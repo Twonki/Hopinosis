@@ -1,15 +1,11 @@
 cabal-version:       2.4
--- The name of the package.
 name:                Hopinosis
 version:             0.0.1
 synopsis:            library to supply "Opinosis"-Algorithm APIs
 
--- A URL where users can report bugs.
 bug-reports:         https://github.com/Twonki/Hopinosis/issues
--- The license under which the package is released.
 license:             MIT
 license-file:        LICENSE
--- The package author(s).
 author:              Leonhard Applis
 maintainer:          Leonhard.Applis@Protonmail.com
 category:            library
@@ -44,7 +40,7 @@ Test-Suite HUnitTestSuite
                        Tests.NodeTests
                        Tests.GraphTests
                        Tests.PathTests
-                       Tests.TestUtils
+                       Tests.TestSuite
   build-depends:       base,
                        test-framework,
                        test-framework-hunit,

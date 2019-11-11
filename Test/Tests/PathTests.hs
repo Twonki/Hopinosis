@@ -1,3 +1,3 @@
 module Tests.PathTests where 
 
-import Tests.TestUtils
+import Tests.TestSuite

@@ -1,3 +1,3 @@
 module Tests.GraphTests where 
 
-import Tests.TestUtils
+import Tests.TestSuite

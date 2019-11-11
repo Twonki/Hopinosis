@@ -37,3 +37,12 @@ foldGraph g =
         foldHelp :: [(String, Values)] -> (String,[Values])
         foldHelp kvs@((k,_):_) = let values =  map (\(_,v) -> v) kvs 
                                  in (k,values)
+
+contains:: String -> Graph -> Bool
+contains s g = let candidates = filter (\(k,_)-> k==s) g
+               in null candidates
+
+get:: String -> Graph -> Maybe Node
+get s g = if contains s g 
+          then Just $ head $ filter (\(k,_)-> k==s) g
+          else Nothing

@@ -9,7 +9,10 @@ import Tests.NodeTests
 import Tests.GraphTests
 import Tests.PathTests 
 
-allTests = TestList []
+allTests = 
+    TestList [
+        allNodeTests
+    ]
 
 tests = hUnitTestToTests allTests
 main = defaultMain tests

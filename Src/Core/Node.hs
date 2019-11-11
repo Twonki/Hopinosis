@@ -1,12 +1,13 @@
 module Core.Node where 
                             
-type Node = (String,Values)    
+type Node = (String,Values)
+
 data Values = Values {
     magnitude::Int,
     outs::[(String,Int)],
     validStart::Bool,
     validEnd::Bool
-    }
+    } deriving (Show,Eq)
 
 emptyValues = Values 0 [] False False 
 
