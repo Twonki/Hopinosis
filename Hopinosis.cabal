@@ -5,7 +5,7 @@ version:             0.0.1
 synopsis:            library to supply "Opinosis"-Algorithm APIs
 
 -- A URL where users can report bugs.
-bug-reports:         https://github.com/Twonki/Opinosis/issues
+bug-reports:         https://github.com/Twonki/Hopinosis/issues
 -- The license under which the package is released.
 license:             MIT
 license-file:        LICENSE
@@ -21,6 +21,7 @@ library
   -- Modules included in this executable, other than Main.
   other-modules:      Core.Node
                       Core.Graph
+                      Core.Path
   -- LANGUAGE extensions used by modules in this package.
   -- other-extensions:
 
@@ -39,6 +40,11 @@ Test-Suite HUnitTestSuite
                        Src
   other-modules:       Core.Node
                        Core.Graph
+                       Core.Path
+                       Tests.NodeTests
+                       Tests.GraphTests
+                       Tests.PathTests
+                       Tests.TestUtils
   build-depends:       base,
                        test-framework,
                        test-framework-hunit,
