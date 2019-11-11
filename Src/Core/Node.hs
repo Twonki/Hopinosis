@@ -14,6 +14,11 @@ emptyValues = Values 0 [] False False
 mergeValues :: Values -> Values -> Values
 -- Combine the inner values, || for the booleans
 mergeValues (Values i o s e) (Values i2 o2 s2 e2) = Values (i+i2) (o++o2) (s||s2) (e||e2)
+    where 
+        addOut :: [(String,Int)] -> (String,Int) -> [(String,Int)]
+        addOut xs y = undefined
+        mergeOuts :: [(String,Int)] -> [(String,Int)] -> [(String,Int)]
+        mergeOuts xs ys = undefined
 
 foldValues :: [Values] -> Values
 foldValues vs = foldr mergeValues emptyValues vs 
