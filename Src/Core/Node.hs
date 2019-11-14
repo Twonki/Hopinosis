@@ -1,4 +1,4 @@
-module Core.Node(Node,Values(..),setStart) where 
+module Core.Node(Node,Values(..),setStart,emptyValues) where 
                             
 import qualified Data.Map as Map
 

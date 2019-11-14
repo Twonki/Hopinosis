@@ -1,10 +1,8 @@
 module Core.Graph where 
 
 import Core.Node
-import Data.List
 
 import qualified Data.Map as Map
-
 
 type Graph = Map.Map String Values
 
