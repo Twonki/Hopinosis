@@ -1,0 +1,26 @@
+
+Test:
+- Test/*
+Code:
+- Src/*
+
+Documentation:
+- README.md
+- CONTRIBUTING.md
+
+Docker:
+- ./**/Dockerfile
+- ./**/docker-compose.yml
+
+Configuration:
+- .github/*.yml
+- .github/*.yaml
+- .github/**/*.yml
+- .github/**/*.yaml
+- .github/workflow/*
+- .cabal
+- .gitignore
+
+Git:
+- .github/*
+- .gitignore
