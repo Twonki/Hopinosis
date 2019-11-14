@@ -3,6 +3,8 @@ module Tests.NodeTests where
 import Tests.TestSuite
 import Test.HUnit hiding (Node)
 
+import qualified Data.Map as Map
+
 allNodeTests = TestList [
     -- Magnitude and Neutrality
     TestLabel "valueMerge_UniValues_ShouldHaveMag2" testValueMerge_ShouldBeAdded
@@ -32,47 +34,50 @@ allNodeTests = TestList [
     , TestLabel "testFoldValues_withTwoDifferentOuts_shouldBeBoth" testFoldValues_withTwoDifferentOuts_shouldBeBoth
     ]
 
-testValueMerge_ShouldBeAdded = (Values 2 [] False False) ~=? mergeValues uniValue uniValue
-testValueMerge_EmptyValueShould_BeNeutral = uniValue ~=? mergeValues uniValue emptyValues
-testValueMerge_TwoEmptyValues_ShouldBeEmpty = emptyValues ~=? mergeValues emptyValues emptyValues
+testValueMerge_ShouldBeAdded = (Values 2 Map.empty False False) ~=? mappend uniValue uniValue
+testValueMerge_EmptyValueShould_BeNeutral = uniValue ~=? mappend uniValue emptyValues
+testValueMerge_TwoEmptyValues_ShouldBeEmpty = emptyValues ~=? mappend emptyValues emptyValues
 
 testValueMerge_oneStartValue_shouldBeStartValue = 
-    True ~=? validStart (mergeValues startValue uniValue)
+    True ~=? validStart (mappend startValue uniValue)
 testValueMerge_oneEndValue_shouldBeEndValue = 
-    True ~=? validEnd (mergeValues endValue uniValue)
+    True ~=? validEnd (mappend endValue uniValue)
 testValueMerge_oneStartValue_onEmptyValue_shouldBeStartValue = 
-    True ~=? validStart (mergeValues startValue emptyValues)
+    True ~=? validStart (mappend startValue emptyValues)
 
 testValueMerge_oneOut_mergedShouldBeTheOutOfFirst =
-    [("Sample",1)] ~=? outs (mergeValues endValue (Values 1 [("Sample",1)] False False))
+    Map.fromList [("Sample",1)] ~=? outs (endValue <> (oneOut "Sample"))
 testValueMerge_oneOut_oneEmpty_mergedShouldBeTheOutOfFirst =
-    [("Sample",1)] ~=? outs (mergeValues emptyValues (Values 1 [("Sample",1)] False False))
+    Map.fromList [("Sample",1)] ~=? outs (emptyValues <> (oneOut "Sample"))
 testValueMerge_twoOut_oneEmpty_shouldBeTwoOutOfFirst=
-    [("Apple",1),("Banana",1)] ~=? outs (mergeValues endValue (Values 1 [("Apple",1),("Banana",1)] False False))
+    Map.fromList [("Apple",1),("Banana",1)] ~=? outs (mappend endValue (Values 1 (Map.fromList [("Apple",1),("Banana",1)]) False False))
 testValueMerge_oneOut_oneOut_shouldBeTwoOutOfBoth=
-    [("Apple",1),("Banana",1)] ~=? outs (mergeValues (Values 1 [("Apple",1)] False False) (Values 1 [("Banana",1)] False False))
+    Map.fromList [("Apple",1),("Banana",1)] ~=? outs (mappend (oneOut "Apple") (oneOut "Banana"))
 testValueMerge_oneOut_oneOut_sameValue_shouldBeMergedAndIncreased = 
-    [("Sample",2)] ~=? outs (mergeValues (Values 1 [("Sample",1)] False False) (Values 1 [("Sample",1)] False False))
+    Map.fromList [("Sample",2)] ~=? outs (mappend (oneOut "Sample") (oneOut "Sample"))
 testValueMerge_oneOut_oneOutWithMag2_sameValue_shouldBeMergedAndIncreased = 
-    [("Sample",3)] ~=? outs (mergeValues (Values 1 [("Sample",1)] False False) (Values 1 [("Sample",2)] False False))
+    Map.fromList [("Sample",3)] ~=? outs (mappend (oneOut "Sample") (Values 1 (Map.singleton "Sample" 2 ) False False))
     
 
 testFoldValues_threeUnivalues_shouldHaveMag3 = 
-    (Values 3 [] False False) ~=? foldValues [uniValue,uniValue,uniValue]
+    (Values 3 Map.empty False False) ~=? mconcat [uniValue,uniValue,uniValue]
 testFoldValues_EmptyList_shouldBeEmptyValues = 
-    emptyValues ~=? foldValues []
+    emptyValues ~=? mconcat []
 testFoldValues_WithStart_shouldBeStart = 
-    True ~=? validStart (foldValues [startValue])
+    True ~=? validStart (mconcat [startValue])
 testFoldValues_WithEnd_shouldBeEnd =
-    True ~=? validEnd (foldValues [endValue])
+    True ~=? validEnd (mconcat [endValue])
 testFoldValues_withEmptyValues_shouldBeEmptyValues =
-    emptyValues ~=? foldValues [emptyValues,emptyValues]
+    emptyValues ~=? mconcat [emptyValues,emptyValues]
 
 testFoldValues_withOuts_shouldHaveOuts = 
-    [("Sample",1)] ~=? outs (foldValues [Values 1 [("Sample",1)] False False])
+    Map.fromList [("Sample",1)] ~=? outs (mconcat [oneOut "Sample"])
 testFoldValues_withOuts_twiceSame_shouldHaveIncreasedOuts =
-    [("Sample",2)] ~=? outs (foldValues [(Values 1 [("Sample",1)] False False),(Values 1 [("Sample",1)] False False)])
+    Map.fromList [("Sample",2)] ~=? outs (mconcat [oneOut "Sample",oneOut "Sample"])
 testFoldValues_withOuts_threeTimesSame_shouldHaveIncreasedOuts =
-    [("Sample",3)] ~=? outs (foldValues [(Values 1 [("Sample",1)] False False),(Values 1 [("Sample",1)] False False),(Values 1 [("Sample",1)] False False)])
+    Map.fromList [("Sample",3)] ~=? outs (mconcat [oneOut "Sample",oneOut "Sample",oneOut "Sample"])
 testFoldValues_withTwoDifferentOuts_shouldBeBoth = 
-    [("Apple",1),("Banana",1)] ~=? outs (foldValues [(Values 1 [("Apple",1)] False False),(Values 1 [("Banana",1)] False False)])
+    Map.fromList [("Apple",1),("Banana",1)] ~=? outs (mconcat [oneOut "Apple",oneOut "Banana"])
+
+oneOut :: String -> Values
+oneOut s = Values 1 (Map.singleton s 1) False False

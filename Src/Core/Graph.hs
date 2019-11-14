@@ -3,6 +3,8 @@ module Core.Graph where
 import Core.Node
 import Data.List
 
+import qualified Data.Map as Map
+
 type Graph = [Node]
 
 parseDocument:: [[String]] -> Graph
@@ -13,8 +15,8 @@ parseSentence' s = let g = parseSentence s
                    in tagStart g s
 
 parseSentence:: [String] -> Graph
-parseSentence (w:[]) = (w,Values 1 [] False True) :[]
-parseSentence (w:o:ws) = (w, Values 1 [(o,1)] False False) : parseSentence (o:ws) 
+parseSentence (w:[]) = (w,Values 1 Map.empty False True) :[]
+parseSentence (w:o:ws) = (w, Values 1 (Map.singleton o 1) False False) : parseSentence (o:ws) 
 
 tagStart:: Graph -> [String] -> Graph
 tagStart g (s:ws) = 
@@ -32,7 +34,7 @@ foldGraph g =
         -- Make [[(x,v)],...] to [(x,[v]),...]
         ks = map foldHelp gs
         -- Apply [v]->v to (x,[v])
-    in map (\(k,vs) -> (k,foldValues vs)) ks
+    in map (\(k,vs) -> (k,mconcat vs)) ks
     where 
         foldHelp :: [(String, Values)] -> (String,[Values])
         foldHelp kvs@((k,_):_) = let values =  map (\(_,v) -> v) kvs 

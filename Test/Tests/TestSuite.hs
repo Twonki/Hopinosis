@@ -10,8 +10,9 @@ where
 import Core.Graph
 import Core.Node
 import Core.Path
+import qualified Data.Map as Map
 
 
-uniValue   = Values 1 [] False False
-startValue = Values 1 [] True False 
-endValue   = Values 1 [] False True
+uniValue   = Values 1 Map.empty False False
+startValue = Values 1 Map.empty True False 
+endValue   = Values 1 Map.empty False True

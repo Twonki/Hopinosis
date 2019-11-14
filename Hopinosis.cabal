@@ -22,7 +22,8 @@ library
   -- other-extensions:
 
   -- Other library packages from which modules are imported.
-  build-depends:       base ^>=4.12.0.0
+  build-depends:       base ^>=4.12.0.0,
+                       containers ^>= 0.6.0.1
 
   -- Directories containing source files.
   hs-source-dirs:      Src
@@ -42,6 +43,7 @@ Test-Suite HUnitTestSuite
                        Tests.PathTests
                        Tests.TestSuite
   build-depends:       base,
+                       containers ^>= 0.6.0.1,
                        test-framework,
                        test-framework-hunit,
                        HUnit,
