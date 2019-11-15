@@ -1,9 +1,12 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Tests.NodeTests where 
 
 import Tests.TestSuite
 import Test.HUnit hiding (Node)
 
 import qualified Data.Map as Map
+import Data.Text hiding(map,singleton)
 
 allNodeTests = TestList [
     -- Magnitude and Neutrality
@@ -79,5 +82,5 @@ testFoldValues_withOuts_threeTimesSame_shouldHaveIncreasedOuts =
 testFoldValues_withTwoDifferentOuts_shouldBeBoth = 
     Map.fromList [("Apple",1),("Banana",1)] ~=? outs (mconcat [oneOut "Apple",oneOut "Banana"])
 
-oneOut :: String -> Values
+oneOut :: Text -> Values
 oneOut s = Values 1 (Map.singleton s 1) False False

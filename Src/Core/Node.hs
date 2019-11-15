@@ -1,12 +1,13 @@
 module Core.Node(Node,Values(..),setStart,emptyValues) where 
                             
 import qualified Data.Map as Map
+import Data.Text
 
-type Node = (String,Values)
+type Node = (Text,Values)
 
 data Values = Values {
     magnitude::Int,
-    outs::Map.Map String Int,
+    outs::Map.Map Text Int,
     validStart::Bool,
     validEnd::Bool
     } deriving (Show,Eq)
