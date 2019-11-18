@@ -1,32 +1,25 @@
-name: Build on Push and PR
 
-on: [push, pull_request]
+name: Haskell CI
+
+on: [push]
 
 jobs:
   build:
-    runs-on: ubuntu-16.04
-    strategy:
-      matrix:
-        ghc: [ '8.6.5' ]
-        cabal: [ '3.0' ]
-    name: Cabal ${{ matrix.cabal }} new-test on ${{ matrix.ghc }}
+
+    runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@master
-      - name: update cabal
-        uses: actions/setup-haskell@v1
-        with:
-          ghc-version: ${{ matrix.ghc }}
-          cabal-version: ${{ matrix.cabal }}
-          run: cabal update
-      - name: run cabal-test
-        uses: actions/setup-haskell@v1
-        with:
-          ghc-version: ${{ matrix.ghc }}
-          cabal-version: ${{ matrix.cabal }}
-          run: cabal new-test
-      - name: Runghc Haskell
-        uses: actions/setup-haskell@v1
-        with:
-          ghc-version: ${{ matrix.ghc }}
-          cabal-version: ${{ matrix.cabal }}
-          run: ghc src/Hopinosis.hs
+    - uses: actions/checkout@v1
+    - uses: actions/setup-haskell@v1
+      with:
+        ghc-version: '8.6.5'
+        cabal-version: '3.0'
+    - name: Install dependencies
+      run: |
+        cabal update
+    - name: Build
+      run: |
+        cabal configure --enable-tests
+        cabal build
+    - name: Run tests
+      run: cabal test
