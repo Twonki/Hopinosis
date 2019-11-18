@@ -1,4 +1,4 @@
-module Core.Node(Node,Values(..),setStart,emptyValues,merge) where 
+module Core.Node(Node,Values(..),setStart) where 
                             
 import qualified Data.Map as Map
 import Data.Text

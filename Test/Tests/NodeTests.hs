@@ -84,3 +84,5 @@ testFoldValues_withTwoDifferentOuts_shouldBeBoth =
 
 oneOut :: Text -> Values
 oneOut s = Values 1 (Map.singleton s 1) False False
+
+emptyValues = mempty
