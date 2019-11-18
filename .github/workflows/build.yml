@@ -12,9 +12,21 @@ jobs:
     name: Cabal ${{ matrix.cabal }} new-test on ${{ matrix.ghc }}
     steps:
       - uses: actions/checkout@master
-      - name: Setup Haskell
+      - name: Runghc Haskell
         uses: actions/setup-haskell@v1
         with:
           ghc-version: ${{ matrix.ghc }}
           cabal-version: ${{ matrix.cabal }}
-      - run: cabal new-test
+          run: ghc src/Hopinosis.hs
+      - name: update cabal
+        uses: actions/setup-haskell@v1
+        with:
+          ghc-version: ${{ matrix.ghc }}
+          cabal-version: ${{ matrix.cabal }}
+          run: cabal update
+      - name: run cabal-test
+        uses: actions/setup-haskell@v1
+        with:
+          ghc-version: ${{ matrix.ghc }}
+          cabal-version: ${{ matrix.cabal }}
+          run: cabal new-test

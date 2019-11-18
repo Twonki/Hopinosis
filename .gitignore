@@ -1,6 +1,10 @@
 /*.ho
 /*.hi
 /*.o
+*.o
+**.o
+**.hi
+**.ho
 /dist/**
 /dist
 /dist-newstyle/**
