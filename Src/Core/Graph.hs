@@ -20,6 +20,7 @@ parseSentence s = tagStart s $ parse s
         parse (w:[]) = Map.singleton w (Values 1 Map.empty False True)
         parse (w:o:ws) = 
                         let n = Map.singleton w (Values 1 (Map.singleton o 1) False False)
-                        in  n <> (parse (o:ws))
+                        in  Map.unionWith (<>) n (parse (o:ws))
         tagStart :: [Text] -> Graph -> Graph
-        tagStart (s:_) =  Map.adjust setStart s
+        tagStart [] g = g
+        tagStart (s:_) g =  Map.adjust setStart s g

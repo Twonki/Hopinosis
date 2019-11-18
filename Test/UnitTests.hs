@@ -11,7 +11,8 @@ import Tests.PathTests
 
 allTests = 
     TestList [
-        allNodeTests
+        allNodeTests,
+        allGraphTests
     ]
 
 tests = hUnitTestToTests allTests
