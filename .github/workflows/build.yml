@@ -7,8 +7,8 @@ jobs:
     runs-on: ubuntu-16.04
     strategy:
       matrix:
-        ghc: [ 8.6.5' ]
-        cabal: [ 3.0' ]
+        ghc: [ '8.6.5' ]
+        cabal: [ '3.0' ]
     name: Cabal ${{ matrix.cabal }} new-test on ${{ matrix.ghc }}
     steps:
       - uses: actions/checkout@master
