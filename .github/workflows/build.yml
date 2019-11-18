@@ -23,4 +23,4 @@ jobs:
         with:
           ghc-version: ${{ matrix.ghc }}
           cabal-version: ${{ matrix.cabal }}
-          run: ghc src/Hopinosis.hs
+          run: ghc src/NotEvenHere.hs
