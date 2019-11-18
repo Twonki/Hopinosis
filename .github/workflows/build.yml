@@ -17,16 +17,16 @@ jobs:
         with:
           ghc-version: ${{ matrix.ghc }}
           cabal-version: ${{ matrix.cabal }}
-        run: cabal update
+          run: cabal update
       - name: run cabal-test
         uses: actions/setup-haskell@v1
         with:
           ghc-version: ${{ matrix.ghc }}
           cabal-version: ${{ matrix.cabal }}
-        run: cabal new-test
+          run: cabal new-test
       - name: Runghc Haskell
         uses: actions/setup-haskell@v1
         with:
           ghc-version: ${{ matrix.ghc }}
           cabal-version: ${{ matrix.cabal }}
-        run: ghc src/Hopinosis.hs
+          run: ghc src/Hopinosis.hs
