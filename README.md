@@ -14,6 +14,7 @@ To yield human readable sentences, only those paths are seen as valid which:
 **Changes to proposal:**
 - The position of a word in the sentence and document is not noted. Keeping track of this would need a strict, iterative approach which is not haskelly. Instead, a flag is set whether it was a start and/or end, and the number of occurences is tracked. 
 - Due to the changes to the value-bag, both ValueBags and the Graph can be seen as Monoids 
+- It's free, open and for you to explore on Github :octocat:
 
 
 ## Build, Run and Test
@@ -22,7 +23,7 @@ To run the code, go to /Src and start your GHCI.
 
 `You@GHCI> :load Hopinosis.hs`
 
-This will let you use the lib. 
+This will let you use the lib. (don't forget to run cabal configure once! You will need libraries.)
 
 ### With Cabal
 For more Information on the setup, see [the cabal file](Hopinosis.cabal).

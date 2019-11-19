@@ -7,7 +7,7 @@ import Tests.TestSuite
 import Tests.TestSuite
 import Test.HUnit hiding (Node)
 
-import qualified Data.Map as Map
+import qualified Data.Map.Monoidal.Strict as Map
 import Data.Text hiding(map,singleton)
 
 allGraphTests = TestList [

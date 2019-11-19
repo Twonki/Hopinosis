@@ -1,13 +1,13 @@
 module Core.Node(Node,Values(..),setStart) where 
                             
-import qualified Data.Map as Map
+import qualified Data.Map.Monoidal.Strict as Map
 import Data.Text
 
 type Node = (Text,Values)
 
 data Values = Values {
     magnitude::Int,
-    outs::Map.Map Text Int,
+    outs::Map.MonoidalMap Text Int,
     validStart::Bool,
     validEnd::Bool
     } deriving (Show,Eq)

@@ -10,7 +10,7 @@ where
 import Core.Graph
 import Core.Node
 import Core.Path
-import qualified Data.Map as Map
+import qualified Data.Map.Monoidal.Strict as Map
 
 
 uniValue   = Values 1 Map.empty False False
