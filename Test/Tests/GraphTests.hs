@@ -26,6 +26,10 @@ allGraphTests = TestList [
     ,TestLabel "testParseEmptyDocument_shouldBeEmpty" testParseEmptyDocument_shouldBeEmpty
     ,TestLabel "testParseDocument_singleWord_shouldBeThere" testParseDocument_singleWord_shouldBeThere
     ,TestLabel "testParseDocuments_WordsAreCombinedOverDocuments" testParseDocuments_WordsAreCombinedOverDocuments
+    
+    ,TestLabel "testBugSentence_shouldBeParsed_shouldTerminate" testBugSentence_HasenDieBlasen
+    ,TestLabel "testBugDocument_shouldBeParsed_shouldTerminate" testBugDocument_HasenDieBlasen
+    ,TestLabel "testBugDocument_HasenDieBlasen2" testBugDocument_HasenDieBlasen2
     ]
 
 
@@ -68,3 +72,15 @@ testParseEmptyDocument_shouldBeEmpty =
     True ~=? Map.null (parseDocument [])
 testParseDocument_singleWord_shouldBeThere = 
     Just (Values 1 Map.empty True True) ~=? Map.lookup "Hello" (parseDocument [["Hello"]] )
+
+{-
+    Defensive Tests - Created to avoid Regression Bugs
+-}
+-- Mainly look if both terminate!
+testBugSentence_HasenDieBlasen = 
+    5 ~=? Prelude.length ( Map.keys (parseSentence (map pack $ Prelude.words "Ich mag Hasen die blasen")))
+testBugDocument_HasenDieBlasen = 
+    5 ~=? Prelude.length ( Map.keys (parseDocument [(map pack $ Prelude.words "Ich mag Hasen die blasen")]))
+testBugDocument_HasenDieBlasen2 = 
+    5 ~=? Prelude.length ( Map.keys (parseDocument [(map pack $ Prelude.words "Ich mag Hasen die blasen"),(map pack $ Prelude.words "Ich mag Hasen die blasen")]))
+    

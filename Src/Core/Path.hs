@@ -3,12 +3,39 @@ module Core.Path where
 import Core.Graph
 import Core.Node
 
-import Data.Text hiding (map,foldr)
+import qualified Data.Map.Monoidal.Strict as Map
+import Data.Text hiding (map,foldr,filter)
 -- Paths 
 -- Filter Cyclic Paths if Key is already in Path
 type Path = [Node]
 
-isValid x = isValidStarted  x && isValidEnded  x && isAsyclic x
+
+{-
+    Path Creation from Graph
+-}
+
+lookupOuts :: Text -> Graph -> [Node]
+lookupOuts t g = filter (\(x,_) -> x == t ) $ Map.assocs g 
+
+nexts :: Node -> Graph -> [Node]
+nexts (_,Values _ os _ _) g =  mconcat $ map (\k -> lookupOuts k g) (Map.keys os)
+
+nextPaths :: Path-> Graph -> [Path]
+nextPaths [] g = []
+nextPaths [x] g = map (\p -> x:[p]) $ nexts x g
+nextPaths (x:xs) g = map (\p ->x:p) $ nextPaths xs g
+
+starts :: Graph -> [Node]
+starts = filter (\(k,v) -> validStart v) . Map.assocs
+
+--firstStep g = filter isAcyclic $ map (\x -> nextPaths x g) $  [starts g]
+--secondStep g = filter isAcyclic $ map nextPaths $ firstStep g
+{-
+    Validity of Paths
+-}
+
+isValid :: Path -> Bool 
+isValid x = isValidStarted  x && isValidEnded  x && isAcyclic x
 
 isValidStarted :: Path -> Bool
 isValidStarted ((_,Values _ _ True _):_) = True
@@ -24,7 +51,7 @@ isInPath s xs = foldr (||) False $ map (\(x,_) -> x==s) xs
 isCyclic :: Path -> Bool 
 isCyclic ((x,_):ps) = isInPath x ps || isCyclic ps
 
-isAsyclic = not . isCyclic
+isAcyclic = not . isCyclic
 
 -- Make Step by Multyplying every out key 
 -- Filter by Cyclic
