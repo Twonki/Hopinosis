@@ -18,6 +18,7 @@ library
   other-modules:      Core.Node
                       Core.Graph
                       Core.Path
+                      Core.Path.Internals
   -- LANGUAGE extensions used by modules in this package.
   -- other-extensions:
 
@@ -39,6 +40,7 @@ Test-Suite HUnitTestSuite
   other-modules:       Core.Node
                        Core.Graph
                        Core.Path
+                       Core.Path.Internals
                        Tests.NodeTests
                        Tests.GraphTests
                        Tests.PathTests
