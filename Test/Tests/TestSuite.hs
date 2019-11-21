@@ -23,7 +23,7 @@ endValue   = Values 1 Map.empty False True
 
     
 toGraphOne :: String -> Graph
-toGraphOne s =  parseSentence (map Txt.pack (words s))
+toGraphOne s =  parseSentence $ Txt.pack <$> (words s)
 
 toGraphMany :: [String] -> Graph
-toGraphMany s = parseDocument  (map (map Txt.pack) (map words s))
+toGraphMany s = parseDocument  ((<$>) Txt.pack <$> words <$> s)
