@@ -25,13 +25,31 @@ nextPaths [x] g = map (\p -> x:[p]) $ nexts x g
 nextPaths (x:xs) g = map (\p ->x:p) $ nextPaths xs g
 
 allPaths :: Graph -> [Path]
-allPaths g = undefined
+allPaths g = allPathsRecursive startPaths g
+    where 
+        startPaths = (\s -> [s]) <$> starts g
+        allPathsRecursive ps g = 
+            let ps' = nextPaths' ps g
+            in 
+                if ps' == ps || ps' == []
+                then ps 
+                else allPathsRecursive ps' g
 
 starts :: Graph -> [Node]
 starts = filter (\(k,v) -> validStart v) . Map.assocs
 
---firstStep g = filter isAcyclic $ map (\x -> nextPaths x g) $  [starts g]
---secondStep g = filter isAcyclic $ map nextPaths $ firstStep g
+nextPaths' :: [Path] -> Graph -> [Path]
+nextPaths' paths g= mconcat (filter isAcyclic <$> (\x -> nextPaths x g ) <$> paths)
+
+{-
+    zeroStep g = (\s -> [s]) <$> starts g
+    firstStep g = mconcat (filter isAcyclic <$> (\x -> nextPaths x g ) <$> zeroStep g)
+    secondStep g = mconcat (filter isAcyclic <$>  (\x -> nextPaths x g ) <$> (firstStep g))
+    thirdStep g = mconcat (filter isAcyclic <$>  (\x -> nextPaths x g ) <$> (secondStep g))
+    ...
+    until StepN == Step(N-1)
+-}
+
 {-
     Validity of Paths
 -}
