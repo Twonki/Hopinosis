@@ -27,6 +27,7 @@ singletonPath = packSingletonNode "Alone":[]
 cyclicPath = packStartNode "Hello" : packNode "you" : packNode "Hello" :packEndNode "World" : []
 unstartedPath = packNode "to" : packNode "my" :packEndNode "Test" : []
 unendedPath = packStartNode "Hello" : packNode "to" : packNode "my" : []
+emptyPath = []
 
 {-
     Test for Exposed Functions
@@ -43,8 +44,11 @@ pathTests = TestList [
     ,TestLabel "isValid_unstartedPath_shouldBeFalse" isValid_unstartedPath_shouldBeFalse
     ,TestLabel "isValid_unendedPath_shouldBeFalse" isValid_unendedPath_shouldBeFalse
     ,TestLabel "isValid_singletonPath_shouldBeTrue" isValid_singletonPath_shouldBeTrue
+    ,TestLabel "isValid_emptyPath_shouldBeFalse"  isValid_emptyPath_shouldBeFalse
 
     ,TestLabel "allPaths_singleSentenceGraph_shouldBeOne" allPaths_singleSentenceGraph_shouldBeOne
+    ,TestLabel "allPaths_singleWordGraph_shouldBeOne" allPaths_singleWordGraph_shouldBeOne
+    ,TestLabel "allPaths_emptyGraph_shouldBeZero" allPaths_emptyGraph_shouldBeZero
     ,TestLabel "allPaths_forkedSentenceGraph_shouldBeTwo" allPaths_forkedSentenceGraph_shouldBeTwo
     ,TestLabel "allPaths_twoDisjunctSentences_shouldBeTwo" allPaths_twoDisjunctSentences_shouldBeTwo
     ,TestLabel "allPaths_twoIdenticalSentences_shouldBeOne" allPaths_twoIdenticalSentences_shouldBeOne
@@ -63,6 +67,8 @@ isValid_unendedPath_shouldBeFalse =
     False ~=? isValid unendedPath
 isValid_singletonPath_shouldBeTrue =
     True ~=? isValid singletonPath
+isValid_emptyPath_shouldBeFalse =
+    False ~=? isValid emptyPath
 
 getStarts_ofOneDocument_shouldBeOne = 
     1 ~=? length (starts (toGraphOne "Hello"))
@@ -78,6 +84,10 @@ getStarts_ofTwoDocumentsWithSameStart_shouldBeOne =
 allPaths_singleSentenceGraph_shouldBeOne = 
     1 ~=? length (allPaths testGraph)
         where testGraph = toGraphMany ["Hello my Test"]
+
+allPaths_singleWordGraph_shouldBeOne= 
+    1 ~=? length (allPaths testGraph)
+        where testGraph = toGraphMany ["Hello"]
 
 allPaths_forkedSentenceGraph_shouldBeTwo = 
     2 ~=? length (allPaths testGraph)
@@ -103,6 +113,8 @@ allPaths_twoForkedAndRejoinedSentences_shouldBeTwo=
     2 ~=? length (allPaths testGraph)
         where testGraph = toGraphMany ["Hello my Test","Hello your Test"]
 
+allPaths_emptyGraph_shouldBeZero = 
+    0 ~=? length (allPaths Map.empty)
 {-
     Test for Internal Functions
 -}
@@ -118,6 +130,7 @@ pathInternalTests = TestList [
     ,TestLabel "isValidEnded_singletonPath_shouldBeTrue" isValidEnded_singletonPath_shouldBeTrue
     ,TestLabel "isCyclic_nonCyclicPath_shouldBeFalse" isCyclic_nonCyclicPath_shouldBeFalse
     ,TestLabel "isCyclic_cyclicPath_shouldBeTrue" isCyclic_cyclicPath_shouldBeTrue
+    ,TestLabel "isCyclic_emptyPath_shouldBeFalse" isCyclic_emptyPath_shouldBeFalse
     ,TestLabel "isCyclic_singletonPath_shouldBeFalse" isCyclic_singletonPath_shouldBeFalse
     ]
 isValidStarted_pathBeginsWithStart_shouldBeTrue=
@@ -153,6 +166,9 @@ isCyclic_nonCyclicPath_shouldBeFalse =
 
 isCyclic_cyclicPath_shouldBeTrue =
     True ~=? isCyclic cyclicPath 
+
+isCyclic_emptyPath_shouldBeFalse =
+    False ~=? isCyclic []
 
 isCyclic_singletonPath_shouldBeFalse=
     False ~=? isCyclic singletonPath
