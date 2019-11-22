@@ -8,7 +8,7 @@ import Tests.TestSuite
 import Test.HUnit hiding (Node)
 
 import qualified Data.Map.Monoidal.Strict as Map
-import Data.Text hiding(map,singleton)
+import Data.Text hiding(map,singleton,filter,length)
 
 allGraphTests = TestList [
     TestLabel "testParseEmpty_shouldBeEmpty" testParseEmpty_shouldBeEmpty
@@ -30,6 +30,10 @@ allGraphTests = TestList [
     ,TestLabel "testBugSentence_shouldBeParsed_shouldTerminate" testBugSentence_HasenDieBlasen
     ,TestLabel "testBugDocument_shouldBeParsed_shouldTerminate" testBugDocument_HasenDieBlasen
     ,TestLabel "testBugDocument_HasenDieBlasen2" testBugDocument_HasenDieBlasen2
+
+    ,TestLabel "testBugDocument_4longSentences_shouldHave10Keys" testBugDocument_4longSentences_shouldHave10Keys
+    ,TestLabel "testBugDocument_4longSentences_shouldHave4Ends" testBugDocument_4longSentences_shouldHave4Ends
+    ,TestLabel "testBugDocument_4longSentences_shouldHave3Starts" testBugDocument_4longSentences_shouldHave3Starts
     ]
 
 
@@ -84,3 +88,18 @@ testBugDocument_HasenDieBlasen =
 testBugDocument_HasenDieBlasen2 = 
     5 ~=? Prelude.length ( Map.keys (parseDocument [(map pack $ Prelude.words "Ich mag Hasen die blasen"),(map pack $ Prelude.words "Ich mag Hasen die blasen")]))
     
+
+{-
+    These Values have been collected using Pen and Paper
+-}
+testBugDocument_4longSentences_shouldHave10Keys = 
+    10 ~=? length (Map.keys testGraph)
+        where testGraph = toGraphMany ["Hello I like dogs","I like rabbits","You are different","You hate rabbits","You like me"]
+
+testBugDocument_4longSentences_shouldHave4Ends=
+    4 ~=? length (( filter (\(k,v) -> validEnd v) . Map.assocs) testGraph)
+        where testGraph = toGraphMany ["Hello I like dogs","I like rabbits","You are different","You hate rabbits","You like me"]
+
+testBugDocument_4longSentences_shouldHave3Starts=
+    3 ~=? length ((filter (\(k,v) -> validStart v) . Map.assocs) testGraph)
+        where testGraph = toGraphMany ["Hello I like dogs","I like rabbits","You are different","You hate rabbits","You like me"]

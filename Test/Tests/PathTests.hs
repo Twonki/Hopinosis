@@ -55,6 +55,9 @@ pathTests = TestList [
     ,TestLabel "allPaths_twoConjoinedSentences_shouldBeFour" allPaths_twoConjoinedSentences_shouldBeFour
     ,TestLabel "allPaths_twoJoiningSentences_shouldBeTwo" allPaths_twoJoiningSentences_shouldBeTwo
     ,TestLabel "allPaths_twoForkedAndRejoinedSentences_shouldBeTwo" allPaths_twoForkedAndRejoinedSentences_shouldBeTwo
+
+    ,TestLabel "allPaths_BugRegression1_LongSentencesShouldBe6" allPaths_BugRegression1_LongSentencesShouldBe6
+    ,TestLabel "allPaths_BugRegression2_LongSentencesShouldBe9" allPaths_BugRegression2_LongSentencesShouldBe9
     ]
 
 isValid_validPath_shouldBeTrue =
@@ -115,6 +118,15 @@ allPaths_twoForkedAndRejoinedSentences_shouldBeTwo=
 
 allPaths_emptyGraph_shouldBeZero = 
     0 ~=? length (allPaths Map.empty)
+
+
+allPaths_BugRegression1_LongSentencesShouldBe6 = 
+    6 ~=? length (allPaths testGraph)
+        where testGraph = toGraphMany ["Hello I like dogs","I like rabbits","You are different","You hate rabbits"]
+
+allPaths_BugRegression2_LongSentencesShouldBe9 = 
+    9 ~=? length (allPaths testGraph)
+        where testGraph = toGraphMany ["Hello I like dogs","I like rabbits","You are different","You hate rabbits","You like me"]
 {-
     Test for Internal Functions
 -}
