@@ -1,6 +1,7 @@
 module Core.Path(
     isValid,
-    starts
+    starts,
+    allPaths
     ) 
 where
 import qualified Core.Path.Internals as Internals
@@ -14,3 +15,6 @@ isValid = Internals.isValid
 
 starts :: Graph -> [Node]
 starts = Internals.starts
+
+allPaths :: Graph -> [Path]
+allPaths = Internals.allPaths

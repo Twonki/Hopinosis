@@ -24,6 +24,9 @@ nextPaths [] g = []
 nextPaths [x] g = map (\p -> x:[p]) $ nexts x g
 nextPaths (x:xs) g = map (\p ->x:p) $ nextPaths xs g
 
+allPaths :: Graph -> [Path]
+allPaths g = undefined
+
 starts :: Graph -> [Node]
 starts = filter (\(k,v) -> validStart v) . Map.assocs
 
@@ -41,13 +44,16 @@ isValidStarted ((_,Values _ _ True _):_) = True
 isValidStarted _ = False
 
 isValidEnded :: Path -> Bool
-isValidEnded [(_,Values _ _ _ True)] = True 
-isValidEnded _ = False
+isValidEnded [] = False
+isValidEnded [(_,Values _ _ _ True)] = True
+isValidEnded (x:xs) = isValidEnded xs
 
 isInPath :: Text -> Path -> Bool 
 isInPath s xs = foldr (||) False $ map (\(x,_) -> x==s) xs
 
 isCyclic :: Path -> Bool 
+isCyclic [] = False
+isCyclic [x] = False
 isCyclic ((x,_):ps) = isInPath x ps || isCyclic ps
 
 isAcyclic = not . isCyclic
