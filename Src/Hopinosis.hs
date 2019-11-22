@@ -16,3 +16,6 @@ toGraphOne s =  parseSentence $ Txt.pack <$> (words s)
 
 toGraphMany :: [String] -> Graph
 toGraphMany s = parseDocument  ((<$>) Txt.pack <$> words <$> s)
+
+printPath = map fst
+printPaths = map (map fst)

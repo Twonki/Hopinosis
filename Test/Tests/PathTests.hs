@@ -57,7 +57,8 @@ pathTests = TestList [
     ,TestLabel "allPaths_twoForkedAndRejoinedSentences_shouldBeTwo" allPaths_twoForkedAndRejoinedSentences_shouldBeTwo
 
     ,TestLabel "allPaths_BugRegression1_LongSentencesShouldBe6" allPaths_BugRegression1_LongSentencesShouldBe6
-    ,TestLabel "allPaths_BugRegression2_LongSentencesShouldBe9" allPaths_BugRegression2_LongSentencesShouldBe9
+    ,TestLabel "allPaths_BugRegression2_LongSentencesShouldBe9" allPaths_BugRegression2_LongSentencesShouldBe11
+    ,TestLabel "allPaths_BugRegression3_LongSentencesShouldTerminate" allPaths_BugRegression3_LongSentencesShouldTerminate
     ]
 
 isValid_validPath_shouldBeTrue =
@@ -124,9 +125,13 @@ allPaths_BugRegression1_LongSentencesShouldBe6 =
     6 ~=? length (allPaths testGraph)
         where testGraph = toGraphMany ["Hello I like dogs","I like rabbits","You are different","You hate rabbits"]
 
-allPaths_BugRegression2_LongSentencesShouldBe9 = 
-    9 ~=? length (allPaths testGraph)
+allPaths_BugRegression2_LongSentencesShouldBe11 = 
+    11 ~=? length (allPaths testGraph)
         where testGraph = toGraphMany ["Hello I like dogs","I like rabbits","You are different","You hate rabbits","You like me"]
+
+allPaths_BugRegression3_LongSentencesShouldTerminate = 
+    11 ~=? length (allPaths testGraph)
+        where testGraph = toGraphMany(["Hello I like Rabbits","I like Dogs","You are Different","You hate Rabbits","You like me"])
 {-
     Test for Internal Functions
 -}
@@ -144,6 +149,9 @@ pathInternalTests = TestList [
     ,TestLabel "isCyclic_cyclicPath_shouldBeTrue" isCyclic_cyclicPath_shouldBeTrue
     ,TestLabel "isCyclic_emptyPath_shouldBeFalse" isCyclic_emptyPath_shouldBeFalse
     ,TestLabel "isCyclic_singletonPath_shouldBeFalse" isCyclic_singletonPath_shouldBeFalse
+    ,TestLabel "InitialNextPaths_ofTwoDisjunctSentences_shouldBeTwo" nextPaths_ofTwoDisjunctSentences_shouldBeTwo
+    ,TestLabel "InitialNextPaths_ofThreeDisjunctSentences_shouldBeThree" nextPaths_ofThreeDisjunctSentences_shouldBeThree
+    ,TestLabel "SecondNextPath_ofTwoDiscjunctSentences_shouldBeTwo" secondNextPath_ofTwoDiscjunctSentences_shouldBeTwo2
     ]
 isValidStarted_pathBeginsWithStart_shouldBeTrue=
     True ~=? isValidStarted validPath
@@ -184,3 +192,23 @@ isCyclic_emptyPath_shouldBeFalse =
 
 isCyclic_singletonPath_shouldBeFalse=
     False ~=? isCyclic singletonPath
+
+
+nextPaths_ofTwoDisjunctSentences_shouldBeTwo = 
+    2 ~=? length (nextPaths testPaths testGraph)
+        where 
+            testGraph = toGraphMany ["I like dogs", "You hate rabbits"]
+            testPaths = (\x-> [x]) <$> starts testGraph
+
+nextPaths_ofThreeDisjunctSentences_shouldBeThree = 
+    3 ~=? length (nextPaths testPaths testGraph)
+        where 
+            testGraph = toGraphMany ["I like dogs", "You hate rabbits","Other Sentence"]
+            testPaths = (\x-> [x]) <$> starts testGraph
+
+secondNextPath_ofTwoDiscjunctSentences_shouldBeTwo2 =
+    2 ~=? length (nextPaths firstPaths testGraph)
+        where 
+            testGraph = toGraphMany ["I like dogs", "You hate rabbits"]
+            testPaths = (\x-> [x]) <$> starts testGraph
+            firstPaths = nextPaths testPaths testGraph

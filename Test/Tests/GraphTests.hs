@@ -80,7 +80,6 @@ testParseDocument_singleWord_shouldBeThere =
 {-
     Defensive Tests - Created to avoid Regression Bugs
 -}
--- Mainly look if both terminate!
 testBugSentence_HasenDieBlasen = 
     5 ~=? Prelude.length ( Map.keys (parseSentence (map pack $ Prelude.words "Ich mag Hasen die blasen")))
 testBugDocument_HasenDieBlasen = 

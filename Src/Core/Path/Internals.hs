@@ -4,7 +4,9 @@ import Core.Graph
 import Core.Node
 
 import qualified Data.Map.Monoidal.Strict as Map
-import Data.Text hiding (map,foldr,filter)
+import Data.Text hiding (map,foldr,filter,concat)
+
+import qualified Data.Set as Set
 
 
 type Path = [Node]
@@ -16,39 +18,33 @@ type Path = [Node]
 lookupOuts :: Text -> Graph -> [Node]
 lookupOuts t g = filter (\(x,_) -> x == t ) $ Map.assocs g 
 
-nexts :: Node -> Graph -> [Node]
-nexts (_,Values _ os _ _) g =  mconcat $ map (\k -> lookupOuts k g) (Map.keys os)
-
-nextPaths :: Path-> Graph -> [Path]
-nextPaths [] g = []
-nextPaths [x] g = map (\p -> x:[p]) $ nexts x g
-nextPaths (x:xs) g = map (\p ->x:p) $ nextPaths xs g
-
 allPaths :: Graph -> [Path]
-allPaths g = allPathsRecursive startPaths g
+allPaths g = filter isValid $ (unique $ allPathsRecursive startPaths g)
     where 
         startPaths = (\s -> [s]) <$> starts g
         allPathsRecursive ps g = 
-            let ps' = nextPaths' ps g
+            let ps' = nextPaths ps g
             in 
                 if ps' == ps || ps' == []
                 then ps 
-                else allPathsRecursive ps' g
+                else ps ++ allPathsRecursive ps' g
+                
+unique = Set.toList . Set.fromList
 
 starts :: Graph -> [Node]
 starts = filter (\(k,v) -> validStart v) . Map.assocs
 
-nextPaths' :: [Path] -> Graph -> [Path]
-nextPaths' paths g= mconcat (filter isAcyclic <$> (\x -> nextPaths x g ) <$> paths)
+nextPaths :: [Path] -> Graph -> [Path]
+nextPaths paths g= mconcat (filter isAcyclic <$> (\x -> nextPathsHelper x g ) <$> paths)
+    where 
+        nexts :: Node -> Graph -> [Node]
+        nexts (_,Values _ os _ _) g =  mconcat $ map (\k -> lookupOuts k g) (Map.keys os)
 
-{-
-    zeroStep g = (\s -> [s]) <$> starts g
-    firstStep g = mconcat (filter isAcyclic <$> (\x -> nextPaths x g ) <$> zeroStep g)
-    secondStep g = mconcat (filter isAcyclic <$>  (\x -> nextPaths x g ) <$> (firstStep g))
-    thirdStep g = mconcat (filter isAcyclic <$>  (\x -> nextPaths x g ) <$> (secondStep g))
-    ...
-    until StepN == Step(N-1)
--}
+        nextPathsHelper :: Path-> Graph -> [Path]
+        nextPathsHelper [] g = []
+        nextPathsHelper [x] g = map (\p -> x:[p]) $ nexts x g
+        nextPathsHelper (x:xs) g = map (\p ->x:p) $ nextPathsHelper xs g
+
 
 {-
     Validity of Paths

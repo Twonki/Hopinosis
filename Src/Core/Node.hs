@@ -10,7 +10,7 @@ data Values = Values {
     outs::Map.MonoidalMap Text Int,
     validStart::Bool,
     validEnd::Bool
-    } deriving (Show,Eq)
+    } deriving (Show,Eq,Ord)
 
 setStart:: Values -> Values
 setStart (Values i o _ e) = (Values i o True e)
