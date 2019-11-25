@@ -37,37 +37,37 @@ allNodeTests = TestList [
     , TestLabel "testFoldValues_withTwoDifferentOuts_shouldBeBoth" testFoldValues_withTwoDifferentOuts_shouldBeBoth
     ]
 
-testValueMerge_ShouldBeAdded = (Values 2 Map.empty False False) ~=? mappend uniValue uniValue
+testValueMerge_ShouldBeAdded = (Values 2 Map.empty 0 False) ~=? mappend uniValue uniValue
 testValueMerge_EmptyValueShould_BeNeutral = uniValue ~=? mappend uniValue emptyValues
 testValueMerge_TwoEmptyValues_ShouldBeEmpty = emptyValues ~=? mappend emptyValues emptyValues
 
 testValueMerge_oneStartValue_shouldBeStartValue = 
-    True ~=? validStart (mappend startValue uniValue)
+    1 ~=? starts (mappend startValue uniValue)
 testValueMerge_oneEndValue_shouldBeEndValue = 
     True ~=? validEnd (mappend endValue uniValue)
 testValueMerge_oneStartValue_onEmptyValue_shouldBeStartValue = 
-    True ~=? validStart (mappend startValue emptyValues)
+    1 ~=? starts (mappend startValue emptyValues)
 
 testValueMerge_oneOut_mergedShouldBeTheOutOfFirst =
     mFromList [("Sample",1)] ~=? outs (endValue <> (oneOut "Sample"))
 testValueMerge_oneOut_oneEmpty_mergedShouldBeTheOutOfFirst =
     mFromList [("Sample",1)] ~=? outs (emptyValues <> (oneOut "Sample"))
 testValueMerge_twoOut_oneEmpty_shouldBeTwoOutOfFirst=
-    mFromList [("Apple",1),("Banana",1)] ~=? outs (mappend endValue (Values 1 (mFromList [("Apple",1),("Banana",1)]) False False))
+    mFromList [("Apple",1),("Banana",1)] ~=? outs (mappend endValue (Values 1 (mFromList [("Apple",1),("Banana",1)]) 0 False))
 testValueMerge_oneOut_oneOut_shouldBeTwoOutOfBoth=
     mFromList [("Apple",1),("Banana",1)] ~=? outs (mappend (oneOut "Apple") (oneOut "Banana"))
 testValueMerge_oneOut_oneOut_sameValue_shouldBeMergedAndIncreased = 
     mFromList [("Sample",2)] ~=? outs (mappend (oneOut "Sample") (oneOut "Sample"))
 testValueMerge_oneOut_oneOutWithMag2_sameValue_shouldBeMergedAndIncreased = 
-    mFromList [("Sample",3)] ~=? outs (mappend (oneOut "Sample") (Values 1 (Map.singleton "Sample" 2 ) False False))
+    mFromList [("Sample",3)] ~=? outs (mappend (oneOut "Sample") (Values 1 (Map.singleton "Sample" 2 ) 0 False))
     
 
 testFoldValues_threeUnivalues_shouldHaveMag3 = 
-    (Values 3 Map.empty False False) ~=? mconcat [uniValue,uniValue,uniValue]
+    (Values 3 Map.empty 0 False) ~=? mconcat [uniValue,uniValue,uniValue]
 testFoldValues_EmptyList_shouldBeEmptyValues = 
     emptyValues ~=? mconcat []
 testFoldValues_WithStart_shouldBeStart = 
-    True ~=? validStart (mconcat [startValue])
+    1 ~=? starts (mconcat [startValue])
 testFoldValues_WithEnd_shouldBeEnd =
     True ~=? validEnd (mconcat [endValue])
 testFoldValues_withEmptyValues_shouldBeEmptyValues =
@@ -83,7 +83,7 @@ testFoldValues_withTwoDifferentOuts_shouldBeBoth =
     mFromList [("Apple",1),("Banana",1)] ~=? outs (mconcat [oneOut "Apple",oneOut "Banana"])
 
 oneOut :: Text -> Values
-oneOut s = Values 1 (Map.singleton s 1) False False
+oneOut s = Values 1 (Map.singleton s 1) 0 False
 
 emptyValues = mempty
 

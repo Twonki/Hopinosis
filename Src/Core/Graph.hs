@@ -17,9 +17,9 @@ parseSentence s = tagStart s $ parse s
     where 
         parse :: [Text] -> Graph
         parse [] = mempty
-        parse (w:[]) = Map.singleton w (Values 1 Map.empty False True)
+        parse (w:[]) = Map.singleton w (Values 1 Map.empty 0 True)
         parse (w:o:ws) = 
-                        let n = Map.singleton w (Values 1 (Map.singleton o 1) False False)
+                        let n = Map.singleton w (Values 1 (Map.singleton o 1) 0 False)
                         in  n <> parse (o:ws)
         tagStart :: [Text] -> Graph -> Graph
         tagStart [] g = g

@@ -59,7 +59,33 @@ pathTests = TestList [
     ,TestLabel "allPaths_BugRegression1_LongSentencesShouldBe6" allPaths_BugRegression1_LongSentencesShouldBe6
     ,TestLabel "allPaths_BugRegression2_LongSentencesShouldBe9" allPaths_BugRegression2_LongSentencesShouldBe11
     ,TestLabel "allPaths_BugRegression3_LongSentencesShouldTerminate" allPaths_BugRegression3_LongSentencesShouldTerminate
+
+    ,TestLabel "validStartsWithSigmaAlpha_SigmaAlphaIsOne_shouldBeEmpty" validStartsWithSigmaAlpha_SigmaAlphaIsOne_shouldBeEmpty
+    ,TestLabel "validStartsWithSigmaAlpha_SigmaAlphaIsZero_GraphHasOneStart_ShouldHaveOne" validStartsWithSigmaAlpha_SigmaAlphaIsZero_GraphHasOneStart_ShouldHaveOne
+    ,TestLabel "validStartsWithSigmaAlpha_SigmaAlphaIsPoint49_GraphHasOneStartWithSigmaAlphaPoint5_ShouldHaveOne" validStartsWithSigmaAlpha_SigmaAlphaIsPoint49_GraphHasOneStartWithSigmaAlphaPoint5_ShouldHaveOne
+    ,TestLabel "validStartsWithSigmaAlpha_SigmaAlphaIsZero_GraphHasTwoStarts_ShouldHaveTwo" validStartsWithSigmaAlpha_SigmaAlphaIsZero_GraphHasTwoStarts_ShouldHaveTwo
+    ,TestLabel "validStartsWithSigmaAlpha_SigmaAlphaIsZero_GraphHasTwoStarts_ShouldHaveTwo_Type2" validStartsWithSigmaAlpha_SigmaAlphaIsZero_GraphHasTwoStarts_ShouldHaveTwo_Type2
+    ,TestLabel "validStartsWithSigmaAlpha_SigmaAlphaIsPoint3_GraphHasOneFitCandidate_ShouldHaveOne" validStartsWithSigmaAlpha_SigmaAlphaIsPoint4_GraphHasOneFitCandidate_ShouldHaveOne
     ]
+
+validStartsWithSigmaAlpha_SigmaAlphaIsOne_shouldBeEmpty = 
+    0 ~=? length (Tests.TestSuite.validStartsWithSigmaAlpha 1.0 (toGraphMany ["Hello my darling test","Hello my other darling test"]))
+
+validStartsWithSigmaAlpha_SigmaAlphaIsZero_GraphHasOneStart_ShouldHaveOne = 
+    1 ~=? length (Tests.TestSuite.validStartsWithSigmaAlpha 0.0 (toGraphMany ["Hello my darling test","Hello my other darling test"]))
+
+validStartsWithSigmaAlpha_SigmaAlphaIsPoint49_GraphHasOneStartWithSigmaAlphaPoint5_ShouldHaveOne = 
+    1 ~=? length (Tests.TestSuite.validStartsWithSigmaAlpha 0.49 (toGraphMany ["Hello my darling test","Hello my other darling test"]))
+    
+validStartsWithSigmaAlpha_SigmaAlphaIsZero_GraphHasTwoStarts_ShouldHaveTwo = 
+    2 ~=? length (Tests.TestSuite.validStartsWithSigmaAlpha 0.0 (toGraphMany ["Hello my darling test", "test what you like"]))
+
+validStartsWithSigmaAlpha_SigmaAlphaIsZero_GraphHasTwoStarts_ShouldHaveTwo_Type2 = 
+    2 ~=? length (Tests.TestSuite.validStartsWithSigmaAlpha 0.0 (toGraphMany ["Hello my darling test", "Totally different sentence"]))
+    
+validStartsWithSigmaAlpha_SigmaAlphaIsPoint4_GraphHasOneFitCandidate_ShouldHaveOne =
+    1 ~=? length (Tests.TestSuite.validStartsWithSigmaAlpha 0.4 (toGraphMany ["Hello my darling test", "Hello my other darling test","darling should not be displayed"]))
+
 
 isValid_validPath_shouldBeTrue =
     True ~=? isValid validPath
@@ -75,15 +101,15 @@ isValid_emptyPath_shouldBeFalse =
     False ~=? isValid emptyPath
 
 getStarts_ofOneDocument_shouldBeOne = 
-    1 ~=? length (starts (toGraphOne "Hello"))
+    1 ~=? length (Tests.TestSuite.validStarts (toGraphOne "Hello"))
 getStarts_ofOneWord_shouldBeWord = 
-    "Hello" ~=? (fst . head) (starts (toGraphOne "Hello"))
+    "Hello" ~=? (fst . head . head) (Tests.TestSuite.validStarts (toGraphOne "Hello"))
 getStarts_ofEmpty_shouldBeEmpty = 
-    True ~=? null ( starts (toGraphOne []))
+    True ~=? null ( Tests.TestSuite.validStarts (toGraphOne []))
 getStarts_ofTwoDocuments_shouldBeTwo = 
-    2 ~=? length (starts (toGraphMany ["Hello my darling test", "Goodbye my darling test"]))
+    2 ~=? length  (Core.Path.Internals.validStarts (toGraphMany ["Hello my darling test", "Goodbye my darling test"]))
 getStarts_ofTwoDocumentsWithSameStart_shouldBeOne =
-    1 ~=? length (starts (toGraphMany ["Hello my darling test", "Hello my other darling test"]))
+    1 ~=? length (Tests.TestSuite.validStarts (toGraphMany ["Hello my darling test", "Hello my other darling test"]))
 
 allPaths_singleSentenceGraph_shouldBeOne = 
     1 ~=? length (allPaths testGraph)
@@ -132,6 +158,9 @@ allPaths_BugRegression2_LongSentencesShouldBe11 =
 allPaths_BugRegression3_LongSentencesShouldTerminate = 
     11 ~=? length (allPaths testGraph)
         where testGraph = toGraphMany(["Hello I like Rabbits","I like Dogs","You are Different","You hate Rabbits","You like me"])
+
+
+
 {-
     Test for Internal Functions
 -}
@@ -152,6 +181,11 @@ pathInternalTests = TestList [
     ,TestLabel "InitialNextPaths_ofTwoDisjunctSentences_shouldBeTwo" nextPaths_ofTwoDisjunctSentences_shouldBeTwo
     ,TestLabel "InitialNextPaths_ofThreeDisjunctSentences_shouldBeThree" nextPaths_ofThreeDisjunctSentences_shouldBeThree
     ,TestLabel "SecondNextPath_ofTwoDiscjunctSentences_shouldBeTwo" secondNextPath_ofTwoDiscjunctSentences_shouldBeTwo2
+
+    ,TestLabel "validStartedWithSigmaAlpha_sigmaalphaiszero_start1shouldbeTrue" validStartedWithSigmaAlpha_sigmaalphaiszero_start1shouldbeTrue
+    ,TestLabel "validStartedWithSigmaAlpha_sigmaalphaiszero_start0ShouldBeFalse" validStartedWithSigmaAlpha_sigmaalphaiszero_start0ShouldBeFalse
+    ,TestLabel "validStartedWithSigmaAlpha_sigmaalphaisPoint5_start2withMag3shouldbeTrue" validStartedWithSigmaAlpha_sigmaalphaisPoint5_start2withMag3shouldbeTrue
+    ,TestLabel "validStartedWithSigmaAlpha_sigmaalphaisPoint5_start1withMag2shouldbeFalse" validStartedWithSigmaAlpha_sigmaalphaisPoint5_start1withMag2shouldbeFalse
     ]
 isValidStarted_pathBeginsWithStart_shouldBeTrue=
     True ~=? isValidStarted validPath
@@ -194,21 +228,39 @@ isCyclic_singletonPath_shouldBeFalse=
     False ~=? isCyclic singletonPath
 
 
+
+validStartedWithSigmaAlpha_sigmaalphaiszero_start1shouldbeTrue = 
+    True ~=? isValidStartedWithSigmaAlpha' 0.0 testPath
+        where testPath = [("SigmaTest",Values 2 Map.empty 1 False)]
+
+validStartedWithSigmaAlpha_sigmaalphaiszero_start0ShouldBeFalse = 
+    False ~=? isValidStartedWithSigmaAlpha' 0.0 testPath
+        where testPath = [("SigmaTest",Values 2 Map.empty 0 False)]
+
+validStartedWithSigmaAlpha_sigmaalphaisPoint5_start2withMag3shouldbeTrue = 
+    True ~=? isValidStartedWithSigmaAlpha' 0.5 testPath
+        where testPath = [("SigmaTest",Values 3 Map.empty 2 False)]
+
+validStartedWithSigmaAlpha_sigmaalphaisPoint5_start1withMag2shouldbeFalse = 
+    False ~=? isValidStartedWithSigmaAlpha' 0.5 testPath
+        where testPath = [("SigmaTest",Values 2 Map.empty 1 False)]
+    
+
 nextPaths_ofTwoDisjunctSentences_shouldBeTwo = 
     2 ~=? length (nextPaths testPaths testGraph)
         where 
             testGraph = toGraphMany ["I like dogs", "You hate rabbits"]
-            testPaths = (\x-> [x]) <$> starts testGraph
+            testPaths = Tests.TestSuite.validStarts testGraph
 
 nextPaths_ofThreeDisjunctSentences_shouldBeThree = 
     3 ~=? length (nextPaths testPaths testGraph)
         where 
             testGraph = toGraphMany ["I like dogs", "You hate rabbits","Other Sentence"]
-            testPaths = (\x-> [x]) <$> starts testGraph
+            testPaths = Tests.TestSuite.validStarts testGraph
 
 secondNextPath_ofTwoDiscjunctSentences_shouldBeTwo2 =
     2 ~=? length (nextPaths firstPaths testGraph)
         where 
             testGraph = toGraphMany ["I like dogs", "You hate rabbits"]
-            testPaths = (\x-> [x]) <$> starts testGraph
+            testPaths = Tests.TestSuite.validStarts testGraph
             firstPaths = nextPaths testPaths testGraph

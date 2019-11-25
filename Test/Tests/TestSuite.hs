@@ -23,10 +23,10 @@ import qualified Data.Map.Monoidal.Strict as Map
 import qualified Data.Text as Txt
 
 
-uniValue   = Values 1 Map.empty False False
-startValue = Values 1 Map.empty True False 
-endValue   = Values 1 Map.empty False True
-singletonValue = Values 1 Map.empty True True
+uniValue   = Values 1 Map.empty 0 False
+startValue = Values 1 Map.empty 1 False 
+endValue   = Values 1 Map.empty 0 True
+singletonValue = Values 1 Map.empty 1 True
 
     
 toGraphOne :: String -> Graph

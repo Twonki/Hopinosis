@@ -4,7 +4,7 @@ import Core.Graph
 import Core.Node
 
 import qualified Data.Map.Monoidal.Strict as Map
-import Data.Text hiding (map,foldr,filter,concat)
+import Data.Text hiding (map,foldr,filter,concat,head)
 
 import qualified Data.Set as Set
 
@@ -21,7 +21,7 @@ lookupOuts t g = filter (\(x,_) -> x == t ) $ Map.assocs g
 allPaths :: Graph -> [Path]
 allPaths g = filter isValid $ (unique $ allPathsRecursive startPaths g)
     where 
-        startPaths = (\s -> [s]) <$> starts g
+        startPaths = validStarts g
         allPathsRecursive ps g = 
             let ps' = nextPaths ps g
             in 
@@ -31,8 +31,11 @@ allPaths g = filter isValid $ (unique $ allPathsRecursive startPaths g)
                 
 unique = Set.toList . Set.fromList
 
-starts :: Graph -> [Node]
-starts = filter (\(k,v) -> validStart v) . Map.assocs
+validStartsWithSigmaAlpha :: Double -> Graph -> [Path]
+validStartsWithSigmaAlpha f g= (map (\s -> [s]) . filter (isValidStartedWithSigmaAlpha f)) (Map.assocs g)
+
+validStarts :: Graph -> [Path]
+validStarts = validStartsWithSigmaAlpha 0
 
 nextPaths :: [Path] -> Graph -> [Path]
 nextPaths paths g= mconcat (filter isAcyclic <$> (\x -> nextPathsHelper x g ) <$> paths)
@@ -50,12 +53,22 @@ nextPaths paths g= mconcat (filter isAcyclic <$> (\x -> nextPathsHelper x g ) <$
     Validity of Paths
 -}
 
-isValid :: Path -> Bool 
-isValid x = isValidStarted  x && isValidEnded  x && isAcyclic x
+isValidWithSigmaAlpha :: Double -> Path -> Bool
+isValidWithSigmaAlpha f [] = False
+isValidWithSigmaAlpha f p = isValidStartedWithSigmaAlpha' f p &&  isValidEnded p && isAcyclic p
+
+isValid :: Path -> Bool
+isValid = isValidWithSigmaAlpha 0
 
 isValidStarted :: Path -> Bool
-isValidStarted ((_,Values _ _ True _):_) = True
-isValidStarted _ = False
+isValidStarted = (isValidStartedWithSigmaAlpha 0.0) . head
+
+isValidStartedWithSigmaAlpha :: Double -> Node -> Bool
+isValidStartedWithSigmaAlpha f (_,Values m _ s _) =  ((fromIntegral s) / (fromIntegral m)) > f
+
+isValidStartedWithSigmaAlpha' :: Double -> Path -> Bool
+isValidStartedWithSigmaAlpha' f = (isValidStartedWithSigmaAlpha f) . head
+
 
 isValidEnded :: Path -> Bool
 isValidEnded [] = False
