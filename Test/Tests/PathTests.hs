@@ -60,6 +60,9 @@ pathTests = TestList [
     ,TestLabel "allPaths_BugRegression2_LongSentencesShouldBe9" allPaths_BugRegression2_LongSentencesShouldBe11
     ,TestLabel "allPaths_BugRegression3_LongSentencesShouldTerminate" allPaths_BugRegression3_LongSentencesShouldTerminate
 
+    ,TestLabel "allPathsWithSigmaAlpha_SigmaAlphaIsOne_ShouldBeEmpty" allPathsWithSigmaAlpha_SigmaAlphaIsOne_ShouldBeEmpty
+    ,TestLabel "allPathsWithSigmaAlpha_SigmaAlphaIsPoint99_ShouldOnlyDisplayStartsWithAlwaysStartWords" allPathsWithSigmaAlpha_SigmaAlphaIsPoint99_ShouldOnlyDisplayStartsWithAlwaysStartWords
+
     ,TestLabel "validStartsWithSigmaAlpha_SigmaAlphaIsOne_shouldBeEmpty" validStartsWithSigmaAlpha_SigmaAlphaIsOne_shouldBeEmpty
     ,TestLabel "validStartsWithSigmaAlpha_SigmaAlphaIsZero_GraphHasOneStart_ShouldHaveOne" validStartsWithSigmaAlpha_SigmaAlphaIsZero_GraphHasOneStart_ShouldHaveOne
     ,TestLabel "validStartsWithSigmaAlpha_SigmaAlphaIsPoint49_GraphHasOneStartWithSigmaAlphaPoint5_ShouldHaveOne" validStartsWithSigmaAlpha_SigmaAlphaIsPoint49_GraphHasOneStartWithSigmaAlphaPoint5_ShouldHaveOne
@@ -145,6 +148,18 @@ allPaths_twoForkedAndRejoinedSentences_shouldBeTwo=
 
 allPaths_emptyGraph_shouldBeZero = 
     0 ~=? length (allPaths Map.empty)
+
+
+allPathsWithSigmaAlpha_SigmaAlphaIsOne_ShouldBeEmpty=
+    0 ~=? length (allPathsWithSigmaAlpha 1.0 testGraph)
+        where testGraph = toGraphMany ["Hello I like dogs","I like rabbits","You are different","You hate rabbits","You like me"]
+{-
+Collected by Hand, The "I" starting paths should be filtered. That means it's 11 -3 = 8 Paths
+-}
+allPathsWithSigmaAlpha_SigmaAlphaIsPoint99_ShouldOnlyDisplayStartsWithAlwaysStartWords=
+    8 ~=? length (allPathsWithSigmaAlpha 0.99 testGraph)
+        where testGraph = toGraphMany ["Hello I like dogs","I like rabbits","You are different","You hate rabbits","You like me"]
+    
 
 
 allPaths_BugRegression1_LongSentencesShouldBe6 = 

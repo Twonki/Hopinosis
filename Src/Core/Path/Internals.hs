@@ -18,8 +18,8 @@ type Path = [Node]
 lookupOuts :: Text -> Graph -> [Node]
 lookupOuts t g = filter (\(x,_) -> x == t ) $ Map.assocs g 
 
-allPaths :: Graph -> [Path]
-allPaths g = filter isValid $ (unique $ allPathsRecursive startPaths g)
+allPathsWithSigmaAlpha :: Double -> Graph -> [Path]
+allPathsWithSigmaAlpha f g = filter (isValidWithSigmaAlpha f) $ (unique $ allPathsRecursive startPaths g)
     where 
         startPaths = validStarts g
         allPathsRecursive ps g = 
@@ -28,6 +28,9 @@ allPaths g = filter isValid $ (unique $ allPathsRecursive startPaths g)
                 if ps' == ps || ps' == []
                 then ps 
                 else ps ++ allPathsRecursive ps' g
+
+allPaths :: Graph -> [Path]
+allPaths = allPathsWithSigmaAlpha 0.0
                 
 unique = Set.toList . Set.fromList
 

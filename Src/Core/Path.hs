@@ -25,5 +25,8 @@ isValid = Internals.isValid
 validStarts :: Graph -> [Path]
 validStarts = Internals.validStarts
 
+allPathsWithSigmaAlpha :: Double -> Graph -> [Path]
+allPathsWithSigmaAlpha = Internals.allPathsWithSigmaAlpha
+
 allPaths :: Graph -> [Path]
 allPaths = Internals.allPaths
