@@ -110,7 +110,7 @@ getStarts_ofOneWord_shouldBeWord =
 getStarts_ofEmpty_shouldBeEmpty = 
     True ~=? null ( Tests.TestSuite.validStarts (toGraphOne []))
 getStarts_ofTwoDocuments_shouldBeTwo = 
-    2 ~=? length  (Core.Path.Internals.validStarts (toGraphMany ["Hello my darling test", "Goodbye my darling test"]))
+    2 ~=? length  (Tests.TestSuite.validStarts (toGraphMany ["Hello my darling test", "Goodbye my darling test"]))
 getStarts_ofTwoDocumentsWithSameStart_shouldBeOne =
     1 ~=? length (Tests.TestSuite.validStarts (toGraphMany ["Hello my darling test", "Hello my other darling test"]))
 
@@ -151,13 +151,13 @@ allPaths_emptyGraph_shouldBeZero =
 
 
 allPathsWithSigmaAlpha_SigmaAlphaIsOne_ShouldBeEmpty=
-    0 ~=? length (allPathsWithSigmaAlpha 1.0 testGraph)
+    0 ~=? length (Tests.TestSuite.allPathsWithSigmaAlpha 1.0 testGraph)
         where testGraph = toGraphMany ["Hello I like dogs","I like rabbits","You are different","You hate rabbits","You like me"]
 {-
 Collected by Hand, The "I" starting paths should be filtered. That means it's 11 -3 = 8 Paths
 -}
 allPathsWithSigmaAlpha_SigmaAlphaIsPoint99_ShouldOnlyDisplayStartsWithAlwaysStartWords=
-    8 ~=? length (allPathsWithSigmaAlpha 0.99 testGraph)
+    8 ~=? length (Tests.TestSuite.allPathsWithSigmaAlpha 0.99 testGraph)
         where testGraph = toGraphMany ["Hello I like dogs","I like rabbits","You are different","You hate rabbits","You like me"]
     
 
@@ -203,17 +203,17 @@ pathInternalTests = TestList [
     ,TestLabel "validStartedWithSigmaAlpha_sigmaalphaisPoint5_start1withMag2shouldbeFalse" validStartedWithSigmaAlpha_sigmaalphaisPoint5_start1withMag2shouldbeFalse
     ]
 isValidStarted_pathBeginsWithStart_shouldBeTrue=
-    True ~=? isValidStarted validPath
+    True ~=? isValidStartedWithSigmaAlpha' 0.0 validPath
 
 isValidStarted_pathHasStartingNode_butStartingNodeIsNotStart_shouldBeFalse=
-    False ~=? isValidStarted testPath
+    False ~=? isValidStartedWithSigmaAlpha' 0.0 testPath
         where testPath = packNode "Test" : packStartNode "Start" : packEndNode "Other" : []
 
 isValidStarted_pathHasNoStarts_shouldBeFalse = 
-    False ~=? isValidStarted unstartedPath
+    False ~=? isValidStartedWithSigmaAlpha' 0.0 unstartedPath
 
 isValidStarted_singletonPath_shouldBeTrue =
-    True ~=? isValidStarted singletonPath
+    True ~=? isValidStartedWithSigmaAlpha' 0.0 singletonPath
     
 
 isValidEnded_pathEndsWithEnd_shouldBeTrue=

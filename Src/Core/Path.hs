@@ -4,6 +4,7 @@ module Core.Path(
     allPaths,
     isValidWithSigmaAlpha,
     validStartsWithSigmaAlpha,
+    allPathsWithSigmaAlpha
     ) 
 where
 import qualified Core.Path.Internals as Internals
@@ -16,17 +17,18 @@ type Path = Internals.Path
 validStartsWithSigmaAlpha :: Double -> Graph -> [Path]
 validStartsWithSigmaAlpha = Internals.validStartsWithSigmaAlpha
 
+validStarts :: Graph -> [Path]
+validStarts = validStartsWithSigmaAlpha 0.0
+
 isValidWithSigmaAlpha :: Double -> Path -> Bool 
 isValidWithSigmaAlpha = Internals.isValidWithSigmaAlpha
 
 isValid :: Path -> Bool
-isValid = Internals.isValid
+isValid = isValidWithSigmaAlpha 0.0
 
-validStarts :: Graph -> [Path]
-validStarts = Internals.validStarts
 
 allPathsWithSigmaAlpha :: Double -> Graph -> [Path]
 allPathsWithSigmaAlpha = Internals.allPathsWithSigmaAlpha
 
 allPaths :: Graph -> [Path]
-allPaths = Internals.allPaths
+allPaths = allPathsWithSigmaAlpha 0.0

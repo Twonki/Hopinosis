@@ -21,7 +21,7 @@ lookupOuts t g = filter (\(x,_) -> x == t ) $ Map.assocs g
 allPathsWithSigmaAlpha :: Double -> Graph -> [Path]
 allPathsWithSigmaAlpha f g = filter (isValidWithSigmaAlpha f) $ (unique $ allPathsRecursive startPaths g)
     where 
-        startPaths = validStarts g
+        startPaths = validStartsWithSigmaAlpha f g
         allPathsRecursive ps g = 
             let ps' = nextPaths ps g
             in 
@@ -29,16 +29,10 @@ allPathsWithSigmaAlpha f g = filter (isValidWithSigmaAlpha f) $ (unique $ allPat
                 then ps 
                 else ps ++ allPathsRecursive ps' g
 
-allPaths :: Graph -> [Path]
-allPaths = allPathsWithSigmaAlpha 0.0
-                
 unique = Set.toList . Set.fromList
 
 validStartsWithSigmaAlpha :: Double -> Graph -> [Path]
 validStartsWithSigmaAlpha f g= (map (\s -> [s]) . filter (isValidStartedWithSigmaAlpha f)) (Map.assocs g)
-
-validStarts :: Graph -> [Path]
-validStarts = validStartsWithSigmaAlpha 0
 
 nextPaths :: [Path] -> Graph -> [Path]
 nextPaths paths g= mconcat (filter isAcyclic <$> (\x -> nextPathsHelper x g ) <$> paths)
@@ -59,12 +53,6 @@ nextPaths paths g= mconcat (filter isAcyclic <$> (\x -> nextPathsHelper x g ) <$
 isValidWithSigmaAlpha :: Double -> Path -> Bool
 isValidWithSigmaAlpha f [] = False
 isValidWithSigmaAlpha f p = isValidStartedWithSigmaAlpha' f p &&  isValidEnded p && isAcyclic p
-
-isValid :: Path -> Bool
-isValid = isValidWithSigmaAlpha 0
-
-isValidStarted :: Path -> Bool
-isValidStarted = (isValidStartedWithSigmaAlpha 0.0) . head
 
 isValidStartedWithSigmaAlpha :: Double -> Node -> Bool
 isValidStartedWithSigmaAlpha f (_,Values m _ s _) =  ((fromIntegral s) / (fromIntegral m)) > f
