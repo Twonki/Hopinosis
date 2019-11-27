@@ -3,6 +3,7 @@ module Hopinosis where
 import Core.Graph
 import Core.Node
 import Core.Path
+import Core.Metric
 
 import Data.List.Split(endByOneOf)
 import qualified Data.Text as Txt

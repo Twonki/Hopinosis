@@ -1,4 +1,5 @@
 module Core.Path(
+    Path,
     isValid,
     validStarts,
     allPaths,
@@ -7,6 +8,7 @@ module Core.Path(
     allPathsWithSigmaAlpha
     ) 
 where
+    
 import qualified Core.Path.Internals as Internals
 import Core.Graph
 import Core.Node
