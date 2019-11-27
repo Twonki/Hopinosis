@@ -4,6 +4,7 @@ module Tests.TestSuite(
     module Core.Graph,
     module Core.Node,
     module Core.Path,
+    module Core.Metric,
     toGraphOne,
     toGraphMany,
     uniValue,
@@ -19,8 +20,10 @@ where
 import Core.Graph
 import Core.Node
 import Core.Path
+import Core.Metric
 import qualified Data.Map.Monoidal.Strict as Map
 import qualified Data.Text as Txt
+
 
 
 uniValue   = Values 1 Map.empty 0 False

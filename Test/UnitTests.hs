@@ -8,12 +8,14 @@ import Test.Framework.Providers.HUnit
 import Tests.NodeTests
 import Tests.GraphTests
 import Tests.PathTests 
+import Tests.MetricTests
 
 allTests = 
     TestList [
         allNodeTests,
         allGraphTests,
-        allPathTests
+        allPathTests,
+        allMetricTests
     ]
 
 tests = hUnitTestToTests allTests
