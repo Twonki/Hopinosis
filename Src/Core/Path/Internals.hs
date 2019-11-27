@@ -4,16 +4,13 @@ import Core.Graph
 import Core.Node
 
 import qualified Data.Map.Monoidal.Strict as Map
-import Data.Text hiding (map,foldr,filter,concat,head)
-
+import Data.Text(Text(..))
 import qualified Data.Set as Set
 
 
 type Path = [Node]
 
-{-
-    Path Creation from Graph
--}
+{- Path Creation from Graph -}
 
 lookupOuts :: Text -> Graph -> [Node]
 lookupOuts t g = filter (\(x,_) -> x == t ) $ Map.assocs g 
@@ -28,8 +25,7 @@ allPathsWithSigmaAlpha f g = filter (isValidWithSigmaAlpha f) $ (unique $ allPat
                 if ps' == ps || ps' == []
                 then ps 
                 else ps ++ allPathsRecursive ps' g
-
-unique = Set.toList . Set.fromList
+        unique = Set.toList . Set.fromList
 
 validStartsWithSigmaAlpha :: Double -> Graph -> [Path]
 validStartsWithSigmaAlpha f g= (map (\s -> [s]) . filter (isValidStartedWithSigmaAlpha f)) (Map.assocs g)
@@ -39,16 +35,12 @@ nextPaths paths g= mconcat (filter isAcyclic <$> (\x -> nextPathsHelper x g ) <$
     where 
         nexts :: Node -> Graph -> [Node]
         nexts (_,Values _ os _ _) g =  mconcat $ map (\k -> lookupOuts k g) (Map.keys os)
-
         nextPathsHelper :: Path-> Graph -> [Path]
         nextPathsHelper [] g = []
         nextPathsHelper [x] g = map (\p -> x:[p]) $ nexts x g
         nextPathsHelper (x:xs) g = map (\p ->x:p) $ nextPathsHelper xs g
 
-
-{-
-    Validity of Paths
--}
+{- Validity of Paths -}
 
 isValidWithSigmaAlpha :: Double -> Path -> Bool
 isValidWithSigmaAlpha f [] = False
@@ -60,23 +52,17 @@ isValidStartedWithSigmaAlpha f (_,Values m _ s _) =  ((fromIntegral s) / (fromIn
 isValidStartedWithSigmaAlpha' :: Double -> Path -> Bool
 isValidStartedWithSigmaAlpha' f = (isValidStartedWithSigmaAlpha f) . head
 
-
 isValidEnded :: Path -> Bool
 isValidEnded [] = False
 isValidEnded [(_,Values _ _ _ True)] = True
 isValidEnded (x:xs) = isValidEnded xs
 
-isInPath :: Text -> Path -> Bool 
-isInPath s xs = foldr (||) False $ map (\(x,_) -> x==s) xs
-
 isCyclic :: Path -> Bool 
 isCyclic [] = False
 isCyclic [x] = False
 isCyclic ((x,_):ps) = isInPath x ps || isCyclic ps
-
+        where 
+            isInPath :: Text -> Path -> Bool 
+            isInPath s xs = foldr (||) False $ map (\(x,_) -> x==s) xs
+            
 isAcyclic = not . isCyclic
-
--- Make Step by Multiplying every out key 
--- Filter by Cyclic
--- Repeat till done
-    

@@ -63,6 +63,9 @@ pathTests = TestList [
     ,TestLabel "allPathsWithSigmaAlpha_SigmaAlphaIsOne_ShouldBeEmpty" allPathsWithSigmaAlpha_SigmaAlphaIsOne_ShouldBeEmpty
     ,TestLabel "allPathsWithSigmaAlpha_SigmaAlphaIsPoint99_ShouldOnlyDisplayStartsWithAlwaysStartWords" allPathsWithSigmaAlpha_SigmaAlphaIsPoint99_ShouldOnlyDisplayStartsWithAlwaysStartWords
 
+    ,TestLabel "allPaths_EdgeCase_TwoSentences_SubPaths_shouldBeTwo" allPaths_EdgeCase_SubPaths_shouldBeTwo
+    ,TestLabel "allPaths_EdgeCase_ThreeSentences_SubPaths_shouldBeThree" allPaths_EdgeCase_ThreeSentences_SubPaths_shouldBeThree
+
     ,TestLabel "validStartsWithSigmaAlpha_SigmaAlphaIsOne_shouldBeEmpty" validStartsWithSigmaAlpha_SigmaAlphaIsOne_shouldBeEmpty
     ,TestLabel "validStartsWithSigmaAlpha_SigmaAlphaIsZero_GraphHasOneStart_ShouldHaveOne" validStartsWithSigmaAlpha_SigmaAlphaIsZero_GraphHasOneStart_ShouldHaveOne
     ,TestLabel "validStartsWithSigmaAlpha_SigmaAlphaIsPoint49_GraphHasOneStartWithSigmaAlphaPoint5_ShouldHaveOne" validStartsWithSigmaAlpha_SigmaAlphaIsPoint49_GraphHasOneStartWithSigmaAlphaPoint5_ShouldHaveOne
@@ -174,8 +177,13 @@ allPaths_BugRegression3_LongSentencesShouldTerminate =
     11 ~=? length (allPaths testGraph)
         where testGraph = toGraphMany(["Hello I like Rabbits","I like Dogs","You are Different","You hate Rabbits","You like me"])
 
+allPaths_EdgeCase_SubPaths_shouldBeTwo =
+    2 ~=? length (allPaths testGraph)
+        where testGraph = toGraphMany(["Hello I like Rabbits","I like Rabbits"])
 
-
+allPaths_EdgeCase_ThreeSentences_SubPaths_shouldBeThree = 
+    3 ~=? length (allPaths testGraph)
+        where testGraph = toGraphMany(["Hello I like Rabbits","I like Rabbits","Rabbits"])
 {-
     Test for Internal Functions
 -}
@@ -214,7 +222,6 @@ isValidStarted_pathHasNoStarts_shouldBeFalse =
 
 isValidStarted_singletonPath_shouldBeTrue =
     True ~=? isValidStartedWithSigmaAlpha' 0.0 singletonPath
-    
 
 isValidEnded_pathEndsWithEnd_shouldBeTrue=
     True ~=? isValidEnded validPath

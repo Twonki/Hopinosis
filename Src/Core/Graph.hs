@@ -8,7 +8,7 @@ type Graph = Map.MonoidalMap Text Values
 
 fromNodes :: [Node] -> Graph
 fromNodes nds = mconcat $ map (\(k,v) -> Map.singleton k v) nds
- 
+
 parseDocument:: [[Text]] -> Graph
 parseDocument = mconcat . map parseSentence
 
