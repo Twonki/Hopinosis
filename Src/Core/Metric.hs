@@ -7,10 +7,12 @@ import Core.Node
 import qualified Data.Map.Monoidal.Strict as MMap
 import qualified Data.Map.Strict as SMap
 import Data.Text (Text(..))
+import Data.Sort (sortOn)
 import qualified Data.Set as Set
 
 type Metric = Path -> Double
 type GraphAwareMetric = Graph -> Path -> Double
+type DistanceFunction = Path -> Path -> Double
 
 edgeStrengths :: Metric
 edgeStrengths [] = 0.0
@@ -52,3 +54,49 @@ cosineSim p1 p2 = cosine p1vec p2vec
             where 
                 dot a b = sum $ zipWith (*) a b
                 len a = sqrt $ dot a a
+
+{- Tuple Selection -}
+bestPaths :: Metric -> DistanceFunction -> Int -> Double -> [Path] -> [Path]
+bestPaths mFn distFn n theta ps = 
+    let 
+        candidates = validCandidatesWithLength ps n
+        filteredCandidates = filterBySigmaTheta candidates mFn theta
+        sortedCandidates = sortByDistances distFn filteredCandidates
+    in
+        getFirst sortedCandidates
+    where 
+        getFirst :: [[Path]] -> [Path]
+        getFirst [] = []
+        getFirst (x:_) = x
+
+commonBestPaths :: [Path] -> [Path]
+commonBestPaths = bestPaths averagedEdgeStrengths cosineSim 3 0.25
+
+validCandidatesWithLength :: [Path] -> Int -> [[Path]]
+validCandidatesWithLength ps n = uniqueCandidates (candidatesWithLength ps n)
+    where
+        allCandidates :: [a] -> [[a]]
+        allCandidates xs = []:(superset xs)
+        superset (x:xs) = [x]:(map (x:) (superset xs)) ++ superset xs
+        superset [] = []
+        candidatesWithLength :: [Path] -> Int -> [[Path]]
+        candidatesWithLength ps n = filter (\candidate -> length candidate ==n) $ allCandidates ps
+        uniqueCandidates :: [[Path]] -> [[Path]]
+        uniqueCandidates = (map Set.toList) . Set.toList . Set.fromList . (map Set.fromList)
+
+calculateAllDistances :: DistanceFunction -> [Path] -> [Double]
+calculateAllDistances _ [] = []
+calculateAllDistances _ (x:[]) = [0.0]
+calculateAllDistances dist (x:os) = map (dist x) os ++ calculateAllDistances dist os
+
+calculateAllMetrics :: Metric -> [Path] -> [Double]
+calculateAllMetrics mfn = map mfn
+
+filterBySigmaTheta :: [[Path]] -> Metric -> Double -> [[Path]]
+filterBySigmaTheta ps mfn theta = filter (\x -> sigmaThetaQualified x mfn theta) ps
+    where 
+        sigmaThetaQualified :: [Path] -> Metric -> Double -> Bool
+        sigmaThetaQualified p mfn sigma= product (map mfn p) > sigma
+
+sortByDistances :: DistanceFunction -> [[Path]] -> [[Path]]
+sortByDistances distFn ps = sortOn (calculateAllDistances distFn) ps

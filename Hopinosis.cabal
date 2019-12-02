@@ -28,7 +28,8 @@ library
                        monoidal-containers ^>=0.6,
                        split ^>= 0.2.3.3,
                        containers^>=0.6,
-                       text ^>= 1.2.3.1
+                       text ^>= 1.2.3.1,
+                       sort ^>= 1.0.0.0
 
   -- Directories containing source files.
   hs-source-dirs:      Src
@@ -54,6 +55,7 @@ Test-Suite HUnitTestSuite
                        monoidal-containers ^>=0.6,
                        containers^>=0.6,
                        split ^>= 0.2.3.3,
+                       sort ^>= 1.0.0.0,
                        text ^>= 1.2.3.1,
                        test-framework,
                        test-framework-hunit,
