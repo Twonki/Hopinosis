@@ -73,12 +73,13 @@ commonBestPaths :: [Path] -> [Path]
 commonBestPaths = bestPaths averagedEdgeStrengths cosineSim 3 0.25
 
 validCandidatesWithLength :: [Path] -> Int -> [[Path]]
-validCandidatesWithLength ps n = uniqueCandidates (candidatesWithLength n ps)
+validCandidatesWithLength ps n = filter (\can -> length can == 3) $ uniqueCandidates $ candidatesWithLength n ps
     where
         candidatesWithLength :: Int -> [Path] -> [[Path]]
         candidatesWithLength 0 _ = []
         candidatesWithLength 1 xs = (\x -> [x]) <$> xs
-        candidatesWithLength n ps = mconcat $ (\recPs -> ( map (\p -> p:recPs)) ps) <$> (candidatesWithLength (n-1) ps)
+        candidatesWithLength n ps = let lastIt = candidatesWithLength (n-1) ps
+                                    in [[p] ++ xs | p <- ps, xs <- lastIt]
         uniqueCandidates :: [[Path]] -> [[Path]]
         uniqueCandidates = (map Set.toList) . Set.toList . Set.fromList . (map Set.fromList)
 
