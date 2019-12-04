@@ -70,10 +70,10 @@ bestPaths mFn distFn n theta ps =
         getFirst (x:_) = x
 
 commonBestPaths :: [Path] -> [Path]
-commonBestPaths = bestPaths averagedEdgeStrengths cosineSim 3 0.25
+commonBestPaths = bestPaths averagedEdgeStrengths cosineSim 3 1.25
 
 validCandidatesWithLength :: [Path] -> Int -> [[Path]]
-validCandidatesWithLength ps n = filter (\can -> length can == 3) $ uniqueCandidates $ candidatesWithLength n ps
+validCandidatesWithLength ps n = filter (\c -> length c == n) $ uniqueCandidates $ candidatesWithLength n ps
     where
         candidatesWithLength :: Int -> [Path] -> [[Path]]
         candidatesWithLength 0 _ = []
