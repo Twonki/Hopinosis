@@ -9,13 +9,15 @@ import Tests.NodeTests
 import Tests.GraphTests
 import Tests.PathTests 
 import Tests.MetricTests
+import Tests.SelectionTests
 
 allTests = 
     TestList [
         allNodeTests,
         allGraphTests,
         allPathTests,
-        allMetricTests
+        allMetricTests,
+        allSelectionTests
     ]
 
 tests = hUnitTestToTests allTests
