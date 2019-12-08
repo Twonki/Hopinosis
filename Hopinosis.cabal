@@ -15,11 +15,14 @@ extra-source-files:  README.md
 library
   exposed-modules:    Hopinosis
   -- Modules included in this executable, other than Main.
-  other-modules:      Core.Node
+  other-modules:      Core.Types
+                      Core.Node
                       Core.Graph
                       Core.Metric
                       Core.Path
                       Core.Path.Internals
+                      Core.Selector
+                      Core.Selector.Internals
   -- LANGUAGE extensions used by modules in this package.
   -- other-extensions:
 
@@ -41,11 +44,14 @@ Test-Suite HUnitTestSuite
   main-is:             UnitTests.hs
   hs-source-dirs:      Test
                        Src
-  other-modules:       Core.Node
+  other-modules:       Core.Types
+                       Core.Node
                        Core.Graph
                        Core.Metric
                        Core.Path
                        Core.Path.Internals
+                       Core.Selector
+                       Core.Selector.Internals
                        Tests.NodeTests
                        Tests.GraphTests
                        Tests.PathTests
