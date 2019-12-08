@@ -24,10 +24,6 @@ allMetricTests = TestList [
     ,TestLabel "cosineSim_TwoEmptyPath_shouldBeZero" cosineSim_TwoEmptyPath_shouldBeZero
     ,TestLabel "cosineSim_FirstPathEmpty_shouldBeZero" cosineSim_FirstPathEmpty_shouldBeZero
 
-
-    ,TestLabel "bestPaths_Get0BestPaths_shouldBeEmpty" bestPaths_Get0BestPaths_shouldBeEmpty
-    ,TestLabel "commonBestPaths_ofEmptyPathList_shouldBeEmpty" commonBestPaths_ofEmptyPathList_shouldBeEmpty
-    --,TestLabel "commonBestPaths_ofOnePath_shouldBeOnePath" commonBestPaths_ofOnePath_shouldBeOnePath
     ]
 
 magnitudes_singleSentenceGraph_shouldBeSentenceLength = 
@@ -116,21 +112,3 @@ cosineSim_FirstPathEmpty_shouldBeZero =
         where 
             testPath1= []
             testPath2= packStartNode "Hello" : packNode "to" : packNode "my" :packEndNode "Test" : []
-
-
-bestPaths_Get0BestPaths_shouldBeEmpty =
-    0 ~=? length (bestPaths (\x->1) (\a b->1) 0 0.25 testPaths )
-        where
-            testPath = packStartNode "Hello" : packNode "to" : packNode "my" :packEndNode "Test" : []
-            testPaths = [testPath]
-
-commonBestPaths_ofEmptyPathList_shouldBeEmpty = 
-    0 ~=? length (commonBestPaths testPaths )
-        where
-            testPaths = []
-
-commonBestPaths_ofOnePath_shouldBeOnePath = 
-    1 ~=? length (commonBestPaths testPaths)
-        where
-            testPath = packStartNode "Hello" : packNode "to" : packNode "my" :packEndNode "Test" : []
-            testPaths = [testPath]

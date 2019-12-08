@@ -56,6 +56,7 @@ Test-Suite HUnitTestSuite
                        Tests.GraphTests
                        Tests.PathTests
                        Tests.MetricTests
+                       Tests.SelectionTests
                        Tests.TestSuite
   build-depends:       base,
                        monoidal-containers ^>=0.6,
