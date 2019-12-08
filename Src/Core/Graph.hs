@@ -1,10 +1,10 @@
 module Core.Graph where 
 
 import Core.Node
-import qualified Data.Map.Monoidal.Strict as Map
-import Data.Text hiding (map,singleton,foldr)
+import Core.Types
 
-type Graph = Map.MonoidalMap Text Values
+import Data.Text(Text(..)) 
+import qualified Data.Map.Monoidal.Strict as Map
 
 fromNodes :: [Node] -> Graph
 fromNodes nds = mconcat $ map (\(k,v) -> Map.singleton k v) nds

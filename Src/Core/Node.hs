@@ -1,9 +1,7 @@
-module Core.Node(Node,Values(..),setStart) where 
+module Core.Node(Values(..),setStart) where 
                             
 import qualified Data.Map.Monoidal.Strict as Map
 import Data.Text
-
-type Node = (Text,Values)
 
 data Values = Values {
     magnitude::Int,

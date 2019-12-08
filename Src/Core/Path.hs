@@ -12,9 +12,7 @@ where
 import qualified Core.Path.Internals as Internals
 import Core.Graph
 import Core.Node
-
-
-type Path = Internals.Path
+import Core.Types
 
 validStartsWithSigmaAlpha :: Double -> Graph -> [Path]
 validStartsWithSigmaAlpha = Internals.validStartsWithSigmaAlpha

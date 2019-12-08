@@ -3,6 +3,7 @@ module Core.Metric where
 import Core.Path 
 import Core.Graph
 import Core.Node   
+import Core.Types
 
 import qualified Data.Map.Monoidal.Strict as MMap
 import qualified Data.Map.Strict as SMap
@@ -10,9 +11,7 @@ import Data.Text (Text(..))
 import Data.Sort (sortOn)
 import qualified Data.Set as Set
 
-type Metric = Path -> Double
-type GraphAwareMetric = Graph -> Path -> Double
-type DistanceFunction = Path -> Path -> Double
+
 
 edgeStrengths :: Metric
 edgeStrengths [] = 0.0

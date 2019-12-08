@@ -1,9 +1,6 @@
 module Core.Selector.Internals(bestPaths,validCandidatesWithLength) where 
 
-import Core.Path 
-import Core.Graph
-import Core.Node
-import Core.Metric   
+import Core.Types 
 
 import qualified Data.Map.Monoidal.Strict as MMap
 import qualified Data.Map.Strict as SMap
@@ -25,8 +22,6 @@ bestPaths mFn distFn n theta ps =
         getFirst [] = []
         getFirst (x:_) = x
 
-commonBestPaths :: [Path] -> [Path]
-commonBestPaths = bestPaths averagedEdgeStrengths cosineSim 3 1.25
 
 validCandidatesWithLength :: [Path] -> Int -> [[Path]]
 validCandidatesWithLength ps n = filter (\c -> length c == n) $ uniqueCandidates $ candidatesWithLength n ps
