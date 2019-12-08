@@ -1,5 +1,5 @@
-module Core.Selector(bestPaths,commonBestPaths) where 
-import qualified Core.Selector.Internals as Internals
+module Core.Selection(bestPaths,commonBestPaths) where 
+import qualified Core.Selection.Internals as Internals
 import qualified Core.Metric as Metric
 import Core.Path
 

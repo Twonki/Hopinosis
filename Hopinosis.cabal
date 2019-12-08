@@ -21,8 +21,8 @@ library
                       Core.Metric
                       Core.Path
                       Core.Path.Internals
-                      Core.Selector
-                      Core.Selector.Internals
+                      Core.Selection
+                      Core.Selection.Internals
   -- LANGUAGE extensions used by modules in this package.
   -- other-extensions:
 
@@ -50,8 +50,8 @@ Test-Suite HUnitTestSuite
                        Core.Metric
                        Core.Path
                        Core.Path.Internals
-                       Core.Selector
-                       Core.Selector.Internals
+                       Core.Selection
+                       Core.Selection.Internals
                        Tests.NodeTests
                        Tests.GraphTests
                        Tests.PathTests

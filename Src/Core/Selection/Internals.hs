@@ -1,4 +1,4 @@
-module Core.Selector.Internals(bestPaths,validCandidatesWithLength) where 
+module Core.Selection.Internals(bestPaths,validCandidatesWithLength) where 
 
 import Core.Types 
 

@@ -13,4 +13,3 @@ type Path = [Node]
 type Metric = Path -> Double
 type GraphAwareMetric = Graph -> Path -> Double
 type DistanceFunction = Path -> Path -> Double
-

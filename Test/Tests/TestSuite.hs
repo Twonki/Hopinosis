@@ -2,7 +2,7 @@
 
 module Tests.TestSuite(
     module Core.Types,
-    module Core.Selector,
+    module Core.Selection,
     module Core.Graph,
     module Core.Node,
     module Core.Path,
@@ -24,7 +24,7 @@ import Core.Graph
 import Core.Node
 import Core.Path
 import Core.Metric
-import Core.Selector
+import Core.Selection
 import qualified Data.Map.Monoidal.Strict as Map
 import qualified Data.Text as Txt
 
