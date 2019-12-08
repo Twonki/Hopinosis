@@ -12,7 +12,8 @@ import qualified Data.Set as Set
 bestPaths :: Metric -> DistanceFunction -> Int -> Double -> [Path] -> [Path]
 bestPaths mFn distFn n theta ps = 
     let 
-        candidates = validCandidatesWithLength ps n
+        n' = min n (length ps) -- There was a bug where one could not select 3 best paths of 2 best paths
+        candidates = validCandidatesWithLength ps n'
         filteredCandidates = filterBySigmaTheta candidates mFn theta
         sortedCandidates = sortByOverallValue mFn distFn filteredCandidates
     in
