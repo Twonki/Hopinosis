@@ -1,5 +1,7 @@
 # Hopinosis
 
+[![Build](https://github.com/Twonki/Hopinosis/workflows/HaskellCI/badge.svg)](https://github.com/Twonki/Hopinosis/actions) 
+
 This repository contains the library "Hopinosis" - a haskell implementation of [Opinosis](https://kavita-ganesan.com/opinosis/). 
 
 
