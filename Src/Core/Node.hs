@@ -15,16 +15,16 @@ import Data.Text
 type Node = (Text,Values)
 
 -- | Data Type Values
+-- Used to describe the values of a word found in the opinosis graph
 -- All the attributes are itself monoidal
--- Magnitude is the number of occurrences 
--- Outs are the outgoing edges and their edge strength
--- starts is the number of occurrences where this node has been a start
--- Valid end marks, whether this node has been an end at least once
-
 data Values = Values {
+     -- | the number of occurrences 
     magnitude::Int,
+     -- | the outgoing edges and their edge strength
     outs::Map.MonoidalMap Text Int,
+     -- | the number of occurrences where this node has been a start
     starts::Int,
+     -- | whether this node has been an end of a sentence at least once
     validEnd::Bool
     } deriving (Show,Eq,Ord)
 
