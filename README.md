@@ -41,6 +41,18 @@ For the installation you need to have symlinks configured for your cabal. After 
 
 If you're using windows, I highly recommend to change that. 
 
+### Documentation
+I am currently working on a proper build with cabal. 
+
+Until then, you can go to the Src directory and run.
+
+
+```
+$Src> haddock -h Hopinosis.hs -o ../docs
+```
+
+Which will create a lot of items for you. 
+
 ## Contribution
 You're contribution is welcome! There are several topics you can help with:
 

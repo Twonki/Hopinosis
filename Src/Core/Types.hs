@@ -1,3 +1,9 @@
+{-|
+Module      : Core.Types
+Description : Types needed by several parts of the library gathered in one file
+License     : MIT
+Maintainer  : Leonhard.Applis@Protonmail.com
+-}
 module Core.Types where 
 
 import Data.Text(Text(..)) 
