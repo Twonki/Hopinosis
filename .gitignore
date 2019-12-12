@@ -1,4 +1,14 @@
 .vscode
+# Haddock 
+**.html
+**.min.js
+**.js
+**.css
+**.gif
+**.json
+**.png
+
+# Cabal and Haskell
 /*.ho
 /*.hi
 /*.o
