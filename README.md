@@ -1,5 +1,8 @@
 # Hopinosis
 
+[![Build](https://github.com/Twonki/Hopinosis/workflows/HaskellCI/badge.svg)](https://github.com/Twonki/Hopinosis/actions) 
+![License: MIT](https://img.shields.io/badge/License-MIT-hotpink.svg)
+
 This repository contains the library "Hopinosis" - a haskell implementation of [Opinosis](https://kavita-ganesan.com/opinosis/). 
 
 

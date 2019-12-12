@@ -7,8 +7,7 @@ import qualified Data.Map.Monoidal.Strict as Map
 import Data.Text(Text(..))
 import qualified Data.Set as Set
 
-
-type Path = [Node]
+import Core.Types
 
 {- Path Creation from Graph -}
 
