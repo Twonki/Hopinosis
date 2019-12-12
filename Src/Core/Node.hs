@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 {-|
 Module      : Core.Node
 Description : Contains the Values of a single node of the opinosis graph
