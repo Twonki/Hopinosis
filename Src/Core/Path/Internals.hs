@@ -6,7 +6,6 @@ Maintainer  : Leonhard.Applis@Protonmail.com
 -}
 module Core.Path.Internals where
 
-import Core.Graph
 import Core.Node
 import Core.Types
 
@@ -56,7 +55,9 @@ validStartsWithSigmaAlpha f g= (map (\s -> [s]) . filter (isValidStartedWithSigm
 -- nextPaths [[a,b]] g = [[a,b,c1],[a,b,c2]]
 -- @
 -- 
--- The paths are checked for being acyclic.
+-- Where c1 and c2 have to be in the graph.
+-- 
+-- The paths are checked for being acyclic. 
 nextPaths :: [Path] -> Graph -> [Path]
 nextPaths paths g= mconcat (filter isAcyclic <$> (\x -> nextPathsHelper x g ) <$> paths)
     where 

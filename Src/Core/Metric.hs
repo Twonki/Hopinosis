@@ -1,7 +1,5 @@
 module Core.Metric where 
 
-import Core.Path 
-import Core.Graph
 import Core.Node   
 import Core.Types
 

@@ -5,11 +5,12 @@ License     : MIT
 Maintainer  : Leonhard.Applis@Protonmail.com
 
 This module contains the "Values" of a single node. 
+
 The values are declared a monoid and a merge function is provided.
 -}
 module Core.Node(Values(..),setStart) where 
 import qualified Data.Map.Monoidal.Strict as Map
-import Data.Text
+import Data.Text(Text(..))
 
 -- | Data Type Values
 -- Used to describe the values of a word found in the opinosis graph

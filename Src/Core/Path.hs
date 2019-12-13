@@ -7,7 +7,6 @@ Maintainer  : Leonhard.Applis@Protonmail.com
 Most of the functions are implemented in "Core.Path.Internals"
 -}
 module Core.Path(
-    Path,
     isValid,
     validStarts,
     allPaths,
@@ -18,8 +17,6 @@ module Core.Path(
 where
 
 import qualified Core.Path.Internals as Internals
-import Core.Graph
-import Core.Node
 import Core.Types
 
 -- |interface to "Core.Path.Internals"
@@ -29,6 +26,7 @@ validStartsWithSigmaAlpha :: Double -- ^sigma alpha value - threshold how often
 validStartsWithSigmaAlpha = Internals.validStartsWithSigmaAlpha
 
 -- |Returns every Node of the graph which has been atleast once been a start
+-- 
 -- Closure of validStartsWithSigmaAlpha 0.0
 validStarts :: Graph -> [Path]
 validStarts = validStartsWithSigmaAlpha 0.0
@@ -41,9 +39,16 @@ isValidWithSigmaAlpha = Internals.isValidWithSigmaAlpha
 isValid :: Path -> Bool
 isValid = isValidWithSigmaAlpha 0.0
 
+-- | Returns all Paths of the Graph which are valid and whose starts are valid given a certain SigmaAlpha 
 
+-- Interface to "Core.Path.Internals"
 allPathsWithSigmaAlpha :: Double -> Graph -> [Path]
 allPathsWithSigmaAlpha = Internals.allPathsWithSigmaAlpha
 
+-- | Generalized allPathsWithSigma Alpha for the default value of SigmaAlpha = 0 
+-- 
+-- Gives valid paths for any nodes which have ever been a start. 
+--
+-- Closure of allPathWithSigmaAlpha 0.0
 allPaths :: Graph -> [Path]
 allPaths = allPathsWithSigmaAlpha 0.0
