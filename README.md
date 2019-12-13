@@ -47,7 +47,7 @@ If you're using windows, I highly recommend to change that.
 
 ### Documentation
 I am currently working on a proper build with cabal. 
-That is not so easy :sad:
+That is not so easy :grimacing:
 
 Until then, you can go to the Src directory and run.
 
@@ -57,6 +57,8 @@ $Src> haddock -h Hopinosis.hs -o ../docs
 ```
 
 Which will create a lot of items for you. `index.html` is the starting point you are looking for.  
+
+**Note:** You may have to run an install beforehand. 
 
 ## Contribution
 You're contribution is welcome! There are several topics you can help with:
