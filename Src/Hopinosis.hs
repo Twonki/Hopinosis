@@ -5,7 +5,6 @@ License     : MIT
 Maintainer  : Leonhard.Applis@Protonmail.com
 
 This Module contains several functions to make and use the Opinosis summaries from strings.
-In addition 
 -}
 module Hopinosis where 
 
@@ -37,6 +36,7 @@ toString p = Txt.unpack (pathJoin (fst <$> p))
         pathJoin = Txt.intercalate (Txt.pack " ")
 
 -- | Takes an unsplit multisentence-text, parses it into a graph, finds the best 3 paths for common parameters and returns the paths readable. 
+-- 
 -- This is the primary function of the module.
 opinosisSummary :: String -> [String]
 opinosisSummary s = 
