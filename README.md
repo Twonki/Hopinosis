@@ -3,11 +3,11 @@
 [![Build](https://github.com/Twonki/Hopinosis/workflows/HaskellCI/badge.svg)](https://github.com/Twonki/Hopinosis/actions) 
 ![License: MIT](https://img.shields.io/badge/License-MIT-hotpink.svg)
 
-This repository contains the library "Hopinosis" - a haskell implementation of [Opinosis](https://kavita-ganesan.com/opinosis/). 
+This repository contains the library "Hopinosis" - a Haskell implementation of [Opinosis](https://kavita-ganesan.com/opinosis/). 
 
 
 Opinosis builds a graph from a given text, where each node is a word in the text. For each node the occurrence is noted and the following word is connected via node.
-Based on this the most redudant paths can be found given that redudancy is either defined by "word occurence" (node magnitude) or "succession" (edge magnitude). 
+Based on this the most redundant paths can be found given that redundancy is either defined by "word occurrence" (node magnitude) or "succession" (edge magnitude). 
 
 To yield human readable sentences, only those paths are seen as valid which:
 1. Start with a node marked as "start"
@@ -15,8 +15,10 @@ To yield human readable sentences, only those paths are seen as valid which:
 3. Are acyclic
 
 **Changes to proposal:**
-- The position of a word in the sentence and document is not noted. Keeping track of this would need a strict, iterative approach which is not haskelly. Instead, a flag is set whether it was a start and/or end, and the number of occurences is tracked. 
+- The position of a word in the sentence and document is not noted. Keeping track of this would need a strict, iterative approach which is not haskelly. 
+  Instead, a flag is set whether it was a start and/or end, and the number of occurrences is tracked. 
 - Due to the changes to the value-bag, both ValueBags and the Graph can be seen as Monoids 
+- There have been no clearly stated measures for similarity of paths. I have left the function as a parameter and provide jaqqard- and cosine-distance as examples. 
 - It's free, open and for you to explore on Github :octocat:
 
 
@@ -33,16 +35,19 @@ For more Information on the setup, see [the cabal file](Hopinosis.cabal).
 
 ```
 $ cabal new-build --enable tests
+$ cabal new-build --enable tests
 $ cabal new-test
 $ cabal new-install
 ```
 
-For the installation you need to have symlinks configured for your cabal. After that, you can invoke the game from anywhere on your machine. 
+For the installation you need to have symlinks configured for your cabal. 
+After that, you can use the library from anywhere on your machine. 
 
 If you're using windows, I highly recommend to change that. 
 
 ### Documentation
 I am currently working on a proper build with cabal. 
+That is not so easy :sad:
 
 Until then, you can go to the Src directory and run.
 
@@ -51,7 +56,7 @@ Until then, you can go to the Src directory and run.
 $Src> haddock -h Hopinosis.hs -o ../docs
 ```
 
-Which will create a lot of items for you. 
+Which will create a lot of items for you. `index.html` is the starting point you are looking for.  
 
 ## Contribution
 You're contribution is welcome! There are several topics you can help with:
@@ -61,3 +66,9 @@ You're contribution is welcome! There are several topics you can help with:
 * Coding: *The more the merrier* - join the programming and help me out!
 
 If you want to help me via code, please refer to the [Contribution Guidelines](CONTRIBUTING.md).
+
+## Additional Notes
+Here are some thoughts on the project which may come across your mind:
+- using my own cosine-similarity. Yes, I also would like to use a library for that. But I have not found a *lightweight* library for this.
+  If I import a nlp-library with cabal, this will blow up the whole build process. That's why I currently stick to two small functions. 
+- HUnit vs. Quickcheck. Yes, I think a lot of parts are perfectly fit for Quickcheck, mostly the parsing.
