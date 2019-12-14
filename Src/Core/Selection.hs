@@ -1,3 +1,13 @@
+{-|
+Module      : Core.Selection
+Description : Contains the functions to select the best n of given paths
+License     : MIT
+Maintainer  : Leonhard.Applis@Protonmail.com
+
+"commonBestPaths" provide a simple default values, or take a metric and a distance function.
+
+Functions are interfaced to "Core.Selection.Internals"
+-}
 module Core.Selection(
     bestPaths,
     commonBestPaths
@@ -13,7 +23,7 @@ import Core.Types
 bestPaths = Internals.bestPaths
 
 -- | returns the best possible path creation given a set of default values
-
+--
 -- For the path-magnitude averagedEdgestrengths was chosen. 
 -- 
 -- For the similarity the cosine-similarity was chosen. 

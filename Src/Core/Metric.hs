@@ -1,3 +1,13 @@
+{-|
+Module      : Core.Metric
+Description : Contains helpers and simple metrics to evaluate paths
+License     : MIT
+Maintainer  : Leonhard.Applis@Protonmail.com
+
+This module contains example metrics - however they are not required for the overall procedure. 
+
+It is only here to provide example values and for the "commonBestPaths".
+-}
 module Core.Metric where 
 
 import Core.Node   
