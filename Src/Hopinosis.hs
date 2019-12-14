@@ -10,7 +10,7 @@ module Hopinosis where
 
 import Core.Graph
 import Core.Path
-import Core.Metric
+import qualified Core.Metric as Metric
 import Core.Selection
 import Core.Types
 
@@ -35,12 +35,45 @@ toString p = Txt.unpack (pathJoin (fst <$> p))
     where
         pathJoin = Txt.intercalate (Txt.pack " ")
 
--- | Takes an unsplit multisentence-text, parses it into a graph, finds the best 3 paths for common parameters and returns the paths readable. 
+-- | A wrapped form of summarize.
+-- 
+-- Default values for "summarize" to make a shorter function.
+commonSummarize :: String -> [String]
+commonSummarize  = summarize Metric.averagedEdgeStrengths Metric.cosineSim 2 0.01 0.5 
+
+-- | This function creates an opinosis summary. 
 -- 
 -- This is the primary function of the module.
-opinosisSummary :: String -> [String]
-opinosisSummary s = 
+-- 
+-- The number of result-sentences greatly impacts the performance. 
+summarize :: 
+    Metric              -- ^ The Metric to evaluate a single path
+    -> DistanceFunction -- ^ The Function to measure the distance between two sentences
+    -> Int              -- ^ The Number of result-sentences
+    -> Double           -- ^ The Sigma Alpha value, which threshhold for the number of starts must be met
+    -> Double           -- ^ The Sigma Delta value, which threshhold for the metric needs to be met
+    -> String           -- ^ The unsplit, multisentence-text
+    -> [String]         -- ^ The Result-Sentences
+summarize mFn dFn n alpha delta s = 
     let graph = toGraphSentences s
-        paths = allPaths graph
-        bests = commonBestPaths paths
+        paths = allPathsWithSigmaAlpha alpha graph
+        bests = bestPaths mFn dFn n delta paths
     in toString <$> bests
+
+-- | a more general "summarize", where one can give the function to build the Graph. 
+-- 
+-- While currently unused, the idea is that potentially a graph can be load, read or otherwise created.
+summarizeFrom :: 
+    Metric                  -- ^ The Metric to evaluate a single path
+    -> DistanceFunction     -- ^ The Function to measure the distance between two sentences
+    -> Int                  -- ^ The Number of result-sentences
+    -> Double               -- ^ The Sigma Alpha value, which threshhold for the number of starts must be met
+    -> Double               -- ^ The Sigma Delta value, which threshhold for the metric needs to be met
+    -> (a -> Graph)         -- ^ A function to create a graph from "a"
+    -> (a -> [String])      -- ^ A function to summarize given the other parameters from an "a"
+summarizeFrom mFn dFn n alpha delta gFn = 
+    \s -> 
+        let graph = gFn s
+            paths = allPathsWithSigmaAlpha alpha graph
+            bests = bestPaths mFn dFn n delta paths
+        in toString <$> bests
