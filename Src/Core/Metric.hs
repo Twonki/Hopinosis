@@ -10,7 +10,12 @@ import Data.Sort (sortOn)
 import qualified Data.Set as Set
 
 
-
+-- | Calculates the accumulated strength of the edges of a path. 
+-- 
+-- This is done via a simple lookup and addition.
+--
+-- Most prominent connections will yield the highest metric, no matter how popular their nodes are.
+-- However, The magnitude can never be lower than the edgeStrength.
 edgeStrengths :: Metric
 edgeStrengths [] = 0.0
 edgeStrengths [x] = 0.0
@@ -21,16 +26,28 @@ edgeStrengths p@(x:y:xs)= (fromIntegral $ nextStrength p) + edgeStrengths (y:xs)
         nextStrength [x] = 0
         nextStrength (x:y:xs) = (outs $ snd x) MMap.! (fst y)
 
+-- | Averaged out strength, first runs "edgeStrengths" and divides it by path length.
 averagedEdgeStrengths :: Metric
 averagedEdgeStrengths p = edgeStrengths p / (fromIntegral $ length p)
 
+-- | Calculates the accumulated magnitudes of a path.
+--
+-- Most prominent words will yield the highest metric, no matter how they are connected. 
 magnitudes :: Metric 
 magnitudes p = fromIntegral (sum $ (magnitude .snd) <$> p)
 
+-- | Averaged Magnitudes, first runs "magnitudes" and divides by path length
 averagedMagnitudes :: Metric 
 averagedMagnitudes p = magnitudes p / (fromIntegral $ length p)
 
-
+-- | Helper Function to make a one-hot encoded vectors
+-- 
+-- @
+-- toVectors ([a,b],[b,c]) = ([1,1,0],[0,1,1])
+-- toVectors ([a,b,d],[a,c,d]) = ([1,1,0,1],[1,0,1,1])
+-- @
+--
+-- Primarily required for "cosineSim".  
 toVectors :: (Path,Path) -> ([Double],[Double])
 toVectors (p1,p2) = 
         (map (\w -> SMap.findWithDefault 0 w p1') unionBagOfWords, map (\w -> SMap.findWithDefault 0 w p2') unionBagOfWords)
@@ -40,6 +57,7 @@ toVectors (p1,p2) =
             p1' = SMap.fromAscList $ (\(k,v) -> (k,fromIntegral $ magnitude v)) <$> p1
             p2' = SMap.fromAscList $ (\(k,v) -> (k,fromIntegral $ magnitude v)) <$> p2
 
+-- | Calculates consine similarity for two paths
 cosineSim :: Path -> Path -> Double
 cosineSim [] _ = 0.0
 cosineSim _ [] = 0.0
