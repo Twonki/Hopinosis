@@ -33,11 +33,10 @@ This will let you use the lib. (don't forget to run cabal configure once! You wi
 ### With Cabal
 For more Information on the setup, see [the cabal file](Hopinosis.cabal).
 
-```
-$ cabal new-build --enable tests
-$ cabal new-build --enable tests
-$ cabal new-test
-$ cabal new-install
+```shell
+$> cabal new-build --enable tests --enable-documentation
+$> cabal new-test
+$> cabal new-install
 ```
 
 For the installation you need to have symlinks configured for your cabal. 
@@ -52,8 +51,8 @@ That is not so easy :grimacing:
 Until then, you can go to the Src directory and run.
 
 
-```
-$Src> haddock -h Hopinosis.hs -o ../docs
+```shell
+$> cabal act-as-setup -- haddock --builddir=dist-newstyle/build/x86_64-windows/ghc-8.6.3/Hopinosis-M.m.f --internal
 ```
 
 Which will create a lot of items for you. `index.html` is the starting point you are looking for.  
