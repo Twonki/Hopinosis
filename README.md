@@ -45,11 +45,7 @@ After that, you can use the library from anywhere on your machine.
 If you're using windows, I highly recommend to change that. 
 
 ### Documentation
-I am currently working on a proper build with cabal. 
-That is not so easy :grimacing:
-
-Until then, you can go to the Src directory and run.
-
+This seems to be the right way to build documentation from source:
 
 ```shell
 $> cabal act-as-setup -- haddock --builddir=dist-newstyle/build/x86_64-windows/ghc-8.6.3/Hopinosis-M.m.f --internal
@@ -57,7 +53,14 @@ $> cabal act-as-setup -- haddock --builddir=dist-newstyle/build/x86_64-windows/g
 
 Which will create a lot of items for you. `index.html` is the starting point you are looking for.  
 
-**Note:** You may have to run an install beforehand. 
+**Note:** You may have to run an `build --enable-documentation` beforehand. 
+
+### Distribution 
+Sources have to be build beforehand:
+
+```shell
+$> cabal act-as-setup -- sdist --snapshot
+```
 
 ## Contribution
 You're contribution is welcome! There are several topics you can help with:
@@ -73,3 +76,4 @@ Here are some thoughts on the project which may come across your mind:
 - using my own cosine-similarity. Yes, I also would like to use a library for that. But I have not found a *lightweight* library for this.
   If I import a nlp-library with cabal, this will blow up the whole build process. That's why I currently stick to two small functions. 
 - HUnit vs. Quickcheck. Yes, I think a lot of parts are perfectly fit for Quickcheck, mostly the parsing.
+- Performance Problems: One thing I am really concerned about is that i cannot imagine some java program to yield so much better results. I have the feeling that there was no similarity measure involved, as none is described in the paper, but after printing the top-n given the metric, the selection has been done manually. This is just a thought so. 
