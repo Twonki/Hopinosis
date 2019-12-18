@@ -72,17 +72,17 @@ validCandidatesWithLength ps n = filter (\c -> length c == n) $ uniqueCandidates
     where
         candidatesWithLength :: Int -> [Path] -> [[Path]]
         candidatesWithLength 0 _ = []
-        candidatesWithLength 1 xs = (\x -> [x]) <$> xs
+        candidatesWithLength 1 xs = (:[]) <$> xs
         candidatesWithLength n ps = let lastIt = candidatesWithLength (n-1) ps
-                                    in [[p] ++ xs | p <- ps, xs <- lastIt]
+                                    in [p : xs | p <- ps, xs <- lastIt]
         uniqueCandidates :: [[Path]] -> [[Path]]
-        uniqueCandidates = (map Set.toList) . Set.toList . Set.fromList . (map Set.fromList)
+        uniqueCandidates = map Set.toList . Set.toList . Set.fromList . map Set.fromList
 
--- | Given a distancefunction, all distances between the paths are returned.
+-- | Given a distance-function, all distances between the paths are returned.
 -- The distances will be returned as a list and are already unique (e.g. if dist(a,b) is already in the list, dist(b,a) will not be in the output)
 calculateAllDistances :: DistanceFunction -> [Path] -> [Double]
 calculateAllDistances _ [] = []
-calculateAllDistances _ (x:[]) = [0.0]
+calculateAllDistances _ [x] = [0.0]
 calculateAllDistances dist (x:os) = map (dist x) os ++ calculateAllDistances dist os
 
 -- | Inverts the distances
@@ -102,8 +102,8 @@ calculateAllMetrics = map
 -- The "invertedDistances" function is used (not normal distances).
 overAllValue :: Metric -> DistanceFunction -> [Path] -> Double
 overAllValue _ _ [] = 0.0
-overAllValue mFn _ (x:[]) = mFn x
-overAllValue mFn dFn ps = product ((mFn <$> ps) ++ (invertedDistances dFn ps))
+overAllValue mFn _ [x] = mFn x
+overAllValue mFn dFn ps = product ((mFn <$> ps) ++ invertedDistances dFn ps)
 
 -- | Checks a list of candidates whether they are over the sigmaDelta threshold given a metric 
 filterBySigmaTheta :: 
@@ -122,4 +122,4 @@ filterBySigmaTheta ps mfn theta = filter (\x -> sigmaThetaQualified x mfn theta)
 -- 
 -- Does not shorten the list of candidates, does not filter the list of candidates in any way.  
 sortByOverallValue :: Metric -> DistanceFunction -> [[Path]] -> [[Path]]
-sortByOverallValue mFn dFn ps = sortOn (overAllValue mFn dFn) ps
+sortByOverallValue mFn dFn = sortOn (overAllValue mFn dFn)

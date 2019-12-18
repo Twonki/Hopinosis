@@ -29,7 +29,7 @@ lookupOuts t g = filter (\(x,_) -> x == t ) $ Map.assocs g
 -- The paths are being checked to start with only valid nodes given the sigmaAlpha, 
 -- are not cyclic and are valid ended. 
 allPathsWithSigmaAlpha :: Double -> Graph -> [Path]
-allPathsWithSigmaAlpha f g = filter (isValidWithSigmaAlpha f) $ (unique $ allPathsRecursive startPaths g)
+allPathsWithSigmaAlpha f g = filter (isValidWithSigmaAlpha f) (unique $ allPathsRecursive startPaths g)
     where 
         startPaths = validStartsWithSigmaAlpha f g
         allPathsRecursive ps g = 
@@ -59,7 +59,7 @@ validStartsWithSigmaAlpha f g= (map (:[]) . filter (isValidStartedWithSigmaAlpha
 -- 
 -- The paths are checked for being acyclic. 
 nextPaths :: [Path] -> Graph -> [Path]
-nextPaths paths g= mconcat (filter isAcyclic <$> (\x -> nextPathsHelper x g ) <$> paths)
+nextPaths paths g= mconcat (filter isAcyclic . (`nextPathsHelper` g ) <$> paths)
     where 
         nexts :: Node -> Graph -> [Node]
         nexts (_,Values _ os _ _) g =  mconcat $ map (`lookupOuts` g) (Map.keys os)
@@ -103,7 +103,7 @@ isCyclic [x] = False
 isCyclic ((x,_):ps) = isInPath x ps || isCyclic ps
         where 
             isInPath :: Text -> Path -> Bool 
-            isInPath s xs = foldr (||) False $ map (\(x,_) -> x==s) xs
+            isInPath s = foldr ((||) . \(x,_) -> x==s) False
 
             
 -- | isAcyclic = not isCyclic
