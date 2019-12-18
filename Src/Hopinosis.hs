@@ -23,7 +23,7 @@ toGraphOne s =  parseSentence $ Txt.pack <$> words s
 
 -- |parses a list of sentences to an opinosis graph.
 toGraphMany :: [String] -> Graph
-toGraphMany s = parseDocument (map (\t -> map Txt.pack t) $ map words s)
+toGraphMany s = parseDocument (map Txt.pack . words <$> s)
 
 -- |parses an un-split multisentence-text to an opinosis graph.
 toGraphSentences:: String -> Graph 
@@ -71,9 +71,8 @@ summarizeFrom ::
     -> Double               -- ^ The Sigma Delta value, which threshhold for the metric needs to be met
     -> (a -> Graph)         -- ^ A function to create a graph from "a"
     -> (a -> [String])      -- ^ A function to summarize given the other parameters from an "a"
-summarizeFrom mFn dFn n alpha delta gFn =
-    \s -> 
-        let graph = gFn s
+summarizeFrom mFn dFn n alpha delta gFn a =
+        let graph = gFn a
             paths = allPathsWithSigmaAlpha alpha graph
             bests = bestPaths mFn dFn n delta paths
         in toString <$> bests
