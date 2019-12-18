@@ -28,7 +28,7 @@ data Values = Values {
 
 -- | Sets the value "start" to one
 setStart:: Values -> Values
-setStart (Values i o _ e) = (Values i o 1 e)
+setStart (Values i o _ e) = Values i o 1 e
 
 -- | merges every value of Values according to their individual monoidal instance
 merge :: Values -> Values -> Values

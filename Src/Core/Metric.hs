@@ -14,21 +14,21 @@ import qualified Data.Set as Set
 edgeStrengths :: Metric
 edgeStrengths [] = 0.0
 edgeStrengths [x] = 0.0
-edgeStrengths p@(x:y:xs)= (fromIntegral $ nextStrength p) + edgeStrengths (y:xs)
+edgeStrengths p@(x:y:xs)= fromIntegral (nextStrength p) + edgeStrengths (y:xs)
     where 
         nextStrength :: Path -> Int 
         nextStrength [] = 0
         nextStrength [x] = 0
-        nextStrength (x:y:xs) = (outs $ snd x) MMap.! (fst y)
+        nextStrength (x:y:xs) = outs (snd x) MMap.! fst y
 
 averagedEdgeStrengths :: Metric
-averagedEdgeStrengths p = edgeStrengths p / (fromIntegral $ length p)
+averagedEdgeStrengths p = edgeStrengths p / fromIntegral (length p)
 
 magnitudes :: Metric 
-magnitudes p = fromIntegral (sum $ (magnitude .snd) <$> p)
+magnitudes p = fromIntegral (sum $ magnitude .snd <$> p)
 
 averagedMagnitudes :: Metric 
-averagedMagnitudes p = magnitudes p / (fromIntegral $ length p)
+averagedMagnitudes p = magnitudes p / fromIntegral (length p)
 
 
 toVectors :: (Path,Path) -> ([Double],[Double])

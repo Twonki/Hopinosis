@@ -35,7 +35,7 @@ allPathsWithSigmaAlpha f g = filter (isValidWithSigmaAlpha f) $ (unique $ allPat
         allPathsRecursive ps g = 
             let ps' = nextPaths ps g
             in 
-                if ps' == ps || ps' == []
+            if ps' == ps || null ps'
                 then ps 
                 else ps ++ allPathsRecursive ps' g
         unique = Set.toList . Set.fromList
@@ -45,7 +45,7 @@ allPathsWithSigmaAlpha f g = filter (isValidWithSigmaAlpha f) $ (unique $ allPat
 -- The nodes are wrapped into a single-element list, so they are single-node paths.
 -- The paths are then used as starting points for other functions.
 validStartsWithSigmaAlpha :: Double -> Graph -> [Path]
-validStartsWithSigmaAlpha f g= (map (\s -> [s]) . filter (isValidStartedWithSigmaAlpha f)) (Map.assocs g)
+validStartsWithSigmaAlpha f g= (map (:[]) . filter (isValidStartedWithSigmaAlpha f)) (Map.assocs g)
 
 -- | Returns all potential paths following the current path in a graph. 
 -- 
@@ -62,11 +62,11 @@ nextPaths :: [Path] -> Graph -> [Path]
 nextPaths paths g= mconcat (filter isAcyclic <$> (\x -> nextPathsHelper x g ) <$> paths)
     where 
         nexts :: Node -> Graph -> [Node]
-        nexts (_,Values _ os _ _) g =  mconcat $ map (\k -> lookupOuts k g) (Map.keys os)
+        nexts (_,Values _ os _ _) g =  mconcat $ map (`lookupOuts` g) (Map.keys os)
         nextPathsHelper :: Path-> Graph -> [Path]
         nextPathsHelper [] g = []
         nextPathsHelper [x] g = map (\p -> x:[p]) $ nexts x g
-        nextPathsHelper (x:xs) g = map (\p ->x:p) $ nextPathsHelper xs g
+        nextPathsHelper (x:xs) g = map (x:) $ nextPathsHelper xs g
 
 -- * Path Validation
 --
@@ -82,11 +82,11 @@ isValidWithSigmaAlpha f p = isValidStartedWithSigmaAlpha' f p &&  isValidEnded p
 
 -- | Validates whether a node is a valid start given a certain sigmaAlpha
 isValidStartedWithSigmaAlpha :: Double -> Node -> Bool
-isValidStartedWithSigmaAlpha f (_,Values m _ s _) =  ((fromIntegral s) / (fromIntegral m)) > f
+isValidStartedWithSigmaAlpha f (_,Values m _ s _) =  (fromIntegral s / fromIntegral m) > f
 
 -- | Checks wether the first node of a path is a valid start given a certain sigmaAlpha
 isValidStartedWithSigmaAlpha' :: Double -> Path -> Bool
-isValidStartedWithSigmaAlpha' f = (isValidStartedWithSigmaAlpha f) . head
+isValidStartedWithSigmaAlpha' f = isValidStartedWithSigmaAlpha f . head
 
 -- | Validates whether a path ends with a node which is an end-node
 isValidEnded :: Path -> Bool

@@ -16,7 +16,7 @@ import qualified Data.Map.Monoidal.Strict as Map
 -- 
 -- This can be used to build graphs from paths - however the graphs will maybe have dead-end edges. 
 fromNodes :: [Node] -> Graph
-fromNodes nds = mconcat $ map (\(k,v) -> Map.singleton k v) nds
+fromNodes nds = mconcat $ map (uncurry Map.singleton) nds
 
 
 -- |Takes a list of list of words and produces an graph. 
@@ -33,7 +33,7 @@ parseSentence s = tagStart s $ parse s
     where 
         parse :: [Text] -> Graph
         parse [] = mempty
-        parse (w:[]) = Map.singleton w (Values 1 Map.empty 0 True)
+        parse [w] = Map.singleton w (Values 1 Map.empty 0 True)
         parse (w:o:ws) = 
                         let n = Map.singleton w (Values 1 (Map.singleton o 1) 0 False)
                         in  n <> parse (o:ws)

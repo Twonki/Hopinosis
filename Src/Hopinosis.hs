@@ -9,7 +9,6 @@ This Module contains several functions to make and use the Opinosis summaries fr
 module Hopinosis where 
 
 import Core.Graph
-import Core.Path
 import Core.Metric
 import Core.Selection
 import Core.Types
@@ -19,15 +18,15 @@ import qualified Data.Text as Txt
 
 -- |parses one sentence to an opinosis graph.    
 toGraphOne :: String -> Graph
-toGraphOne s =  parseSentence $ Txt.pack <$> (words s)
+toGraphOne s =  parseSentence $ Txt.pack <$> words s
 
 -- |parses a list of sentences to an opinosis graph.
 toGraphMany :: [String] -> Graph
-toGraphMany s = parseDocument  ((<$>) Txt.pack <$> words <$> s)
+toGraphMany s = parseDocument (<$>) Txt.pack . words <$> s
 
 -- |parses an un-split multisentence-text to an opinosis graph.
 toGraphSentences:: String -> Graph 
-toGraphSentences =  parseDocument . map (map Txt.toLower) . map (map Txt.pack) . map words . endByOneOf ".;:!?\n"
+toGraphSentences =  parseDocument . map ((map Txt.toLower . Txt.pack) . words) . endByOneOf ".;:!?\n"
 
 -- |forms a readable sentence from a path.
 toString :: Path -> String
