@@ -18,7 +18,7 @@ To yield human readable sentences, only those paths are seen as valid which:
 - The position of a word in the sentence and document is not noted. Keeping track of this would need a strict, iterative approach which is not haskelly. 
   Instead, a flag is set whether it was a start and/or end, and the number of occurrences is tracked. 
 - Due to the changes to the value-bag, both ValueBags and the Graph can be seen as Monoids 
-- There have been no clearly stated measures for similarity of paths. I have left the function as a parameter and provide jaqqard- and cosine-distance as examples. 
+- There have been no clearly stated measures for similarity of paths. I have left the function as a parameter and provide jaccard- and cosine-distance as examples. 
 - It's free, open and for you to explore on Github :octocat:
 
 
@@ -76,4 +76,4 @@ Here are some thoughts on the project which may come across your mind:
 - using my own cosine-similarity. Yes, I also would like to use a library for that. But I have not found a *lightweight* library for this.
   If I import a nlp-library with cabal, this will blow up the whole build process. That's why I currently stick to two small functions. 
 - HUnit vs. Quickcheck. Yes, I think a lot of parts are perfectly fit for Quickcheck, mostly the parsing.
-- Performance Problems: One thing I am really concerned about is that i cannot imagine some java program to yield so much better results. I have the feeling that there was no similarity measure involved, as none is described in the paper, but after printing the top-n given the metric, the selection has been done manually. This is just a thought so. 
+- Performance Problems: One thing I am really concerned about is that I cannot imagine some java program to yield so much better results. I have the feeling that there was no similarity measure involved, as none is described in the paper, but after printing the top-n given the metric, the selection has been done manually. This is just a thought. 
