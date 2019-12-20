@@ -1,9 +1,12 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Tests.MetricTests(allMetricTests) where 
+module Tests.MetricTests(allMetricTests,allMetricProperties) where 
 
 import Tests.TestSuite
-import Test.HUnit hiding (Node)
+import Test.HUnit hiding (Node,Path)
+
+import Test.Framework.Providers.QuickCheck2
+import Test.QuickCheck(forAll, listOf, listOf1,Property)
 
 import Data.Text(Text(..))
 
@@ -39,6 +42,12 @@ allMetricTests = TestList [
     ,TestLabel "jaccardSim_bothPathsEmpty_shouldBeZero" jaccardSim_bothPathsEmpty_shouldBeZero
     ,TestLabel "jaccardSim_oneOfTwoWordsOverlapping_shouldBePoint5" jaccardSim_oneOfTwoWordsOverlapping_shouldBePoint5
     ,TestLabel "jaccardSim_oneOfTwoWordsOverlapping_shouldBeSymmetric" jaccardSim_oneOfTwoWordsOverlapping_shouldBeSymmetric
+    ]
+
+allMetricProperties = [
+    --testProperty "cosineSim of same element is 1" prop_cosineSimReflexivity
+    testProperty "cosineSim of empty list is 0" prop_cosineSimEmptyElem
+    --testProperty "cosineSim is symmetric" prop_cosineSimSymetry
     ]
 
 magnitudes_singleSentenceGraph_shouldBeSentenceLength = 
@@ -221,3 +230,17 @@ jaccardSim_oneOfTwoWordsOverlapping_shouldBeSymmetric =
         where 
             testPath1= packStartNode "Hello" : packEndNode "Leonhard" : []
             testPath2= packStartNode "Hello"  : []
+
+prop_cosineSimReflexivity :: Property
+prop_cosineSimReflexivity = 
+    forAll (listOf1 arbitrary) cosineSimReflexivity
+    where 
+        cosineSimReflexivity :: Path -> Bool
+        cosineSimReflexivity p = 
+            cosineSim p p == 1 
+
+prop_cosineSimEmptyElem p = 
+    cosineSim p [] == 0
+
+prop_cosineSimSymetry p1 p2 = 
+    cosineSim p1 p2 == cosineSim p2 p1

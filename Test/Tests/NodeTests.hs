@@ -107,4 +107,4 @@ oneOut s = Values 1 (Map.singleton s 1) 0 False
 emptyValues = mempty
 
 mFromList :: [(Text,Int)] -> Map.MonoidalMap Text Int
-mFromList g = foldr (Map.unionWith (+) ) Map.empty ( map (\(a,b) -> Map.singleton a b) g)
+mFromList = foldr (Map.unionWith (+) . uncurry Map.singleton) Map.empty

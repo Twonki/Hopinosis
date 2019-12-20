@@ -22,7 +22,7 @@ allTests =
         allSelectionTests
     ]
 
-allProperties = allNodeProperties -- ++ allPathProperties ++ allMetricProperties ... 
+allProperties = allNodeProperties ++ allMetricProperties-- ++ allPathProperties ++  ... 
 
 tests = hUnitTestToTests allTests ++ allProperties
 main = 

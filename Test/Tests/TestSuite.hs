@@ -72,4 +72,5 @@ instance (Arbitrary a,Arbitrary b) => Arbitrary (Map.MonoidalMap a b) where
         --TODO: have more outs than one! 
 
 instance Arbitrary Txt.Text where 
-    arbitrary = Txt.pack <$> arbitrary
+    arbitrary = oneof $ return . Txt.pack <$> ["A","B","C","D","E","F","G"]
+    --arbitrary = Txt.pack <$> arbitrary
