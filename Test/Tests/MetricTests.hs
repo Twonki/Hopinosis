@@ -31,15 +31,9 @@ allMetricTests = TestList [
 
     ,TestLabel "cosineSim_samePaths_shouldBeOne" cosineSim_samePaths_shouldBeOne
     ,TestLabel "cosineSim_CompleteDifferentPaths_shouldBeZero" cosineSim_CompleteDifferentPaths_shouldBeZero
-    ,TestLabel "cosineSim_OneEmptyPath_shouldBeZero" cosineSim_OneEmptyPath_shouldBeZero
-    ,TestLabel "cosineSim_TwoEmptyPath_shouldBeZero" cosineSim_TwoEmptyPath_shouldBeZero
-    ,TestLabel "cosineSim_FirstPathEmpty_shouldBeZero" cosineSim_FirstPathEmpty_shouldBeZero
 
     ,TestLabel "jaccardSim_samePaths_shouldBeOne" jaccardSim_samePaths_shouldBeOne
     ,TestLabel "jaccardSim_CompleteDifferentPaths_shouldBeZero" jaccardSim_CompleteDifferentPaths_shouldBeZero
-    ,TestLabel "jaccardSim_secondPathEmpty_shouldBeZero" jaccardSim_secondPathEmpty_shouldBeZero
-    ,TestLabel "jaccardSim_firstPathEmpty_shouldBeZero" jaccardSim_firstPathEmpty_shouldBeZero
-    ,TestLabel "jaccardSim_bothPathsEmpty_shouldBeZero" jaccardSim_bothPathsEmpty_shouldBeZero
     ,TestLabel "jaccardSim_oneOfTwoWordsOverlapping_shouldBePoint5" jaccardSim_oneOfTwoWordsOverlapping_shouldBePoint5
     ,TestLabel "jaccardSim_oneOfTwoWordsOverlapping_shouldBeSymmetric" jaccardSim_oneOfTwoWordsOverlapping_shouldBeSymmetric
     ]
@@ -172,25 +166,6 @@ cosineSim_CompleteDifferentPaths_shouldBeZero =
             testPath1= packStartNode "Hello" : packNode "to" : packNode "my" :packEndNode "Test" : []
             testPath2= packStartNode "Bye" : packNode "you" : packNode "fancy" :packEndNode "reader" : []
 
-cosineSim_OneEmptyPath_shouldBeZero = 
-    0 ~=? cosineSim testPath1 testPath2
-        where 
-            testPath1= packStartNode "Hello" : packNode "to" : packNode "my" :packEndNode "Test" : []
-            testPath2= []
-
-cosineSim_TwoEmptyPath_shouldBeZero = 
-    0 ~=? cosineSim testPath1 testPath2
-        where 
-            testPath1= []
-            testPath2= []
-
-cosineSim_FirstPathEmpty_shouldBeZero = 
-    0 ~=? cosineSim testPath1 testPath2
-        where 
-            testPath1= []
-            testPath2= packStartNode "Hello" : packNode "to" : packNode "my" :packEndNode "Test" : []
-
-
 jaccardSim_samePaths_shouldBeOne = 
     True ~=? 1>= jaccardSim testPath1 testPath2 && cosineSim testPath1 testPath2 >0.99999
         where 
@@ -203,23 +178,6 @@ jaccardSim_CompleteDifferentPaths_shouldBeZero =
             testPath1= packStartNode "Hello" : packNode "to" : packNode "my" :packEndNode "Test" : []
             testPath2= packStartNode "Bye" : packNode "you" : packNode "fancy" :packEndNode "reader" : []
 
-jaccardSim_secondPathEmpty_shouldBeZero = 
-    0 ~=? jaccardSim testPath1 testPath2
-        where 
-            testPath1= packStartNode "Hello" : packNode "to" : packNode "my" :packEndNode "Test" : []
-            testPath2= []
-
-jaccardSim_bothPathsEmpty_shouldBeZero = 
-    0 ~=? jaccardSim testPath1 testPath2
-        where 
-            testPath1= []
-            testPath2= []
-
-jaccardSim_firstPathEmpty_shouldBeZero   = 
-    0 ~=? jaccardSim testPath1 testPath2
-        where 
-            testPath1= []
-            testPath2= packStartNode "Hello" : packNode "to" : packNode "my" :packEndNode "Test" : []
 
 jaccardSim_oneOfTwoWordsOverlapping_shouldBePoint5 = 
     0.5 ~=? jaccardSim testPath1 testPath2 
