@@ -12,6 +12,7 @@ import Core.Types
 import qualified Data.Map.Monoidal.Strict as Map
 import Data.Text(Text(..))
 import qualified Data.Set as Set
+import Data.Monoid(Any(..),Sum(..))
 
 -- * Path Creation from Graph
 --
@@ -82,7 +83,7 @@ isValidWithSigmaAlpha f p = isValidStartedWithSigmaAlpha' f p &&  isValidEnded p
 
 -- | Validates whether a node is a valid start given a certain sigmaAlpha
 isValidStartedWithSigmaAlpha :: Double -> Node -> Bool
-isValidStartedWithSigmaAlpha f (_,Values m _ s _) =  (fromIntegral s / fromIntegral m) > f
+isValidStartedWithSigmaAlpha f (_,Values (Sum m) _ (Sum s) _) =  (fromIntegral s / fromIntegral m) > f
 
 -- | Checks wether the first node of a path is a valid start given a certain sigmaAlpha
 isValidStartedWithSigmaAlpha' :: Double -> Path -> Bool
@@ -91,7 +92,7 @@ isValidStartedWithSigmaAlpha' f = isValidStartedWithSigmaAlpha f . head
 -- | Validates whether a path ends with a node which is an end-node
 isValidEnded :: Path -> Bool
 isValidEnded [] = False
-isValidEnded [(_,Values _ _ _ True)] = True
+isValidEnded [(_,Values _ _ _ (Any True))] = True
 isValidEnded (x:xs) = isValidEnded xs
 
 -- | Checks wether a path contains a node twice. 

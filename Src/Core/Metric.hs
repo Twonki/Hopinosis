@@ -17,6 +17,7 @@ import qualified Data.Map.Monoidal.Strict as MMap
 import qualified Data.Map.Strict as SMap
 import Data.Text (Text(..))
 import Data.Sort (sortOn)
+import Data.Monoid(Sum(..),Any(..))
 import qualified Data.Set as Set
 
 
@@ -34,7 +35,7 @@ edgeStrengths p@(x:y:xs)= fromIntegral (nextStrength p) + edgeStrengths (y:xs)
         nextStrength :: Path -> Int 
         nextStrength [] = 0
         nextStrength [x] = 0
-        nextStrength (x:y:xs) = outs (snd x) MMap.! fst y
+        nextStrength (x:y:xs) = let (Sum a) = outs (snd x) MMap.! fst y in a 
 
 -- | Averaged out strength, first runs "edgeStrengths" and divides it by path length.
 averagedEdgeStrengths :: Metric
@@ -44,7 +45,7 @@ averagedEdgeStrengths p = edgeStrengths p / fromIntegral (length p)
 --
 -- Most prominent words will yield the highest metric, no matter how they are connected. 
 magnitudes :: Metric 
-magnitudes p = fromIntegral (sum $ magnitude .snd <$> p)
+magnitudes p = let (Sum b) = mconcat (magnitude .snd <$> p) in fromIntegral b
 
 -- | Averaged Magnitudes, first runs "magnitudes" and divides by path length
 averagedMagnitudes :: Metric 
@@ -64,8 +65,8 @@ toVectors (p1,p2) =
         where 
             unique = Set.toList . Set.fromList
             unionBagOfWords = unique $ (fst <$> p1) ++ (fst <$> p2)
-            p1' = SMap.fromAscList $ (\(k,v) -> (k,fromIntegral $ magnitude v)) <$> p1
-            p2' = SMap.fromAscList $ (\(k,v) -> (k,fromIntegral $ magnitude v)) <$> p2
+            p1' = SMap.fromAscList $ (\(k,v) -> (k,fromIntegral $ magnitude' v)) <$> p1
+            p2' = SMap.fromAscList $ (\(k,v) -> (k,fromIntegral $ magnitude' v)) <$> p2
 
 -- | Calculates consine similarity for two paths
 --

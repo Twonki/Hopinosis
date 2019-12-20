@@ -8,8 +8,8 @@ import Test.HUnit hiding (Node)
 
 import qualified Data.Map.Monoidal.Strict as Map
 import Data.Text hiding(map,singleton,foldr,words,null,length,head)
-    
-import Tests.TestSuite
+import Data.Monoid(Sum(..),Any(..))
+
 
 import Core.Path.Internals hiding (starts,isValid,allPaths)
 
@@ -253,19 +253,19 @@ isCyclic_singletonPath_shouldBeFalse=
 
 validStartedWithSigmaAlpha_sigmaalphaiszero_start1shouldbeTrue = 
     True ~=? isValidStartedWithSigmaAlpha' 0.0 testPath
-        where testPath = [("SigmaTest",Values 2 Map.empty 1 False)]
+        where testPath = [("SigmaTest",Values (Sum 2) Map.empty 1 (Any False))]
 
 validStartedWithSigmaAlpha_sigmaalphaiszero_start0ShouldBeFalse = 
     False ~=? isValidStartedWithSigmaAlpha' 0.0 testPath
-        where testPath = [("SigmaTest",Values 2 Map.empty 0 False)]
+        where testPath = [("SigmaTest",Values (Sum 2) Map.empty 0 (Any False))]
 
 validStartedWithSigmaAlpha_sigmaalphaisPoint5_start2withMag3shouldbeTrue = 
     True ~=? isValidStartedWithSigmaAlpha' 0.5 testPath
-        where testPath = [("SigmaTest",Values 3 Map.empty 2 False)]
+        where testPath = [("SigmaTest",Values (Sum 3) Map.empty (Sum 2) (Any False))]
 
 validStartedWithSigmaAlpha_sigmaalphaisPoint5_start1withMag2shouldbeFalse = 
     False ~=? isValidStartedWithSigmaAlpha' 0.5 testPath
-        where testPath = [("SigmaTest",Values 2 Map.empty 1 False)]
+        where testPath = [("SigmaTest",Values (Sum 2) Map.empty 1 (Any False))]
     
 
 nextPaths_ofTwoDisjunctSentences_shouldBeTwo = 

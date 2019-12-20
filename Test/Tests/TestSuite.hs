@@ -29,6 +29,7 @@ import Core.Metric
 import Core.Selection
 import qualified Data.Map.Monoidal.Strict as Map
 import qualified Data.Text as Txt
+import Data.Monoid(Sum(..),Any(..))
 import Control.Monad
   ( liftM
   , liftM2
@@ -38,10 +39,10 @@ import Control.Monad
 
 import Test.QuickCheck
 
-uniValue   = Values 1 Map.empty 0 False
-startValue = Values 1 Map.empty 1 False 
-endValue   = Values 1 Map.empty 0 True
-singletonValue = Values 1 Map.empty 1 True
+uniValue   = Values (Sum 1) Map.empty (Sum 0) (Any False)
+startValue = Values (Sum 1) Map.empty (Sum 1) (Any False) 
+endValue   = Values (Sum 1) Map.empty (Sum 0) (Any True)
+singletonValue = Values (Sum 1) Map.empty (Sum 1) (Any True)
 
     
 toGraphOne :: String -> Graph

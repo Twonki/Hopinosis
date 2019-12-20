@@ -2,13 +2,13 @@
 
 module Tests.GraphTests where 
 
-import Tests.TestSuite
 
 import Tests.TestSuite
 import Test.HUnit hiding (Node)
 
 import qualified Data.Map.Monoidal.Strict as Map
 import Data.Text hiding(map,singleton,filter,length)
+import Data.Monoid(Sum(..),Any(..))
 
 allGraphTests = TestList [
     TestLabel "testParseEmpty_shouldBeEmpty" testParseEmpty_shouldBeEmpty
@@ -40,42 +40,42 @@ allGraphTests = TestList [
 testParseEmpty_shouldBeEmpty = 
     True ~=? Map.null (parseSentence [])
 testParseOneWord_shouldBeThere = 
-    Just (Values 1 Map.empty 1 True) ~=? Map.lookup "Hello" (parseSentence ["Hello"] )
+    Just (Values (Sum 1) Map.empty (Sum 1) (Any True)) ~=? Map.lookup "Hello" (parseSentence ["Hello"] )
 
 testParseTwoWords_checkLastOne =
-    Just (Values 1 Map.empty 0 True) ~=? Map.lookup "Bye" (parseSentence ["Hello","Bye"])
+    Just (Values (Sum 1) Map.empty 0 (Any True)) ~=? Map.lookup "Bye" (parseSentence ["Hello","Bye"])
 testParseTwoWords_checkFirstOne =
-    Just (Values 1 (Map.singleton "Bye" 1) 1 False) ~=? Map.lookup "Hello" (parseSentence ["Hello","Bye"])
+    Just (Values (Sum 1) (Map.singleton "Bye" (Sum 1)) (Sum 1) (Any False)) ~=? Map.lookup "Hello" (parseSentence ["Hello","Bye"])
 
 testParseThreeWords_checkFirstOne =
-    Just (Values 1 (Map.singleton "Middle" 1) 1 False) ~=? Map.lookup "Hello" (parseSentence ["Hello","Middle","Bye"])
+    Just (Values (Sum 1) (Map.singleton "Middle" (Sum 1)) (Sum 1) (Any False)) ~=? Map.lookup "Hello" (parseSentence ["Hello","Middle","Bye"])
 testParseThreeWords_checkLastOne =
-    Just (Values 1 Map.empty 0 True) ~=? Map.lookup "Bye" (parseSentence ["Hello","Middle","Bye"])
+    Just (Values (Sum 1) Map.empty 0 (Any True)) ~=? Map.lookup "Bye" (parseSentence ["Hello","Middle","Bye"])
 testParseThreeWords_checkMiddleOne = 
-    Just (Values 1 (Map.singleton "Bye" 1) 0 False) ~=? Map.lookup "Middle" (parseSentence ["Hello","Middle","Bye"])
+    Just (Values (Sum 1) (Map.singleton "Bye" (Sum 1)) 0 (Any False)) ~=? Map.lookup "Middle" (parseSentence ["Hello","Middle","Bye"])
 
 -- Word-DUplication-Tests
 testParseWordTwice_check =
-    Just (Values 2 (Map.singleton "Hey" 1) 1 True) ~=? Map.lookup "Hey" (parseSentence ["Hey","Hey"])
+    Just (Values (Sum 2) (Map.singleton "Hey" (Sum 1)) (Sum 1) (Any True)) ~=? Map.lookup "Hey" (parseSentence ["Hey","Hey"])
 testParseWordTwice_withOtherWordInBetween_check =
-    Just (Values 2 (Map.singleton "Other" 1) 1 True) ~=? Map.lookup "Hey" (parseSentence ["Hey","Other","Hey"])
+    Just (Values (Sum 2) (Map.singleton "Other" (Sum 1)) (Sum 1) (Any True)) ~=? Map.lookup "Hey" (parseSentence ["Hey","Other","Hey"])
 testParseWordThrice_check =
-    Just (Values 3 (Map.singleton "Hey" 2) 1 True) ~=? Map.lookup "Hey" (parseSentence ["Hey","Hey","Hey"])
+    Just (Values (Sum 3) (Map.singleton "Hey" (Sum 2)) (Sum 1) (Any True)) ~=? Map.lookup "Hey" (parseSentence ["Hey","Hey","Hey"])
 
 -- Document-Duplication-Tests
 testParseDocumentTwice_check =
-    Just (Values 2 Map.empty 2 True) ~=? Map.lookup "Hey" (parseDocument [["Hey"],["Hey"]])
+    Just (Values (Sum 2) Map.empty (Sum 2) (Any True)) ~=? Map.lookup "Hey" (parseDocument [["Hey"],["Hey"]])
 testParseDocumentThrice_check =
-    Just (Values 3 Map.empty 3 True) ~=? Map.lookup "Hey" (parseDocument [["Hey"],["Hey"],["Hey"]])
+    Just (Values (Sum 3) Map.empty (Sum 3) (Any True)) ~=? Map.lookup "Hey" (parseDocument [["Hey"],["Hey"],["Hey"]])
 
 testParseDocuments_WordsAreCombinedOverDocuments = 
-    Just (Values 2 (Map.singleton "Hey" 1) 1 True) ~=? Map.lookup "Baby" (parseDocument [["Hey","Baby"],["Baby","Hey"]])
+    Just (Values (Sum 2) (Map.singleton "Hey" (Sum 1)) (Sum 1) (Any True)) ~=? Map.lookup "Baby" (parseDocument [["Hey","Baby"],["Baby","Hey"]])
 
     
 testParseEmptyDocument_shouldBeEmpty = 
     True ~=? Map.null (parseDocument [])
 testParseDocument_singleWord_shouldBeThere = 
-    Just (Values 1 Map.empty 1 True) ~=? Map.lookup "Hello" (parseDocument [["Hello"]] )
+    Just (Values (Sum 1) Map.empty (Sum 1) (Any True)) ~=? Map.lookup "Hello" (parseDocument [["Hello"]] )
 
 {-
     Defensive Tests - Created to avoid Regression Bugs
@@ -96,7 +96,7 @@ testBugDocument_4longSentences_shouldHave10Keys =
         where testGraph = toGraphMany ["Hello I like dogs","I like rabbits","You are different","You hate rabbits","You like me"]
 
 testBugDocument_4longSentences_shouldHave4Ends=
-    4 ~=? length (( filter (\(k,v) -> validEnd v) . Map.assocs) testGraph)
+    4 ~=? length (( filter (\(k,v) -> getAny $ validEnd v) . Map.assocs) testGraph)
         where testGraph = toGraphMany ["Hello I like dogs","I like rabbits","You are different","You hate rabbits","You like me"]
 
 testBugDocument_4longSentences_shouldHave3Starts=
