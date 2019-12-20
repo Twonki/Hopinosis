@@ -45,9 +45,11 @@ allMetricTests = TestList [
     ]
 
 allMetricProperties = [
-    --testProperty "cosineSim of same element is 1" prop_cosineSimReflexivity
-    testProperty "cosineSim of empty list is 0" prop_cosineSimEmptyElem
-    --testProperty "cosineSim is symmetric" prop_cosineSimSymetry
+    --testProperty "cosineSim of same element is 1" prop_cosineSimReflexivity,
+    testProperty "cosineSim of empty list is 0" prop_cosineSimEmptyElem,
+    testProperty "cosineSim is symmetric" prop_cosineSimSymmetry,
+    testProperty "jaccardSim of empty list is 0" prop_jaccardSimEmptyElem,
+    testProperty "jaccardSim is symmetric" prop_jaccardSimSymmetry
     ]
 
 magnitudes_singleSentenceGraph_shouldBeSentenceLength = 
@@ -237,10 +239,17 @@ prop_cosineSimReflexivity =
     where 
         cosineSimReflexivity :: Path -> Bool
         cosineSimReflexivity p = 
-            cosineSim p p == 1 
+            cosineSim p p == 1.0 
 
 prop_cosineSimEmptyElem p = 
     cosineSim p [] == 0
 
-prop_cosineSimSymetry p1 p2 = 
+prop_cosineSimSymmetry p1 p2 = 
     cosineSim p1 p2 == cosineSim p2 p1
+
+
+prop_jaccardSimEmptyElem p = 
+    jaccardSim p [] == 0
+
+prop_jaccardSimSymmetry p1 p2 = 
+    jaccardSim p1 p2 == jaccardSim p2 p1

@@ -65,7 +65,7 @@ packStartNode :: Txt.Text -> Node
 packStartNode s = (s,startValue)
 
 instance Arbitrary Values where 
-    arbitrary = liftM4 Values arbitrary arbitrary arbitrary arbitrary 
+    arbitrary = liftM4 Values sumOf1 arbitrary arbitrary arbitrary 
 
 instance (Arbitrary a,Arbitrary b) => Arbitrary (Map.MonoidalMap a b) where 
     arbitrary = oneof [liftM2 Map.singleton arbitrary arbitrary, return Map.empty]
@@ -75,3 +75,6 @@ instance (Arbitrary a,Arbitrary b) => Arbitrary (Map.MonoidalMap a b) where
 instance Arbitrary Txt.Text where 
     arbitrary = oneof $ return . Txt.pack <$> ["A","B","C","D","E","F","G"]
     --arbitrary = Txt.pack <$> arbitrary
+
+sumOf1 :: Gen (Sum Word)
+sumOf1 = return (Sum 1)
