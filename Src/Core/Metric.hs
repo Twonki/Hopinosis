@@ -74,14 +74,17 @@ toVectors (p1,p2) =
 cosineSim :: Path -> Path -> Double
 cosineSim [] _ = 0.0
 cosineSim _ [] = 0.0
-cosineSim p1 p2 = cosine p1vec p2vec
-    where 
-        (p1vec,p2vec) = toVectors (p1,p2)
-        cosine :: [Double] -> [Double] -> Double
-        cosine xs ys = dot xs ys / (len xs * len ys)
-            where 
-                dot a b = sum $ zipWith (*) a b
-                len a = sqrt $ dot a a
+cosineSim p1 p2 = 
+    if p1 == p2 
+    then 1.0 -- Shortcut equal items
+    else cosine p1vec p2vec
+        where 
+            (p1vec,p2vec) = toVectors (p1,p2)
+            cosine :: [Double] -> [Double] -> Double
+            cosine xs ys = dot xs ys / (len xs * len ys)
+                where 
+                    dot a b = sum $ zipWith (*) a b
+                    len a = sqrt $ dot a a
 
 -- | Calculates the jaccard similarity of two paths
 --   
@@ -89,16 +92,19 @@ cosineSim p1 p2 = cosine p1vec p2vec
 jaccardSim :: Path -> Path -> Double 
 jaccardSim [] _ = 0.0
 jaccardSim _ [] = 0.0
-jaccardSim p1 p2 = jaccard p1vec p2vec 
-    where 
-        (p1vec,p2vec) = toVectors (p1,p2)
-        -- | The vectors are already on the same length, so the vector length equals the size of the union of the words of both documents.
-        -- Therefore I only need to check the "hits" in both items and I'm good to go. 
-        jaccard :: [Double] -> [Double] -> Double 
-        jaccard [] [] = 0.0
-        jaccard vec1 vec2 = fromIntegral (hits vec1 vec2) / fromIntegral (length vec1)
-        hits :: [Double] -> [Double] -> Int
-        hits [] [] = 0
-        hits (a:as) (b:bs) = if a > 0 && b > 0 -- Initial Idea was that a == b, but a "hit" is also if b has the word twice, so this is the better implementation
-                             then 1 + hits as bs 
-                             else hits as bs 
+jaccardSim p1 p2 = 
+        if p1 == p2 
+        then 1.0 -- Shortcut equal items
+        else jaccard p1vec p2vec 
+            where 
+                (p1vec,p2vec) = toVectors (p1,p2)
+                -- | The vectors are already on the same length, so the vector length equals the size of the union of the words of both documents.
+                -- Therefore I only need to check the "hits" in both items and I'm good to go. 
+                jaccard :: [Double] -> [Double] -> Double 
+                jaccard [] [] = 0.0
+                jaccard vec1 vec2 = fromIntegral (hits vec1 vec2) / fromIntegral (length vec1)
+                hits :: [Double] -> [Double] -> Int
+                hits [] [] = 0
+                hits (a:as) (b:bs) = if a > 0 && b > 0 -- Initial Idea was that a == b, but a "hit" is also if b has the word twice, so this is the better implementation
+                                    then 1 + hits as bs 
+                                    else hits as bs 

@@ -45,9 +45,10 @@ allMetricTests = TestList [
     ]
 
 allMetricProperties = [
-    --testProperty "cosineSim of same element is 1" prop_cosineSimReflexivity,
+    testProperty "cosineSim of same element is 1" prop_cosineSimReflexivity,
     testProperty "cosineSim of empty list is 0" prop_cosineSimEmptyElem,
     testProperty "cosineSim is symmetric" prop_cosineSimSymmetry,
+    testProperty "jaccardSim to itself is 1" prop_jaccardSimReflexivity,
     testProperty "jaccardSim of empty list is 0" prop_jaccardSimEmptyElem,
     testProperty "jaccardSim is symmetric" prop_jaccardSimSymmetry
     ]
@@ -247,6 +248,13 @@ prop_cosineSimEmptyElem p =
 prop_cosineSimSymmetry p1 p2 = 
     cosineSim p1 p2 == cosineSim p2 p1
 
+prop_jaccardSimReflexivity :: Property
+prop_jaccardSimReflexivity = 
+    forAll (listOf1 arbitrary) jaccardSimReflexivity
+    where 
+        jaccardSimReflexivity :: Path -> Bool
+        jaccardSimReflexivity p = 
+            jaccardSim p p == 1.0 
 
 prop_jaccardSimEmptyElem p = 
     jaccardSim p [] == 0
