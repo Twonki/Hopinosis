@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Tests.NodeTests where 
+module Tests.NodeTests(allNodeTests,nodeQuickCheckProps) where 
 
 import Tests.TestSuite
 import Test.HUnit hiding (Node)
@@ -36,6 +36,8 @@ allNodeTests = TestList [
     , TestLabel "testFoldValues_withOuts_threeTimesSame_shouldHaveIncreasedOuts" testFoldValues_withOuts_threeTimesSame_shouldHaveIncreasedOuts
     , TestLabel "testFoldValues_withTwoDifferentOuts_shouldBeBoth" testFoldValues_withTwoDifferentOuts_shouldBeBoth
     ]
+
+nodeQuickCheckProps = [("v+mempty=v",prop_memptyAddition)]
 
 testValueMerge_ShouldBeAdded = (Values 2 Map.empty 0 False) ~=? mappend uniValue uniValue
 testValueMerge_EmptyValueShould_BeNeutral = uniValue ~=? mappend uniValue emptyValues
@@ -81,6 +83,11 @@ testFoldValues_withOuts_threeTimesSame_shouldHaveIncreasedOuts =
     mFromList [("Sample",3)] ~=? outs (mconcat [oneOut "Sample",oneOut "Sample",oneOut "Sample"])
 testFoldValues_withTwoDifferentOuts_shouldBeBoth = 
     mFromList [("Apple",1),("Banana",1)] ~=? outs (mconcat [oneOut "Apple",oneOut "Banana"])
+
+
+prop_memptyAddition :: Values  -> Bool
+prop_memptyAddition v = 
+    v <> mempty == v
 
 oneOut :: Text -> Values
 oneOut s = Values 1 (Map.singleton s 1) 0 False

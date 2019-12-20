@@ -14,11 +14,11 @@ extra-source-files:  README.md
 
 library
   exposed-modules:    Hopinosis
+                      Core.Metric
   -- Modules included in this executable, other than Main.
   other-modules:      Core.Types
                       Core.Node
                       Core.Graph
-                      Core.Metric
                       Core.Path
                       Core.Path.Internals
                       Core.Selection
@@ -60,10 +60,12 @@ Test-Suite HUnitTestSuite
                        Tests.TestSuite
   build-depends:       base,
                        monoidal-containers ^>=0.6,
+                       QuickCheck ^>=2.13.2,
                        containers^>=0.6,
                        split ^>= 0.2.3.3,
                        sort ^>= 1.0.0.0,
                        text ^>= 1.2.3.1,
+                       test-framework-quickcheck2 ^>= 0.3.0.5,
                        test-framework,
                        test-framework-hunit,
                        HUnit,
