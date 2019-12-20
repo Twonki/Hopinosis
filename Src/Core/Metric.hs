@@ -32,7 +32,7 @@ edgeStrengths [] = 0.0
 edgeStrengths [x] = 0.0
 edgeStrengths p@(x:y:xs)= fromIntegral (nextStrength p) + edgeStrengths (y:xs)
     where 
-        nextStrength :: Path -> Int 
+        nextStrength :: Path -> Word 
         nextStrength [] = 0
         nextStrength [x] = 0
         nextStrength (x:y:xs) = let (Sum a) = outs (snd x) MMap.! fst y in a 
@@ -65,8 +65,8 @@ toVectors (p1,p2) =
         where 
             unique = Set.toList . Set.fromList
             unionBagOfWords = unique $ (fst <$> p1) ++ (fst <$> p2)
-            p1' = SMap.fromAscList $ (\(k,v) -> (k,fromIntegral $ magnitude' v)) <$> p1
-            p2' = SMap.fromAscList $ (\(k,v) -> (k,fromIntegral $ magnitude' v)) <$> p2
+            p1' = SMap.fromAscList $ (\(k,v) -> (k,fromIntegral $ getSum $ magnitude v)) <$> p1
+            p2' = SMap.fromAscList $ (\(k,v) -> (k,fromIntegral $ getSum $ magnitude v)) <$> p2
 
 -- | Calculates consine similarity for two paths
 --

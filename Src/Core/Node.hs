@@ -8,7 +8,7 @@ This module contains the "Values" of a single node.
 
 The values are declared a monoid and a merge function is provided.
 -}
-module Core.Node(Values(..),setStart,magnitude') where 
+module Core.Node(Values(..),setStart) where 
 import qualified Data.Map.Monoidal.Strict as Map
 import Data.Text(Text(..))
 import Data.Monoid(Sum(..),Any(..))
@@ -18,17 +18,14 @@ import Data.Monoid(Sum(..),Any(..))
 -- All the attributes are itself monoidal
 data Values = Values {
      -- | the number of occurrences 
-    magnitude::Sum Int,
+    magnitude::Sum Word,
      -- | the outgoing edges and their edge strength
-    outs::Map.MonoidalMap Text (Sum Int),
+    outs::Map.MonoidalMap Text (Sum Word),
      -- | the number of occurrences where this node has been a start
-    starts::Sum Int,
+    starts::Sum Word,
      -- | whether this node has been an end of a sentence at least once
     validEnd::Any
     } deriving (Show,Eq,Ord)
-
-magnitude' :: Values -> Int
-magnitude' (Values (Sum i) _ _ _) = i
 
 -- | Sets the value "start" to one
 setStart:: Values -> Values
