@@ -6,8 +6,6 @@ import Test.Framework
 import Test.Framework.Providers.HUnit
 import Test.Framework.Providers.QuickCheck2
 
-import Test.QuickCheck
-
 import Tests.NodeTests
 import Tests.GraphTests
 import Tests.PathTests 
@@ -24,8 +22,9 @@ allTests =
         allSelectionTests
     ]
 
-tests = hUnitTestToTests allTests ++ 
-        (uncurry testProperty <$> nodeQuickCheckProps)
+allProperties = allNodeProperties -- ++ allPathProperties ++ allMetricProperties ... 
+
+tests = hUnitTestToTests allTests ++ allProperties
 main = 
     defaultMain tests
      

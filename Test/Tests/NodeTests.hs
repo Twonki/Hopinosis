@@ -1,9 +1,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Tests.NodeTests(allNodeTests,nodeQuickCheckProps) where 
+module Tests.NodeTests(allNodeTests,allNodeProperties) where 
 
 import Tests.TestSuite
 import Test.HUnit hiding (Node)
+
+import Test.Framework.Providers.QuickCheck2
 
 import qualified Data.Map.Monoidal.Strict as Map
 import Data.Text hiding(map,singleton,foldr)
@@ -37,7 +39,14 @@ allNodeTests = TestList [
     , TestLabel "testFoldValues_withTwoDifferentOuts_shouldBeBoth" testFoldValues_withTwoDifferentOuts_shouldBeBoth
     ]
 
-nodeQuickCheckProps = [("v+mempty=v",prop_memptyAddition)]
+allNodeProperties = [
+     testProperty "v+mempty=v" prop_memptyAddition
+    , testProperty "value addition" prop_valueAddition
+    ]
+
+--prop = uncurry testProperty
+
+--nodeQuickCheckProps = [named_prop_memptyAddition,named_prop_valueAddition]
 
 testValueMerge_ShouldBeAdded = (Values 2 Map.empty 0 False) ~=? mappend uniValue uniValue
 testValueMerge_EmptyValueShould_BeNeutral = uniValue ~=? mappend uniValue emptyValues
@@ -84,10 +93,13 @@ testFoldValues_withOuts_threeTimesSame_shouldHaveIncreasedOuts =
 testFoldValues_withTwoDifferentOuts_shouldBeBoth = 
     mFromList [("Apple",1),("Banana",1)] ~=? outs (mconcat [oneOut "Apple",oneOut "Banana"])
 
-
 prop_memptyAddition :: Values  -> Bool
 prop_memptyAddition v = 
     v <> mempty == v
+
+prop_valueAddition :: Values -> Values -> Bool    
+prop_valueAddition v1@(Values a1 b1 c1 d1) v2@(Values a2 b2 c2 d2) =
+    v1 <> v2 == Values (a1 + a2) (Map.unionWith (+) b1 b2) (c1 + c2) (d1||d2)
 
 oneOut :: Text -> Values
 oneOut s = Values 1 (Map.singleton s 1) 0 False

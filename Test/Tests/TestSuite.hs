@@ -69,7 +69,7 @@ instance Arbitrary Values where
 instance (Arbitrary a,Arbitrary b) => Arbitrary (Map.MonoidalMap a b) where 
     arbitrary = oneof [liftM2 Map.singleton arbitrary arbitrary, return Map.empty]
         
-        --return Map.empty --TODO: This is quite minimalistic
+        --TODO: have more outs than one! 
 
 instance Arbitrary Txt.Text where 
     arbitrary = Txt.pack <$> arbitrary
