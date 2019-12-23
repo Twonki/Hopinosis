@@ -110,22 +110,29 @@ I have chosen Text as hardcoded type, as it is the most important for my use-cas
 -}
 
 prop_listTooShort_noTuplesMade :: [Text] -> Word -> Bool
-prop_listTooShort_noTuplesMade xs n = 
-    if length xs < fromIntegral n 
-    then length (Intern.ntuples xs n) == 0
-    else True -- actual property of qualified tuples is done separate
+prop_listTooShort_noTuplesMade xs n =
+    let xs' = uniquifieNonDeep xs
+    in   
+        if length xs' < fromIntegral n 
+        then length (Intern.ntuples xs' n) == 0
+        else True -- actual property of qualified tuples is done separate
 
 prop_makeTuples_tuplesHaveLengthN ::[Text] -> Word -> Bool
 prop_makeTuples_tuplesHaveLengthN xs n = 
-    if length xs >= fromIntegral n 
-    then all (\x -> length x == (fromIntegral n)) (Intern.ntuples xs n)
-    else True 
+    let xs' = uniquifieNonDeep xs
+    in  
+        if length xs' >= fromIntegral n 
+        then all (\x -> length x == (fromIntegral n)) (Intern.ntuples xs' n)
+        else True 
 
 
 prop_tuplesAreUnique ::[Text] -> Word -> Bool
 prop_tuplesAreUnique xs n = 
-    let tuples = Intern.ntuples xs n 
-    in length tuples == length (uniquifie tuples)
+    let 
+        xs' = uniquifieNonDeep xs -- because xs can contain duplicates, which is not in my usecase and breaks the prop
+        tuples = Intern.ntuples xs' n 
+    in 
+        length tuples == length (uniquifie tuples)
             
 
 

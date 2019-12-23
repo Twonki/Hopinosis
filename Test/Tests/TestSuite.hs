@@ -18,6 +18,7 @@ module Tests.TestSuite(
     packEndNode,
     packStartNode,
     uniquifie,
+    uniquifieNonDeep,
     -- Export my QuickCheck thingies
     arbitrary
     )
@@ -83,3 +84,6 @@ sumOf1 = return (Sum 1)
 
 uniquifie ::(Ord a) =>  [[a]] -> [[a]]
 uniquifie = map Set.toList . Set.toList . Set.fromList . map Set.fromList
+
+uniquifieNonDeep ::(Ord a) => [a] -> [a]
+uniquifieNonDeep = Set.toList . Set.fromList

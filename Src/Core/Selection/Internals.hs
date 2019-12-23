@@ -33,14 +33,14 @@ import qualified Data.Set as Set
 bestPaths :: 
     Metric -- ^ The metric to calculate the value of a single path
     -> DistanceFunction -- ^ the distance function, which compares two paths 
-    -> Int -- ^ the number of paths which should be returned 
+    -> Word -- ^ the number of paths which should be returned 
     -> Double -- ^ sigmaDelta, threshold which the metric for each path has to superset
     -> [Path] -- ^ input paths - all possible paths, regardless of their metrics and distances
     -> [Path] 
 bestPaths mFn distFn n theta ps = 
     let 
-        n' = min n (length ps) -- There was a bug where one could not select 3 best paths of 2 best paths
-        candidates = validCandidatesWithLength ps n'
+        n' = min (fromIntegral n) (length ps) -- There was a bug where one could not select 3 best paths of 2 best paths
+        candidates = validCandidatesWithLength ps (fromIntegral n')
         filteredCandidates = filterBySigmaTheta candidates mFn theta
         sortedCandidates = sortByOverallValue mFn distFn filteredCandidates
     in
@@ -66,11 +66,11 @@ bestPaths mFn distFn n theta ps =
 -- This had fatal (read: truly fatal) performance impacts. Do not do this.
 validCandidatesWithLength :: 
     [Path] -- ^ Input Paths - usually all validPaths of an opinosis-graph
-    -> Int  -- ^ Number of result-sentences, will be the size of the returned result-candidates
+    -> Word  -- ^ Number of result-sentences, will be the size of the returned result-candidates
     -> [[Path]] -- ^ List of the Result candidates
-validCandidatesWithLength ps n = filter (\c -> length c == n) $ uniqueCandidates $ candidatesWithLength n ps
+validCandidatesWithLength ps n = ntuples ps n 
     where
-        candidatesWithLength :: Int -> [Path] -> [[Path]]
+        candidatesWithLength :: Word -> [Path] -> [[Path]]
         candidatesWithLength 0 _ = []
         candidatesWithLength 1 xs = (:[]) <$> xs
         candidatesWithLength n ps = let lastIt = candidatesWithLength (n-1) ps
@@ -127,4 +127,13 @@ sortByOverallValue mFn dFn = sortOn (overAllValue mFn dFn)
 ntuples ::(Ord a) => [a] -> Word -> [[a]]
 ntuples as n = if length as < fromIntegral n 
                then []
-               else undefined
+               else go n as 
+    where
+        go :: (Ord b) => Word -> [b] -> [[b]]
+        go 0 _  = []
+        go _ [] = []
+        go 1 xs = [[a] | a <- xs]
+        go 2 xs = [[a,b] | a<- xs, b<- xs, a<b]
+        go 3 xs = [[a,b,c] | a<- xs, b<- xs, c<-xs, a<b ,b<c]
+        go 4 xs = [[a,b,c,d] | a<- xs, b<- xs, c<-xs, d<- xs, a<b, b<c,c<d]
+        go _ _ = []
