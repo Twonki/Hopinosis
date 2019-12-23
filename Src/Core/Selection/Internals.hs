@@ -123,3 +123,8 @@ filterBySigmaTheta ps mfn theta = filter (\x -> sigmaThetaQualified x mfn theta)
 -- Does not shorten the list of candidates, does not filter the list of candidates in any way.  
 sortByOverallValue :: Metric -> DistanceFunction -> [[Path]] -> [[Path]]
 sortByOverallValue mFn dFn = sortOn (overAllValue mFn dFn)
+
+ntuples ::(Ord a) => [a] -> Word -> [[a]]
+ntuples as n = if length as < fromIntegral n 
+               then []
+               else undefined

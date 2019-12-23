@@ -17,6 +17,7 @@ module Tests.TestSuite(
     packSingletonNode,
     packEndNode,
     packStartNode,
+    uniquifie,
     -- Export my QuickCheck thingies
     arbitrary
     )
@@ -30,6 +31,7 @@ import Core.Selection
 import qualified Data.Map.Monoidal.Strict as Map
 import qualified Data.Text as Txt
 import Data.Monoid(Sum(..),Any(..))
+import qualified Data.Set as Set
 import Control.Monad
   ( liftM
   , liftM2
@@ -78,3 +80,6 @@ instance Arbitrary Txt.Text where
 
 sumOf1 :: Gen (Sum Word)
 sumOf1 = return (Sum 1)
+
+uniquifie ::(Ord a) =>  [[a]] -> [[a]]
+uniquifie = map Set.toList . Set.toList . Set.fromList . map Set.fromList

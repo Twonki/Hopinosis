@@ -1,11 +1,15 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Tests.SelectionTests(allSelectionTests) where 
+module Tests.SelectionTests(allSelectionTests,allSelectionProperties) where 
 
 import Tests.TestSuite
 import Test.HUnit hiding (Node)
+import Test.Framework.Providers.QuickCheck2
 
 import Data.Text(Text(..))
+
+
+import qualified Core.Selection.Internals as Intern
 
 allSelectionTests = TestList [
     TestLabel "bestPaths_Get0BestPaths_shouldBeEmpty" bestPaths_Get0BestPaths_shouldBeEmpty
@@ -20,6 +24,13 @@ allSelectionTests = TestList [
     ,TestLabel "bestPaths_twoBestPaths_ofTwoForkingPaths_shouldBeTwoPaths" bestPaths_twoBestPaths_ofTwoForkingPaths_shouldBeTwoPaths
     ]
 
+allSelectionProperties = [
+    testProperty "Cannot make n-tuples from to short candidates" prop_listTooShort_noTuplesMade
+    , testProperty "Tuples have length n" prop_makeTuples_tuplesHaveLengthN
+    , testProperty "Tuples are Unique" prop_tuplesAreUnique
+    ]
+
+       
 bestPaths_Get0BestPaths_shouldBeEmpty =
     0 ~=? length (anyBestPathsWithStart 0 testPaths )
         where
@@ -89,6 +100,34 @@ bestPaths_twoBestPaths_ofTwoForkingPaths_shouldBeTwoPaths=
             testPath = packStartNode "Hello" : packNode "to" : packNode "my" :packEndNode "Test" : []
             testPath2 = packStartNode "Hello" : packNode "to" : packNode "my" :packEndNode "Friends" : []
             testPaths = [testPath,testPath2]
+
+{- 
+These properties are usually having the signature (Ord a) => [a] -> Word -> Bool
+But then you cannot properly compile them, as they have an ambigious type reference. 
+(You can try those out with just changing the signature, then you get the same error)
+
+I have chosen Text as hardcoded type, as it is the most important for my use-case. 
+-}
+
+prop_listTooShort_noTuplesMade :: [Text] -> Word -> Bool
+prop_listTooShort_noTuplesMade xs n = 
+    if length xs < fromIntegral n 
+    then length (Intern.ntuples xs n) == 0
+    else True -- actual property of qualified tuples is done separate
+
+prop_makeTuples_tuplesHaveLengthN ::[Text] -> Word -> Bool
+prop_makeTuples_tuplesHaveLengthN xs n = 
+    if length xs >= fromIntegral n 
+    then all (\x -> length x == (fromIntegral n)) (Intern.ntuples xs n)
+    else True 
+
+
+prop_tuplesAreUnique ::[Text] -> Word -> Bool
+prop_tuplesAreUnique xs n = 
+    let tuples = Intern.ntuples xs n 
+    in length tuples == length (uniquifie tuples)
+            
+
 
 -- Small helper with most simplest Distance and Metric, but needs a start 
 anyBestPathsWithStart n = bestPaths (\x->1) (\a b->1) n 0.025
