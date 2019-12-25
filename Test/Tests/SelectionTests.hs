@@ -25,9 +25,9 @@ allSelectionTests = TestList [
     ]
 
 allSelectionProperties = [
-    testProperty "Cannot make n-tuples from to short candidates" prop_listTooShort_noTuplesMade
-    , testProperty "Tuples have length n" prop_makeTuples_tuplesHaveLengthN
-    , testProperty "Tuples are Unique" prop_tuplesAreUnique
+ --   testProperty "Cannot make n-tuples from to short candidates" prop_listTooShort_noTuplesMade
+ --   , testProperty "Tuples have length n" prop_makeTuples_tuplesHaveLengthN
+ --   , testProperty "Tuples are Unique" prop_tuplesAreUnique
     ]
 
        

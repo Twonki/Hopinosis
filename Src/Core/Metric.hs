@@ -21,6 +21,40 @@ import Data.Monoid(Sum(..),Any(..))
 import qualified Data.Set as Set
 
 
+{-
+* Meta Functions
+
+$MetaFunctions
+
+The following functions are "meta-functions" regarding metrics, such as combining or inverting metrics. 
+-}
+
+-- | Returns a function, which sums the results of two metric functions. 
+metricAdd :: Metric -> Metric -> Metric 
+metricAdd a b = \p -> a p + b p
+
+-- | Returns a function, which multiplies the results of two metric functions. 
+metricProd :: Metric -> Metric -> Metric 
+metricProd a b = \p -> a p * b p
+
+
+-- | Multiplies the results of two distance function. 
+--
+-- This should keep the required attributes such as symmetry and reflexivity of distance functions, 
+-- iff both distance functions keep these attributes. 
+--
+-- Thats why there is no distance-add, as e.g. the reflexivity would be either violated 
+-- or the inputs where no valid distance functions.
+distanceProd :: DistanceFunction -> DistanceFunction -> DistanceFunction
+distanceProd a b = \p1 p2 -> a p1 p2 * b p1 p2 
+
+{-
+* Metric Functions
+
+$MetricFunctions
+
+-}
+
 -- | Calculates the accumulated strength of the edges of a path. 
 -- 
 -- This is done via a simple lookup and addition.
@@ -51,22 +85,12 @@ magnitudes p = let (Sum b) = mconcat (magnitude .snd <$> p) in fromIntegral b
 averagedMagnitudes :: Metric 
 averagedMagnitudes p = magnitudes p / fromIntegral (length p)
 
--- | Helper Function to make a one-hot encoded vectors
--- 
--- @
--- toVectors ([a,b],[b,c]) = ([1,1,0],[0,1,1])
--- toVectors ([a,b,d],[a,c,d]) = ([1,1,0,1],[1,0,1,1])
--- @
---
--- Primarily required for "cosineSim".  
-toVectors :: (Path,Path) -> ([Double],[Double])
-toVectors (p1,p2) = 
-        (map (\w -> SMap.findWithDefault 0 w p1') unionBagOfWords, map (\w -> SMap.findWithDefault 0 w p2') unionBagOfWords)
-        where 
-            unique = Set.toList . Set.fromList
-            unionBagOfWords = unique $ (fst <$> p1) ++ (fst <$> p2)
-            p1' = SMap.fromAscList $ (\(k,v) -> (k,fromIntegral $ getSum $ magnitude v)) <$> p1
-            p2' = SMap.fromAscList $ (\(k,v) -> (k,fromIntegral $ getSum $ magnitude v)) <$> p2
+{-
+* Distance Functions
+
+$DistanceFunctions
+
+-}
 
 -- | Calculates consine similarity for two paths
 --
@@ -108,3 +132,28 @@ jaccardSim p1 p2 =
                 hits (a:as) (b:bs) = if a > 0 && b > 0 -- Initial Idea was that a == b, but a "hit" is also if b has the word twice, so this is the better implementation
                                     then 1 + hits as bs 
                                     else hits as bs 
+
+
+{-
+* Helper Functions
+
+$HelperFunctions
+
+-}
+
+-- | Helper Function to make a one-hot encoded vectors
+-- 
+-- @
+-- toVectors ([a,b],[b,c]) = ([1,1,0],[0,1,1])
+-- toVectors ([a,b,d],[a,c,d]) = ([1,1,0,1],[1,0,1,1])
+-- @
+--
+-- Primarily required for "cosineSim".  
+toVectors :: (Path,Path) -> ([Double],[Double])
+toVectors (p1,p2) = 
+        (map (\w -> SMap.findWithDefault 0 w p1') unionBagOfWords, map (\w -> SMap.findWithDefault 0 w p2') unionBagOfWords)
+        where 
+            unique = Set.toList . Set.fromList
+            unionBagOfWords = unique $ (fst <$> p1) ++ (fst <$> p2)
+            p1' = SMap.fromAscList $ (\(k,v) -> (k,fromIntegral $ getSum $ magnitude v)) <$> p1
+            p2' = SMap.fromAscList $ (\(k,v) -> (k,fromIntegral $ getSum $ magnitude v)) <$> p2
