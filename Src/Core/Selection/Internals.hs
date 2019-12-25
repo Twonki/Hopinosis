@@ -21,7 +21,8 @@ import Core.Types
 import qualified Data.Map.Monoidal.Strict as MMap
 import qualified Data.Map.Strict as SMap
 import Data.Text (Text(..))
-import Data.Sort (sort,sortOn)
+import Data.Sort (sortOn)
+import Data.List.Ordered(nubSort)
 import qualified Data.Set as Set
 
 
@@ -124,12 +125,18 @@ filterBySigmaTheta ps mfn theta = filter (\x -> sigmaThetaQualified x mfn theta)
 sortByOverallValue :: Metric -> DistanceFunction -> [[Path]] -> [[Path]]
 sortByOverallValue mFn dFn = sortOn (overAllValue mFn dFn)
 
+-- | Creates unique ntuples of a list. 
+-- 
+-- The List needs to be sortable, but does not need to be sorted. 
+-- The List will be made unique and the resulting tuples should also be sorted. 
+--
+-- It has simple error handling for empty lists, to short tuples and to small / big ints
 ntuples ::(Ord a) => [a] -> Word -> [[a]]
 ntuples as n = if length as < fromIntegral n 
                then []
-               else go n as 
+               else go n as' 
     where
-        as' =  sort as
+        as' = nubSort as 
         go :: (Ord b) => Word -> [b] -> [[b]]
         go 0 _      = [[]]  -- There is only one "0-tuple" = empty list
         go _ []     = []    -- It's impossible to make n-tuple (n>0) out of empty list

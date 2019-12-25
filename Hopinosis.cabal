@@ -29,6 +29,7 @@ library
   -- Other library packages from which modules are imported.
   build-depends:       base ^>=4.12.0.0,
                        monoidal-containers ^>=0.6,
+                       data-ordlist ^>= 0.4.7.0,
                        split ^>= 0.2.3.3,
                        containers^>=0.6,
                        text ^>= 1.2.3.1,
@@ -60,6 +61,7 @@ Test-Suite HUnitTestSuite
                        Tests.TestSuite
   build-depends:       base,
                        monoidal-containers ^>=0.6,
+                       data-ordlist ^>= 0.4.7.0,
                        QuickCheck ^>=2.13.2,
                        containers^>=0.6,
                        split ^>= 0.2.3.3,
