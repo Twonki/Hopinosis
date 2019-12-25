@@ -18,6 +18,9 @@ import qualified Data.Map.Strict as SMap
 import Data.Text (Text(..))
 import Data.Sort (sortOn)
 import Data.Monoid(Sum(..),Any(..))
+
+import qualified Data.List.Ordered as Ordered
+
 import qualified Data.Set as Set
 
 
@@ -93,18 +96,11 @@ jaccardSim :: Path -> Path -> Double
 jaccardSim [] _ = 0.0
 jaccardSim _ [] = 0.0
 jaccardSim p1 p2 = 
-        if p1 == p2 
-        then 1.0 -- Shortcut equal items
-        else jaccard p1vec p2vec 
+            if p1' == p2' 
+            then 1.0
+            else fromIntegral (length hits) / fromIntegral (length unio)
             where 
-                (p1vec,p2vec) = toVectors (p1,p2)
-                -- | The vectors are already on the same length, so the vector length equals the size of the union of the words of both documents.
-                -- Therefore I only need to check the "hits" in both items and I'm good to go. 
-                jaccard :: [Double] -> [Double] -> Double 
-                jaccard [] [] = 0.0
-                jaccard vec1 vec2 = fromIntegral (hits vec1 vec2) / fromIntegral (length vec1)
-                hits :: [Double] -> [Double] -> Int
-                hits [] [] = 0
-                hits (a:as) (b:bs) = if a > 0 && b > 0 -- Initial Idea was that a == b, but a "hit" is also if b has the word twice, so this is the better implementation
-                                    then 1 + hits as bs 
-                                    else hits as bs 
+                p1' = Ordered.nubSort $ map fst p1 
+                p2' = Ordered.nubSort $ map fst p2 
+                hits = Ordered.isect p1' p2'
+                unio = Ordered.xunion p1' p2'
