@@ -21,7 +21,7 @@ import Core.Types
 import qualified Data.Map.Monoidal.Strict as MMap
 import qualified Data.Map.Strict as SMap
 import Data.Text (Text(..))
-import Data.Sort (sortOn)
+import Data.Sort (sort,sortOn)
 import qualified Data.Set as Set
 
 
@@ -129,11 +129,8 @@ ntuples as n = if length as < fromIntegral n
                then []
                else go n as 
     where
+        as' =  sort as
         go :: (Ord b) => Word -> [b] -> [[b]]
-        go 0 _  = []
-        go _ [] = []
-        go 1 xs = [[a] | a <- xs]
-        go 2 xs = [[a,b] | a<- xs, b<- xs, a<b]
-        go 3 xs = [[a,b,c] | a<- xs, b<- xs, c<-xs, a<b ,b<c]
-        go 4 xs = [[a,b,c,d] | a<- xs, b<- xs, c<-xs, d<- xs, a<b, b<c,c<d]
-        go _ _ = []
+        go 0 _      = [[]]  -- There is only one "0-tuple" = empty list
+        go _ []     = []    -- It's impossible to make n-tuple (n>0) out of empty list
+        go n (x:xs) = [ x:ys | ys <- go (n-1) xs ] ++ go n xs
