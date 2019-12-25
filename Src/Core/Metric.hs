@@ -103,4 +103,4 @@ jaccardSim p1 p2 =
                 p1' = Ordered.nubSort $ map fst p1 
                 p2' = Ordered.nubSort $ map fst p2 
                 hits = Ordered.isect p1' p2'
-                unio = Ordered.xunion p1' p2'
+                unio = Ordered.union p1' p2'

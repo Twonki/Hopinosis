@@ -34,9 +34,11 @@ allMetricProperties = [
     testProperty "cosineSim of same element is 1" prop_cosineSimReflexivity,
     testProperty "cosineSim of empty list is 0" prop_cosineSimEmptyElem,
     testProperty "cosineSim is symmetric" prop_cosineSimSymmetry,
+    testProperty "cosineSim is always between 0 and 1" prop_cosineSimValueRange,
     testProperty "jaccardSim to itself is 1" prop_jaccardSimReflexivity,
     testProperty "jaccardSim of empty list is 0" prop_jaccardSimEmptyElem,
-    testProperty "jaccardSim is symmetric" prop_jaccardSimSymmetry
+    testProperty "jaccardSim is symmetric" prop_jaccardSimSymmetry,
+    testProperty "jaccardSim is always between 0 and 1" prop_jaccardSimValueRange
     ]
 
 magnitudes_singleSentenceGraph_shouldBeSentenceLength = 
@@ -155,10 +157,14 @@ prop_cosineSimReflexivity =
             cosineSim p p == 1.0 
 
 prop_cosineSimEmptyElem p = 
-    cosineSim p [] == 0
+    cosineSim p [] == 0 && cosineSim [] p == 0
 
 prop_cosineSimSymmetry p1 p2 = 
     cosineSim p1 p2 == cosineSim p2 p1
+
+prop_cosineSimValueRange p1 p2 =
+    dist >= 0.0 && dist <= 1.0 
+    where dist = cosineSim p1 p2 
 
 prop_jaccardSimReflexivity :: Property
 prop_jaccardSimReflexivity = 
@@ -169,7 +175,11 @@ prop_jaccardSimReflexivity =
             jaccardSim p p == 1.0 
 
 prop_jaccardSimEmptyElem p = 
-    jaccardSim p [] == 0
+    jaccardSim p [] == 0 && jaccardSim [] p == 0
 
 prop_jaccardSimSymmetry p1 p2 = 
     jaccardSim p1 p2 == jaccardSim p2 p1
+
+prop_jaccardSimValueRange p1 p2 =
+    dist >= 0.0 && dist <= 1.0 
+    where dist = jaccardSim p1 p2  
