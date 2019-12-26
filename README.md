@@ -22,6 +22,8 @@ To yield human readable sentences, only those paths are seen as valid which:
 - It's free, open and for you to explore on Github :octocat:
 
 
+You can find [samples](samples.md) in this repository, with rough estimates of time on a common office-laptop (generic thinkpad).
+
 ## Build, Run and Test
 ### Interactive
 To run the code, go to /Src and start your GHCI. 
