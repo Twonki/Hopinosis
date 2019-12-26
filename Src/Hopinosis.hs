@@ -16,6 +16,7 @@ import Core.Types
 
 import Data.List.Split(endByOneOf)
 import qualified Data.Text as Txt
+import Data.Sort (sortOn)
 
 -- |parses one sentence to an opinosis graph.    
 toGraphOne :: String -> Graph
@@ -59,6 +60,32 @@ summarize mFn dFn n alpha delta s =
         paths = allPathsWithSigmaAlpha alpha graph
         bests = bestPaths mFn dFn n delta paths
     in toString <$> bests
+
+-- | A less general summarize. 
+-- 
+-- Builds a graph, filters results by alpha and delta given the metric funcion, 
+-- and returns the n best sentences given the metric. 
+-- 
+-- It can be expected to yield similiar results (read: repetitive sentence-parts). 
+-- It can also be expected to be much faster than summarize with distances. 
+-- 
+-- An important part about this function is to (easily) compare the speed and results of 
+-- "summarize". Maybe someone else can use a better approach to get distances to work faster. 
+-- 
+-- The size of n does not impact the performance. E.g. "small ns" won't increase performance 
+-- unlike the "summarize" function. 
+summarizeWithoutDistances :: 
+    Metric              -- ^ The Metric to evaluate a single path
+    -> Int              -- ^ The Number of result-sentences
+    -> Double           -- ^ The Sigma Alpha value, which threshhold for the number of starts must be met
+    -> Double           -- ^ The Sigma Delta value, which threshhold for the metric needs to be met
+    -> String           -- ^ The unsplit, multisentence-text
+    -> [String]         -- ^ The Result-Sentences
+summarizeWithoutDistances mFn n alpha delta s =
+    let graph    = toGraphSentences s 
+        paths    = allPathsWithSigmaAlpha alpha graph 
+        filtered = sortOn mFn (filter (\x -> mFn x >= delta) paths) 
+    in toString <$> (take n filtered)
 
 -- | a more general "summarize", where one can give the function to build the Graph. 
 -- 
