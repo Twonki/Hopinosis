@@ -25,6 +25,8 @@ import Data.Sort (sortOn)
 import qualified Data.Set as Set
 
 
+import Control.Parallel.Strategies
+
 -- | returns the n paths which are - in regard to each other - achieving the highest overall score
 -- 
 -- The score is calculated by multiplying the metric values and the distances between paths.
@@ -83,7 +85,7 @@ validCandidatesWithLength ps n = filter (\c -> length c == n) $ uniqueCandidates
 calculateAllDistances :: DistanceFunction -> [Path] -> [Double]
 calculateAllDistances _ [] = []
 calculateAllDistances _ [x] = [0.0]
-calculateAllDistances dist (x:os) = map (dist x) os ++ calculateAllDistances dist os
+calculateAllDistances dist (x:os) = (parMap rpar (dist x)) os ++ calculateAllDistances dist os
 
 -- | Inverts the distances
 --
@@ -103,7 +105,7 @@ calculateAllMetrics = map
 overAllValue :: Metric -> DistanceFunction -> [Path] -> Double
 overAllValue _ _ [] = 0.0
 overAllValue mFn _ [x] = mFn x
-overAllValue mFn dFn ps = product ((mFn <$> ps) ++ invertedDistances dFn ps)
+overAllValue mFn dFn ps = product (parMap rpar mFn ps ++ invertedDistances dFn ps)
 
 -- | Checks a list of candidates whether they are over the sigmaDelta threshold given a metric 
 filterBySigmaTheta :: 
@@ -114,7 +116,7 @@ filterBySigmaTheta ::
 filterBySigmaTheta ps mfn theta = filter (\x -> sigmaThetaQualified x mfn theta) ps
     where 
         sigmaThetaQualified :: [Path] -> Metric -> Double -> Bool
-        sigmaThetaQualified p mfn sigma= product (map mfn p) > sigma
+        sigmaThetaQualified p mfn sigma= product (parMap rpar mfn p) > sigma
 
 -- | sorts the candidates by their overall Value
 -- 

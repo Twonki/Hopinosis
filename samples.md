@@ -33,8 +33,8 @@ The dummy is `0.0`.
 
 ``` 
 /Src> ghci
-ghci> :load Hopinosis.hs
-ghci> text1 = "I like cats. Cats eat a lot of food. My cat is called Catie. my cats full name is Catharina. This is not one of my worst jokes. Anyway, Catie likes poultry as her favorite food"
+:load Hopinosis.hs
+text1 = "I like cats. Cats eat a lot of food. My cat is called Catie. my cats full name is Catharina. This is not one of my worst jokes. Anyway, Catie likes poultry as her favorite food"
 ``` 
 
 
@@ -108,7 +108,7 @@ results in
 > which is snow. 
 
 ```
-ghci> text2 = "The eskimos have more than 50 words for snow. For some time, eskimos should have been called inuit, as eskimo was the name given by colonists. apparently, eskimos seem to be fine with being called eskimos nowadays. I do not know, whether inuit also have 50 words for snow. but maybe i will meet both an inuit and an eskimo, and clarify what is correct. until then, i will use 1 word for snow. which is snow."
+text2 = "The eskimos have more than 50 words for snow. For some time, eskimos should have been called inuit, as eskimo was the name given by colonists. apparently, eskimos seem to be fine with being called eskimos nowadays. I do not know, whether inuit also have 50 words for snow. but maybe i will meet both an inuit and an eskimo, and clarify what is correct. until then, i will use 1 word for snow. which is snow."
 ```
 
 With:
@@ -180,7 +180,7 @@ The following are various [Darkwing Duck](https://www.youtube.com/watch?v=3_ee6a
 *Let's get dangerous!*
 
 ```
-ghci> text3 = "I am the terror that flaps in the night, I am the batteries that are not included. I am the terror that flaps in the night, I am the fingernail that scrapes the blackboard of your soul. I am the terror that flaps in the night, I am a special news bulletin that interrupts your favorite show. I am the terror that flaps in the night! I am the wrong number that wakes you at 3am. I am the terror that flaps in the night, I am the onion that stings in your eye. I am the terror that flaps in the night, I am the hairball that clogs your drains. I am the terror that flaps in the night, I am the low ratings that cancel your program. I am the terror that flaps in the night, I am the termite that devours your floorboards. I am the terror that flaps in the night, I am the slug that slimes your begonias. I am the terror that flaps in the night. I am Darkwing Duck."
+text3 = "I am the terror that flaps in the night, I am the batteries that are not included. I am the terror that flaps in the night, I am the fingernail that scrapes the blackboard of your soul. I am the terror that flaps in the night, I am a special news bulletin that interrupts your favorite show. I am the terror that flaps in the night! I am the wrong number that wakes you at 3am. I am the terror that flaps in the night, I am the onion that stings in your eye. I am the terror that flaps in the night, I am the hairball that clogs your drains. I am the terror that flaps in the night, I am the low ratings that cancel your program. I am the terror that flaps in the night, I am the termite that devours your floorboards. I am the terror that flaps in the night, I am the slug that slimes your begonias. I am the terror that flaps in the night. I am Darkwing Duck."
 ```
 
 With:
@@ -218,6 +218,17 @@ Failed due to memory (lol)
 - "i am a special news bulletin that stings in your begonias"
 - "i am a special news bulletin that stings in your drains"
 
+
+** The function: `summarizeWithoutDistances` performs really really fast, however the results are very similar. **
+
+## Text 4
+The following is the introduction scene of Southparks *The Coon* [Season 13 Episode 2](https://www.southparkstudios.co.uk/full-episodes/s13e02-the-coon) and the transcript is taken [from the fandom](https://southpark.fandom.com/wiki/The_Coon/Script).
+
+```
+ text4 = "[voice over] The city isn't what it used to be. It all happened so fast. Everything went to crap. It's like... everyone's sense of morals just... disappeared. Bad economy made things worse. [A shot of Tele's TV store  Closed until further notice due to BAD ECONOMY ] The jobs started drying up. Then the stores had to shut down. [a shadow runs across the screen, in a cape. Next scene: an alley looking towards the street. An Obama poster for CHANGE is shown, with WHEN? spray-painted over the word] Then a black man was elected President. He was supposed to change things. [the shadow climbs up a pipe and runs across the roof of the building opposite the alley entrance] He didn't. [next shot is that of a street under a threatening red sky] As more and more people turned to crime and violence the town becomes gripped in fear. Dark times. The city needs protection. [another alley. An aluminum trash can falls over, spilling its contents. The shadow appears on a wall, larger than life, then runs away] There is an animal that lives by night, searches the trashcans and cleans out the garbage. [A rain gutter is shown. The shadow runs across the screen again, closer to the camera] To clean out the trashcan of society I've chosen to become more than a man. [another rooftop. The camera finds the shadow and zooms in on it.] I'm the hero this town needs. I am... [the shadow turns and is lit up. It's Cartman dressed as...] the Coon! [Cartman looks up to the sky, and graphics for  The Coon  pop up. Next scene, the Coon runs down a street and leaps onto the roof of a car] As the world plummets into despair the Coon fights to keep order intact. [he leaps off the car]."
+```
+
+**Note:** This completely fails on every try. Lol. I need a bigger machine.
 
 ## Summary of Findings
 1. Having high alpha values seems to purge a lot of the items

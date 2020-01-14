@@ -21,6 +21,7 @@ To yield human readable sentences, only those paths are seen as valid which:
 - There have been no clearly stated measures for similarity of paths. I have left the function as a parameter and provide jaccard- and cosine-distance as examples. 
 - It's free, open and for you to explore on Github :octocat:
 
+I have put some [samples](./samples.md) up for you, so you can see what you might expect. 
 
 You can find [samples](samples.md) in this repository, with rough estimates of time on a common office-laptop (generic thinkpad).
 

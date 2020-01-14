@@ -1,6 +1,6 @@
 cabal-version:       2.4
 name:                Hopinosis
-version:             0.0.1
+version:             0.0.2
 synopsis:            library to supply "Opinosis"-Algorithm APIs
 
 bug-reports:         https://github.com/Twonki/Hopinosis/issues
@@ -23,16 +23,20 @@ library
                       Core.Path.Internals
                       Core.Selection
                       Core.Selection.Internals
+  ghc-options:
+    -O2
+    -Wall
   -- LANGUAGE extensions used by modules in this package.
   -- other-extensions:
 
   -- Other library packages from which modules are imported.
-  build-depends:       base ^>=4.12.0.0,
-                       monoidal-containers ^>=0.6,
-                       split ^>= 0.2.3.3,
-                       containers^>=0.6,
-                       text ^>= 1.2.3.1,
-                       sort ^>= 1.0.0.0
+  build-depends:       base,
+                       monoidal-containers,
+                       split,
+                       parallel,
+                       containers,
+                       text,
+                       sort
 
   -- Directories containing source files.
   hs-source-dirs:      Src
@@ -59,13 +63,14 @@ Test-Suite HUnitTestSuite
                        Tests.SelectionTests
                        Tests.TestSuite
   build-depends:       base,
-                       monoidal-containers ^>=0.6,
-                       QuickCheck ^>=2.13.2,
-                       containers^>=0.6,
-                       split ^>= 0.2.3.3,
-                       sort ^>= 1.0.0.0,
-                       text ^>= 1.2.3.1,
-                       test-framework-quickcheck2 ^>= 0.3.0.5,
+                       monoidal-containers,
+                       parallel,
+                       QuickCheck,
+                       containers,
+                       split,
+                       sort,
+                       text,
+                       test-framework-quickcheck2,
                        test-framework,
                        test-framework-hunit,
                        HUnit,
