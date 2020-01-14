@@ -20,6 +20,8 @@ import Data.Sort (sortOn)
 import Data.Monoid(Sum(..),Any(..))
 import qualified Data.Set as Set
 
+import Control.Parallel
+
 
 {-
 * Meta Functions
@@ -109,6 +111,7 @@ cosineSim p1 p2 =
                 where 
                     dot a b = sum $ zipWith (*) a b
                     len a = sqrt $ dot a a
+
 
 -- | Calculates the jaccard similarity of two paths
 --   

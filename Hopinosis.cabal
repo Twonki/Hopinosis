@@ -1,6 +1,6 @@
 cabal-version:       2.4
 name:                Hopinosis
-version:             0.0.1
+version:             0.0.2
 synopsis:            library to supply "Opinosis"-Algorithm APIs
 
 bug-reports:         https://github.com/Twonki/Hopinosis/issues
@@ -23,6 +23,9 @@ library
                       Core.Path.Internals
                       Core.Selection
                       Core.Selection.Internals
+  ghc-options:
+    -O2
+    -Wall
   -- LANGUAGE extensions used by modules in this package.
   -- other-extensions:
 
@@ -30,6 +33,7 @@ library
   build-depends:       base,
                        monoidal-containers,
                        split,
+                       parallel,
                        containers,
                        text,
                        sort
@@ -60,6 +64,7 @@ Test-Suite HUnitTestSuite
                        Tests.TestSuite
   build-depends:       base,
                        monoidal-containers,
+                       parallel,
                        QuickCheck,
                        containers,
                        split,
