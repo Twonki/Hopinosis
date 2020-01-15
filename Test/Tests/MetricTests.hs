@@ -163,7 +163,7 @@ prop_cosineSimSymmetry p1 p2 =
     cosineSim p1 p2 == cosineSim p2 p1
 
 prop_cosineSimValueRange p1 p2 =
-    dist >= 0.0 && dist <= 1.0 
+    dist >= 0.0 && dist <= 1.0
     where dist = cosineSim p1 p2 
 
 prop_jaccardSimReflexivity :: Property
