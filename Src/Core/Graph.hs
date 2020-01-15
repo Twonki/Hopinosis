@@ -11,7 +11,7 @@ import Core.Types
 
 import Data.Monoid(Sum(..),Any(..))
 
-import Data.Text(Text(..)) 
+import Data.Text(Text) 
 import qualified Data.Map.Monoidal.Strict as Map
 
 -- | Builds a graph from a list of nodes. 
@@ -41,4 +41,4 @@ parseSentence s = tagStart s $ parse s
                         in  n <> parse (o:ws)
         tagStart :: [Text] -> Graph -> Graph
         tagStart [] g = g
-        tagStart (s:_) g =  Map.adjust setStart s g
+        tagStart (n:_) g =  Map.adjust setStart n g

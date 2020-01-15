@@ -20,7 +20,7 @@ import Core.Types
 
 import qualified Data.Map.Monoidal.Strict as MMap
 import qualified Data.Map.Strict as SMap
-import Data.Text (Text(..))
+import Data.Text (Text)
 import Data.Sort (sortOn)
 import Data.List.Ordered(nubSort)
 import qualified Data.Set as Set
@@ -71,26 +71,19 @@ validCandidatesWithLength ::
     [Path] -- ^ Input Paths - usually all validPaths of an opinosis-graph
     -> Word  -- ^ Number of result-sentences, will be the size of the returned result-candidates
     -> [[Path]] -- ^ List of the Result candidates
-validCandidatesWithLength ps n = ntuples ps n 
-    where
-        candidatesWithLength :: Word -> [Path] -> [[Path]]
-        candidatesWithLength 0 _ = []
-        candidatesWithLength 1 xs = (:[]) <$> xs
-        candidatesWithLength n ps = let lastIt = candidatesWithLength (n-1) ps
-                                    in [p : xs | p <- ps, xs <- lastIt]
-        uniqueCandidates :: [[Path]] -> [[Path]]
-        uniqueCandidates = map Set.toList . Set.toList . Set.fromList . map Set.fromList
+validCandidatesWithLength ps n = ntuples ps n
 
 -- | Given a distance-function, all distances between the paths are returned.
 -- The distances will be returned as a list and are already unique (e.g. if dist(a,b) is already in the list, dist(b,a) will not be in the output)
 calculateAllDistances :: DistanceFunction -> [Path] -> [Double]
 calculateAllDistances _ [] = []
-calculateAllDistances _ [x] = [0.0]
+calculateAllDistances _ [_] = [0.0]
 calculateAllDistances dist (x:os) = (parMap rpar (dist x)) os ++ calculateAllDistances dist os
 
 -- | Inverts the distances
 --
 -- If I don't invert them, I will get the closest sentences instead of the most distinct
+invertedDistances :: DistanceFunction -> [Path] -> [Double]
 invertedDistances dFn ps = [1-u | u <- calculateAllDistances dFn ps]
 
 -- | applies the metric function to a list of paths
@@ -117,7 +110,7 @@ filterBySigmaTheta ::
 filterBySigmaTheta ps mfn theta = filter (\x -> sigmaThetaQualified x mfn theta) ps
     where 
         sigmaThetaQualified :: [Path] -> Metric -> Double -> Bool
-        sigmaThetaQualified p mfn sigma= product (parMap rpar mfn p) > sigma
+        sigmaThetaQualified p mfn' sigma= product (parMap rpar mfn' p) > sigma
 
 -- | sorts the candidates by their overall Value
 -- 
@@ -142,4 +135,4 @@ ntuples as n = if length as < fromIntegral n
         go :: (Ord b) => Word -> [b] -> [[b]]
         go 0 _      = [[]]  -- There is only one "0-tuple" = empty list
         go _ []     = []    -- It's impossible to make n-tuple (n>0) out of empty list
-        go n (x:xs) = [ x:ys | ys <- go (n-1) xs ] ++ go n xs
+        go n' (x:xs) = [ x:ys | ys <- go (n'-1) xs ] ++ go n' xs

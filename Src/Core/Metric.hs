@@ -15,7 +15,7 @@ import Core.Types
 
 import qualified Data.Map.Monoidal.Strict as MMap
 import qualified Data.Map.Strict as SMap
-import Data.Text (Text(..))
+import Data.Text (Text)
 import Data.Sort (sortOn)
 import Data.Monoid(Sum(..),Any(..))
 
@@ -68,13 +68,13 @@ $MetricFunctions
 -- However, The magnitude can never be lower than the edgeStrength.
 edgeStrengths :: Metric
 edgeStrengths [] = 0.0
-edgeStrengths [x] = 0.0
-edgeStrengths p@(x:y:xs)= fromIntegral (nextStrength p) + edgeStrengths (y:xs)
+edgeStrengths [_] = 0.0
+edgeStrengths p@(_:y:xs)= fromIntegral (nextStrength p) + edgeStrengths (y:xs)
     where 
         nextStrength :: Path -> Word 
         nextStrength [] = 0
-        nextStrength [x] = 0
-        nextStrength (x:y:xs) = let (Sum a) = outs (snd x) MMap.! fst y in a 
+        nextStrength [_] = 0
+        nextStrength (u:v:_) = let (Sum a) = outs (snd u) MMap.! fst v in a 
 
 -- | Averaged out strength, first runs "edgeStrengths" and divides it by path length.
 averagedEdgeStrengths :: Metric

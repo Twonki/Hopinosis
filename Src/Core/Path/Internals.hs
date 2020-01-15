@@ -10,7 +10,7 @@ import Core.Node
 import Core.Types
 
 import qualified Data.Map.Monoidal.Strict as Map
-import Data.Text(Text(..))
+import Data.Text(Text)
 import qualified Data.Set as Set
 import Data.Monoid(Any(..),Sum(..))
 
@@ -33,12 +33,12 @@ allPathsWithSigmaAlpha :: Double -> Graph -> [Path]
 allPathsWithSigmaAlpha f g = filter (isValidWithSigmaAlpha f) (unique $ allPathsRecursive startPaths g)
     where 
         startPaths = validStartsWithSigmaAlpha f g
-        allPathsRecursive ps g = 
-            let ps' = nextPaths ps g
+        allPathsRecursive ps graph = 
+            let ps' = nextPaths ps graph
             in 
             if ps' == ps || null ps'
                 then ps 
-                else ps ++ allPathsRecursive ps' g
+                else ps ++ allPathsRecursive ps' graph
         unique = Set.toList . Set.fromList
 
 -- | Returns all nodes in a graph, which are valid starts given a certain sigmaAlpha.
@@ -63,11 +63,11 @@ nextPaths :: [Path] -> Graph -> [Path]
 nextPaths paths g= mconcat (filter isAcyclic . (`nextPathsHelper` g ) <$> paths)
     where 
         nexts :: Node -> Graph -> [Node]
-        nexts (_,Values _ os _ _) g =  mconcat $ map (`lookupOuts` g) (Map.keys os)
+        nexts (_,Values _ os _ _) v =  mconcat $ map (`lookupOuts` v) (Map.keys os)
         nextPathsHelper :: Path-> Graph -> [Path]
-        nextPathsHelper [] g = []
-        nextPathsHelper [x] g = map (\p -> x:[p]) $ nexts x g
-        nextPathsHelper (x:xs) g = map (x:) $ nextPathsHelper xs g
+        nextPathsHelper [] _ = []
+        nextPathsHelper [x] u = map (\p -> x:[p]) $ nexts x u
+        nextPathsHelper (x:xs) u = map (x:) $ nextPathsHelper xs u
 
 -- * Path Validation
 --
@@ -78,7 +78,7 @@ nextPaths paths g= mconcat (filter isAcyclic . (`nextPathsHelper` g ) <$> paths)
 
 -- | check whether a path is both valid Ended and valid started given a certain sigmaAlpha
 isValidWithSigmaAlpha :: Double -> Path -> Bool
-isValidWithSigmaAlpha f [] = False
+isValidWithSigmaAlpha _ [] = False
 isValidWithSigmaAlpha f p = isValidStartedWithSigmaAlpha' f p &&  isValidEnded p && isAcyclic p
 
 -- | Validates whether a node is a valid start given a certain sigmaAlpha
@@ -93,21 +93,22 @@ isValidStartedWithSigmaAlpha' f = isValidStartedWithSigmaAlpha f . head
 isValidEnded :: Path -> Bool
 isValidEnded [] = False
 isValidEnded [(_,Values _ _ _ (Any True))] = True
-isValidEnded (x:xs) = isValidEnded xs
+isValidEnded (_:xs) = isValidEnded xs
 
 -- | Checks wether a path contains a node twice. 
 -- 
 -- This is done recursive via comparing if a text is occurring twice. 
 isCyclic :: Path -> Bool 
 isCyclic [] = False
-isCyclic [x] = False
+isCyclic [_] = False
 isCyclic ((x,_):ps) = isInPath x ps || isCyclic ps
         where 
             isInPath :: Text -> Path -> Bool 
-            isInPath s = foldr ((||) . \(x,_) -> x==s) False
+            isInPath s = foldr ((||) . \(f,_) -> f==s) False
 
             
 -- | isAcyclic = not isCyclic
 -- 
--- no additional logic.      
+-- no additional logic.
+isAcyclic :: Path -> Bool       
 isAcyclic = not . isCyclic

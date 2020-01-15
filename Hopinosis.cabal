@@ -25,7 +25,6 @@ library
                       Core.Selection.Internals
   ghc-options:
     -O2
-    -Wall
   -- LANGUAGE extensions used by modules in this package.
   -- other-extensions:
 
@@ -71,6 +70,9 @@ Test-Suite HUnitTestSuite
                        split,
                        sort,
                        text,
+                       data-ordlist,
                        test-framework-quickcheck2,
-                       data-ordlist
+                       test-framework,
+                       test-framework-hunit,
+                       HUnit,
   default-language: Haskell2010

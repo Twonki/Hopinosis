@@ -37,6 +37,7 @@ merge (Values i o s e) (Values i2 o2 s2 e2) =
     Values (i<>i2) (o <> o2) (s <> s2) (e <> e2)
 
 -- | Neutral element, used for mempty and especially for tests
+emptyValues :: Values
 emptyValues = Values mempty Map.empty mempty mempty
 
 instance Semigroup Values where
