@@ -50,7 +50,7 @@ commonSummarize  = summarize Metric.averagedEdgeStrengths Metric.cosineSim 2 0.0
 summarize :: 
     Metric              -- ^ The Metric to evaluate a single path
     -> DistanceFunction -- ^ The Function to measure the distance between two sentences
-    -> Int              -- ^ The Number of result-sentences
+    -> Word              -- ^ The Number of result-sentences
     -> Double           -- ^ The Sigma Alpha value, which threshhold for the number of starts must be met
     -> Double           -- ^ The Sigma Delta value, which threshhold for the metric needs to be met
     -> String           -- ^ The unsplit, multisentence-text
@@ -93,7 +93,7 @@ summarizeWithoutDistances mFn n alpha delta s =
 summarizeFrom :: 
     Metric                  -- ^ The Metric to evaluate a single path
     -> DistanceFunction     -- ^ The Function to measure the distance between two sentences
-    -> Int                  -- ^ The Number of result-sentences
+    -> Word                  -- ^ The Number of result-sentences
     -> Double               -- ^ The Sigma Alpha value, which threshhold for the number of starts must be met
     -> Double               -- ^ The Sigma Delta value, which threshhold for the metric needs to be met
     -> (a -> Graph)         -- ^ A function to create a graph from "a"

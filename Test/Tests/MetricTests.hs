@@ -28,23 +28,17 @@ allMetricTests = TestList [
     ,TestLabel "toVectors_6distinctWords_otherVector_shouldHaveLength6Too" toVectors_6distinctWords_otherVector_shouldHaveLength6Too
     ,TestLabel "toVectors_onePathEmpty_otherHas3Words_shouldHaveLength3" toVectors_onePathEmpty_otherHas3Words_shouldHaveLength3
     ,TestLabel "toVectors_onePathEmpty_otherVector_otherHas3Words_shouldHaveLength3too" toVectors_onePathEmpty_otherVector_otherHas3Words_shouldHaveLength3too
-
-    ,TestLabel "cosineSim_samePaths_shouldBeOne" cosineSim_samePaths_shouldBeOne
-    ,TestLabel "cosineSim_CompleteDifferentPaths_shouldBeZero" cosineSim_CompleteDifferentPaths_shouldBeZero
-
-    ,TestLabel "jaccardSim_samePaths_shouldBeOne" jaccardSim_samePaths_shouldBeOne
-    ,TestLabel "jaccardSim_CompleteDifferentPaths_shouldBeZero" jaccardSim_CompleteDifferentPaths_shouldBeZero
-    ,TestLabel "jaccardSim_oneOfTwoWordsOverlapping_shouldBePoint5" jaccardSim_oneOfTwoWordsOverlapping_shouldBePoint5
-    ,TestLabel "jaccardSim_oneOfTwoWordsOverlapping_shouldBeSymmetric" jaccardSim_oneOfTwoWordsOverlapping_shouldBeSymmetric
     ]
 
 allMetricProperties = [
     testProperty "cosineSim of same element is 1" prop_cosineSimReflexivity,
     testProperty "cosineSim of empty list is 0" prop_cosineSimEmptyElem,
     testProperty "cosineSim is symmetric" prop_cosineSimSymmetry,
+    testProperty "cosineSim is always between 0 and 1" prop_cosineSimValueRange,
     testProperty "jaccardSim to itself is 1" prop_jaccardSimReflexivity,
     testProperty "jaccardSim of empty list is 0" prop_jaccardSimEmptyElem,
-    testProperty "jaccardSim is symmetric" prop_jaccardSimSymmetry
+    testProperty "jaccardSim is symmetric" prop_jaccardSimSymmetry,
+    testProperty "jaccardSim is always between 0 and 1" prop_jaccardSimValueRange
     ]
 
 magnitudes_singleSentenceGraph_shouldBeSentenceLength = 
@@ -154,44 +148,6 @@ toVectors_onePathEmpty_otherVector_otherHas3Words_shouldHaveLength3too =
             testPath2 = []
             (vec1,vec2) = toVectors (testPath1,testPath2)
 
-cosineSim_samePaths_shouldBeOne = 
-    True ~=? 1>= cosineSim testPath1 testPath2 && cosineSim testPath1 testPath2 >0.99999
-        where 
-            testPath1= packStartNode "Hello" : packNode "to" : packNode "my" :packEndNode "Test" : []
-            testPath2= packStartNode "Hello" : packNode "to" : packNode "my" :packEndNode "Test" : []
-
-cosineSim_CompleteDifferentPaths_shouldBeZero = 
-    0 ~=? cosineSim testPath1 testPath2
-        where 
-            testPath1= packStartNode "Hello" : packNode "to" : packNode "my" :packEndNode "Test" : []
-            testPath2= packStartNode "Bye" : packNode "you" : packNode "fancy" :packEndNode "reader" : []
-
-jaccardSim_samePaths_shouldBeOne = 
-    True ~=? 1>= jaccardSim testPath1 testPath2 && cosineSim testPath1 testPath2 >0.99999
-        where 
-            testPath1= packStartNode "Hello" : packNode "to" : packNode "my" :packEndNode "Test" : []
-            testPath2= packStartNode "Hello" : packNode "to" : packNode "my" :packEndNode "Test" : []
-
-jaccardSim_CompleteDifferentPaths_shouldBeZero = 
-    0 ~=? jaccardSim testPath1 testPath2
-        where 
-            testPath1= packStartNode "Hello" : packNode "to" : packNode "my" :packEndNode "Test" : []
-            testPath2= packStartNode "Bye" : packNode "you" : packNode "fancy" :packEndNode "reader" : []
-
-
-jaccardSim_oneOfTwoWordsOverlapping_shouldBePoint5 = 
-    0.5 ~=? jaccardSim testPath1 testPath2 
-        where 
-            testPath1= packStartNode "Hello" : packEndNode "Leonhard" : []
-            testPath2= packStartNode "Hello"  : []
-
--- same as above but with paths switched    
-jaccardSim_oneOfTwoWordsOverlapping_shouldBeSymmetric = 
-    0.5 ~=? jaccardSim testPath2 testPath1 
-        where 
-            testPath1= packStartNode "Hello" : packEndNode "Leonhard" : []
-            testPath2= packStartNode "Hello"  : []
-
 prop_cosineSimReflexivity :: Property
 prop_cosineSimReflexivity = 
     forAll (listOf1 arbitrary) cosineSimReflexivity
@@ -201,10 +157,14 @@ prop_cosineSimReflexivity =
             cosineSim p p == 1.0 
 
 prop_cosineSimEmptyElem p = 
-    cosineSim p [] == 0
+    cosineSim p [] == 0 && cosineSim [] p == 0
 
 prop_cosineSimSymmetry p1 p2 = 
     cosineSim p1 p2 == cosineSim p2 p1
+
+prop_cosineSimValueRange p1 p2 =
+    dist >= 0.0 && dist <= 1.0 
+    where dist = cosineSim p1 p2 
 
 prop_jaccardSimReflexivity :: Property
 prop_jaccardSimReflexivity = 
@@ -215,7 +175,11 @@ prop_jaccardSimReflexivity =
             jaccardSim p p == 1.0 
 
 prop_jaccardSimEmptyElem p = 
-    jaccardSim p [] == 0
+    jaccardSim p [] == 0 && jaccardSim [] p == 0
 
 prop_jaccardSimSymmetry p1 p2 = 
     jaccardSim p1 p2 == jaccardSim p2 p1
+
+prop_jaccardSimValueRange p1 p2 =
+    dist >= 0.0 && dist <= 1.0 
+    where dist = jaccardSim p1 p2  

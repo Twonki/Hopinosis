@@ -20,6 +20,7 @@ import qualified Core.Metric as Metric
 import Core.Types
 
 -- | Interface to "Core.Selection.Internals"
+bestPaths :: Metric -> DistanceFunction -> Word -> Double -> [Path] -> [Path]
 bestPaths = Internals.bestPaths
 
 -- | returns the best possible path creation given a set of default values
