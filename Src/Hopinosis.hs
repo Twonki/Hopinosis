@@ -19,27 +19,27 @@ import qualified Data.Text as Txt
 import Data.Sort (sortOn)
 
 -- |parses one sentence to an opinosis graph.    
-toGraphOne :: String -> Graph
-toGraphOne s =  parseSentence $ Txt.pack <$> words s
+toGraphOne :: Text -> Graph
+toGraphOne s =  parseSentence $ words s
 
 -- |parses a list of sentences to an opinosis graph.
-toGraphMany :: [String] -> Graph
-toGraphMany s = parseDocument (map Txt.pack . words <$> s)
+toGraphMany :: [Text] -> Graph
+toGraphMany s = parseDocument (words <$> s)
 
 -- |parses an un-split multisentence-text to an opinosis graph.
-toGraphSentences:: String -> Graph 
-toGraphSentences =  parseDocument . map (map (Txt.toLower . Txt.pack) . words) . endByOneOf ".;:!?\n"
+toGraphSentences:: Text -> Graph 
+toGraphSentences =  parseDocument . map (map (Txt.toLower) . words) . endByOneOf ".;:!?\n"
 
 -- |forms a readable sentence from a path.
-toString :: Path -> String
-toString p = Txt.unpack (pathJoin (fst <$> p))
+toString :: Path -> Text
+toString p = pathJoin (fst <$> p)
     where
         pathJoin = Txt.intercalate (Txt.pack " ")
 
 -- | A wrapped form of summarize.
 -- 
 -- Default values for "summarize" to make a shorter function.
-commonSummarize :: String -> [String]
+commonSummarize :: Text -> [Text]
 commonSummarize  = summarize Metric.averagedEdgeStrengths Metric.cosineSim 2 0.01 0.5 
 
 -- | This function creates an opinosis summary. 
@@ -53,8 +53,8 @@ summarize ::
     -> Word              -- ^ The Number of result-sentences
     -> Double           -- ^ The Sigma Alpha value, which threshhold for the number of starts must be met
     -> Double           -- ^ The Sigma Delta value, which threshhold for the metric needs to be met
-    -> String           -- ^ The unsplit, multisentence-text
-    -> [String]         -- ^ The Result-Sentences
+    -> Text           -- ^ The unsplit, multisentence-text
+    -> [Text]         -- ^ The Result-Sentences
 summarize mFn dFn n alpha delta s = 
     let graph = toGraphSentences s
         paths = allPathsWithSigmaAlpha alpha graph
@@ -79,8 +79,8 @@ summarizeWithoutDistances ::
     -> Int              -- ^ The Number of result-sentences
     -> Double           -- ^ The Sigma Alpha value, which threshhold for the number of starts must be met
     -> Double           -- ^ The Sigma Delta value, which threshhold for the metric needs to be met
-    -> String           -- ^ The unsplit, multisentence-text
-    -> [String]         -- ^ The Result-Sentences
+    -> Text           -- ^ The unsplit, multisentence-text
+    -> [Text]         -- ^ The Result-Sentences
 summarizeWithoutDistances mFn n alpha delta s =
     let graph    = toGraphSentences s 
         paths    = allPathsWithSigmaAlpha alpha graph 
@@ -97,7 +97,7 @@ summarizeFrom ::
     -> Double               -- ^ The Sigma Alpha value, which threshhold for the number of starts must be met
     -> Double               -- ^ The Sigma Delta value, which threshhold for the metric needs to be met
     -> (a -> Graph)         -- ^ A function to create a graph from "a"
-    -> (a -> [String])      -- ^ A function to summarize given the other parameters from an "a"
+    -> (a -> [Text])      -- ^ A function to summarize given the other parameters from an "a"
 summarizeFrom mFn dFn n alpha delta gFn a =
         let graph = gFn a
             paths = allPathsWithSigmaAlpha alpha graph
