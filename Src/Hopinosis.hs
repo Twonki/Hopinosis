@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-|
 Module      : Hopinosis
 Description : Toplevel Functions for the Opinosis Algorithm
@@ -14,24 +15,33 @@ import Core.Path
 import Core.Selection
 import Core.Types
 
-import Data.List.Split(endByOneOf)
 import qualified Data.Text as Txt
 import Data.Sort (sortOn)
 
 -- |parses one sentence to an opinosis graph.    
-toGraphOne :: Text -> Graph
-toGraphOne s =  parseSentence $ words s
+toGraphOne :: Txt.Text -> Graph
+toGraphOne s =  parseSentence $ Txt.words s
 
 -- |parses a list of sentences to an opinosis graph.
-toGraphMany :: [Text] -> Graph
-toGraphMany s = parseDocument (words <$> s)
+toGraphMany :: [Txt.Text] -> Graph
+toGraphMany s = parseDocument (Txt.words <$> s)
 
 -- |parses an un-split multisentence-text to an opinosis graph.
-toGraphSentences:: Text -> Graph 
-toGraphSentences =  parseDocument . map (map (Txt.toLower) . words) . endByOneOf ".;:!?\n"
+toGraphSentences:: Txt.Text -> Graph 
+toGraphSentences =  parseDocument . map (Txt.words . Txt.toLower) . split'' 
+    where
+        split'' :: Txt.Text -> [Txt.Text]
+        split'' t = do 
+            t1 <- Txt.splitOn "\n" t
+            t2 <- Txt.splitOn "?" t1
+            t3 <- Txt.splitOn "!" t2
+            t4 <- Txt.splitOn ":" t3
+            t5 <- Txt.splitOn ";" t4
+            t6 <- Txt.splitOn "." t5
+            return t6
 
 -- |forms a readable sentence from a path.
-toString :: Path -> Text
+toString :: Path -> Txt.Text
 toString p = pathJoin (fst <$> p)
     where
         pathJoin = Txt.intercalate (Txt.pack " ")
@@ -39,7 +49,7 @@ toString p = pathJoin (fst <$> p)
 -- | A wrapped form of summarize.
 -- 
 -- Default values for "summarize" to make a shorter function.
-commonSummarize :: Text -> [Text]
+commonSummarize :: Txt.Text -> [Txt.Text]
 commonSummarize  = summarize Metric.averagedEdgeStrengths Metric.cosineSim 2 0.01 0.5 
 
 -- | This function creates an opinosis summary. 
@@ -53,8 +63,8 @@ summarize ::
     -> Word              -- ^ The Number of result-sentences
     -> Double           -- ^ The Sigma Alpha value, which threshhold for the number of starts must be met
     -> Double           -- ^ The Sigma Delta value, which threshhold for the metric needs to be met
-    -> Text           -- ^ The unsplit, multisentence-text
-    -> [Text]         -- ^ The Result-Sentences
+    -> Txt.Text           -- ^ The unsplit, multisentence-text
+    -> [Txt.Text]         -- ^ The Result-Sentences
 summarize mFn dFn n alpha delta s = 
     let graph = toGraphSentences s
         paths = allPathsWithSigmaAlpha alpha graph
@@ -79,13 +89,13 @@ summarizeWithoutDistances ::
     -> Int              -- ^ The Number of result-sentences
     -> Double           -- ^ The Sigma Alpha value, which threshhold for the number of starts must be met
     -> Double           -- ^ The Sigma Delta value, which threshhold for the metric needs to be met
-    -> Text           -- ^ The unsplit, multisentence-text
-    -> [Text]         -- ^ The Result-Sentences
+    -> Txt.Text           -- ^ The unsplit, multisentence-text
+    -> [Txt.Text]         -- ^ The Result-Sentences
 summarizeWithoutDistances mFn n alpha delta s =
     let graph    = toGraphSentences s 
         paths    = allPathsWithSigmaAlpha alpha graph 
         filtered = sortOn mFn (filter (\x -> mFn x >= delta) paths) 
-    in toString <$> (take n filtered)
+    in toString <$> take n filtered
 
 -- | a more general "summarize", where one can give the function to build the Graph. 
 -- 
@@ -97,7 +107,7 @@ summarizeFrom ::
     -> Double               -- ^ The Sigma Alpha value, which threshhold for the number of starts must be met
     -> Double               -- ^ The Sigma Delta value, which threshhold for the metric needs to be met
     -> (a -> Graph)         -- ^ A function to create a graph from "a"
-    -> (a -> [Text])      -- ^ A function to summarize given the other parameters from an "a"
+    -> (a -> [Txt.Text])      -- ^ A function to summarize given the other parameters from an "a"
 summarizeFrom mFn dFn n alpha delta gFn a =
         let graph = gFn a
             paths = allPathsWithSigmaAlpha alpha graph
