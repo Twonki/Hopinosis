@@ -14,18 +14,20 @@ import Data.Monoid(Sum(..),Any(..))
 import Data.Text(Text) 
 import qualified Data.Map.Monoidal.Strict as Map
 
+import Control.Parallel.Strategies
+
 -- | Builds a graph from a list of nodes. 
 -- 
 -- This can be used to build graphs from paths - however the graphs will maybe have dead-end edges. 
 fromNodes :: [Node] -> Graph
-fromNodes nds = mconcat $ map (uncurry Map.singleton) nds
+fromNodes nds = mconcat $ (parMap rpar (uncurry Map.singleton) nds)
 
 
 -- |Takes a list of list of words and produces an graph. 
 -- 
 -- The words have to be in correct order of their occurrence, including duplicates. 
 parseDocument:: [[Text]] -> Graph
-parseDocument = mconcat . map parseSentence
+parseDocument = mconcat . (parMap rpar parseSentence)
 
 -- |Takes a list of words and produces an graph. 
 -- 
