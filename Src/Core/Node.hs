@@ -12,6 +12,7 @@ module Core.Node(Values(..),setStart) where
 import qualified Data.Map.Monoidal.Strict as Map
 import Data.Text(Text(..))
 import Data.Monoid(Sum(..),Any(..))
+import Control.DeepSeq (NFData,rnf)
 
 -- | Data Type Values
 -- Used to describe the values of a word found in the opinosis graph
@@ -45,3 +46,9 @@ instance Semigroup Values where
 
 instance Monoid Values where 
     mempty = emptyValues
+
+-- | NFData enables to "force evaluate" the Values, 
+--   that is to forcefully break the laziness.
+--   It is implemented as simply forcing all components.
+instance NFData Values where 
+    rnf (Values m o s e) =  rnf m `seq` rnf o `seq` rnf s `seq` rnf e

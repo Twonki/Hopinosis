@@ -1,6 +1,6 @@
 cabal-version:       2.4
 name:                Hopinosis
-version:             0.1.0.0
+version:             0.1.1.0
 synopsis:            library to supply "Opinosis"-Algorithm APIs
 
 bug-reports:         https://github.com/Twonki/Hopinosis/issues
@@ -36,7 +36,8 @@ library
                        containers,
                        text,
                        data-ordlist,
-                       sort
+                       sort,
+                       deepseq
 
   -- Directories containing source files.
   hs-source-dirs:      Src
@@ -75,4 +76,5 @@ Test-Suite HUnitTestSuite
                        test-framework,
                        test-framework-hunit,
                        HUnit,
+                       deepseq
   default-language: Haskell2010
