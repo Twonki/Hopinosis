@@ -14,16 +14,15 @@ jobs:
       with:
         ghc-version: '8.8.3'
         cabal-version: '3.2'
-    - name: Install dependencies
+    - name: Configure
       run: |
         cabal update
         cabal new-configure --enable-coverage --enable-tests
-        cabal new-install --only-dependencies
     - name: Build
       run: |
         cabal new-build
-    - name: Local Install 
+    - name: Install 
       run: | 
         cabal new-install --lib
-    - name: Run tests
+    - name: Unit-Test
       run: cabal new-test
