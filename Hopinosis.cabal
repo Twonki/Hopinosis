@@ -11,8 +11,29 @@ maintainer:          Leonhard.Applis@Protonmail.com
 category:            library
 extra-source-files:  README.md
 
+common deps
+  build-depends:  base,
+                  monoidal-containers,
+                  split,
+                  parallel,
+                  containers,
+                  text,
+                  data-ordlist,
+                  sort,
+                  deepseq
+  ghc-options: 
+    -Wall
+    -O2
+
+common test-deps
+  build-depends:       test-framework-quickcheck2,
+                       test-framework,
+                       test-framework-hunit,
+                       HUnit,
+                       QuickCheck
 
 library
+  import: deps
   exposed-modules:    Hopinosis
                       Core.Metric
   -- Modules included in this executable, other than Main.
@@ -23,21 +44,6 @@ library
                       Core.Path.Internals
                       Core.Selection
                       Core.Selection.Internals
-  ghc-options:
-    -O2
-  -- LANGUAGE extensions used by modules in this package.
-  -- other-extensions:
-
-  -- Other library packages from which modules are imported.
-  build-depends:       base,
-                       monoidal-containers,
-                       split,
-                       parallel,
-                       containers,
-                       text,
-                       data-ordlist,
-                       sort,
-                       deepseq
 
   -- Directories containing source files.
   hs-source-dirs:      Src
@@ -45,6 +51,7 @@ library
   default-language:    Haskell2010
 
 Test-Suite HUnitTestSuite
+  import: deps, test-deps
   type:                exitcode-stdio-1.0
   main-is:             UnitTests.hs
   hs-source-dirs:      Test
@@ -63,18 +70,4 @@ Test-Suite HUnitTestSuite
                        Tests.MetricTests
                        Tests.SelectionTests
                        Tests.TestSuite
-  build-depends:       base,
-                       monoidal-containers,
-                       parallel,
-                       QuickCheck,
-                       containers,
-                       split,
-                       sort,
-                       text,
-                       data-ordlist,
-                       test-framework-quickcheck2,
-                       test-framework,
-                       test-framework-hunit,
-                       HUnit,
-                       deepseq
   default-language: Haskell2010
