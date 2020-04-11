@@ -31,7 +31,7 @@ common test-deps
                        HUnit,
                        QuickCheck
 
-library Hopinosis
+library
   import: deps
   exposed-modules:    Hopinosis
                       Core.Metric

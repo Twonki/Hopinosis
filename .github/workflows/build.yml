@@ -19,8 +19,10 @@ jobs:
         cabal update
     - name: Build
       run: |
-        cabal configure --enable-tests --enable-coverage
+        cabal configure --disable-coverage --disable-tests
         cabal new-build
-        cabal new-install
+    - name: Local Install 
+      run: | 
+        cabal new-install --lib
     - name: Run tests
-      run: cabal test
+      run: cabal new-test --enable-coverage
