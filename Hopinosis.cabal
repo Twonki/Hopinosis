@@ -1,6 +1,6 @@
-cabal-version:       2.4
+cabal-version:       3.0
 name:                Hopinosis
-version:             0.1.2.0
+version:             0.1.2.1
 synopsis:            library to supply "Opinosis"-Algorithm APIs
 
 bug-reports:         https://github.com/Twonki/Hopinosis/issues
