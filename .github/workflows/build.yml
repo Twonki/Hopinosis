@@ -26,4 +26,4 @@ jobs:
       run: | 
         cabal new-install --lib
     - name: Run tests
-      run: cabal new-test --enable-coverage
+      run: cabal new-test
