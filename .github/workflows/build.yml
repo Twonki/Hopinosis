@@ -12,14 +12,15 @@ jobs:
     - uses: actions/checkout@v1
     - uses: actions/setup-haskell@v1
       with:
-        ghc-version: '8.6.5'
-        cabal-version: '3.0'
+        ghc-version: '8.8.3'
+        cabal-version: '3.2'
     - name: Install dependencies
       run: |
         cabal update
+        cabal new-configure --enable-coverage --enable-tests
+        cabal new-install --only-dependencies
     - name: Build
       run: |
-        cabal configure --disable-coverage --disable-tests
         cabal new-build
     - name: Local Install 
       run: | 

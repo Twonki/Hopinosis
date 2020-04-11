@@ -1,4 +1,4 @@
-cabal-version:       3.0
+cabal-version:       3.2
 name:                Hopinosis
 version:             0.1.2.1
 synopsis:            library to supply "Opinosis"-Algorithm APIs
