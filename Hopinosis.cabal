@@ -1,6 +1,6 @@
 cabal-version:       2.4
 name:                Hopinosis
-version:             0.1.1.0
+version:             0.1.2.0
 synopsis:            library to supply "Opinosis"-Algorithm APIs
 
 bug-reports:         https://github.com/Twonki/Hopinosis/issues
@@ -21,8 +21,7 @@ common deps
                   data-ordlist,
                   sort,
                   deepseq
-  ghc-options: 
-    -Wall
+  ghc-options:
     -O2
 
 common test-deps
