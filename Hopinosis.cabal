@@ -36,14 +36,15 @@ library
   import: deps
   exposed-modules:    Hopinosis
                       Core.Metric
-  -- Modules included in this executable, other than Main.
-  other-modules:      Core.Types
-                      Core.Node
+                      Core.Types
                       Core.Graph
+                      Core.Node
                       Core.Path
-                      Core.Path.Internals
                       Core.Selection
+                      Core.Path.Internals
                       Core.Selection.Internals
+  -- Modules included in this executable, other than Main.
+  --other-modules:      
 
   -- Directories containing source files.
   hs-source-dirs:      Src
@@ -55,16 +56,8 @@ Test-Suite HUnitTestSuite
   type:                exitcode-stdio-1.0
   main-is:             UnitTests.hs
   hs-source-dirs:      Test
-                       Src
-  other-modules:       Core.Types
-                       Core.Node
-                       Core.Graph
-                       Core.Metric
-                       Core.Path
-                       Core.Path.Internals
-                       Core.Selection
-                       Core.Selection.Internals
-                       Tests.NodeTests
+  build-depends:       Hopinosis
+  other-modules:       Tests.NodeTests
                        Tests.GraphTests
                        Tests.PathTests
                        Tests.MetricTests
