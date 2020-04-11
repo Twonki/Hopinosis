@@ -9,8 +9,6 @@ import Test.Framework.Providers.QuickCheck2
 import Data.Text(Text(..))
 
 
-import qualified Core.Selection.Internals as Intern
-
 allSelectionTests = TestList [
     TestLabel "bestPaths_Get0BestPaths_shouldBeEmpty" bestPaths_Get0BestPaths_shouldBeEmpty
     ,TestLabel "bestPaths_ofEmptyPathList_shouldBeEmpty" bestPaths_ofEmptyPathList_shouldBeEmpty
@@ -109,6 +107,7 @@ But then you cannot properly compile them, as they have an ambigious type refere
 I have chosen Text as hardcoded type, as it is the most important for my use-case. 
 -}
 
+{--
 prop_listTooShort_noTuplesMade :: [Text] -> Word -> Bool
 prop_listTooShort_noTuplesMade xs n =
     let xs' = uniquifieNonDeep xs
@@ -136,5 +135,6 @@ prop_tuplesAreUnique xs n =
             
 
 
+--}
 -- Small helper with most simplest Distance and Metric, but needs a start 
 anyBestPathsWithStart n = bestPaths (\x->1) (\a b->1) n 0.025

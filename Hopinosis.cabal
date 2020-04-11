@@ -40,10 +40,9 @@ library
                       Core.Node
                       Core.Path
                       Core.Selection
-                      Core.Path.Internals
-                      Core.Selection.Internals
   -- Modules included in this executable, other than Main.
-  --other-modules:      
+  other-modules:      Core.Path.Internals
+                      Core.Selection.Internals
 
   -- Directories containing source files.
   hs-source-dirs:      Src

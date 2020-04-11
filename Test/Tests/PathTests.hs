@@ -11,11 +11,9 @@ import Data.Text hiding(map,singleton,foldr,words,null,length,head)
 import Data.Monoid(Sum(..),Any(..))
 
 
-import Core.Path.Internals hiding (starts,isValid,allPaths)
-
 allPathTests = TestList [
     TestLabel "exposed PathFunctions" pathTests
-    , TestLabel "Internal PathFunctions" pathInternalTests
+    --, TestLabel "Internal PathFunctions" pathInternalTests
     ]
 
 {-
@@ -187,7 +185,7 @@ allPaths_EdgeCase_ThreeSentences_SubPaths_shouldBeThree =
 {-
     Test for Internal Functions
 -}
-
+{--
 pathInternalTests = TestList [
     TestLabel "isValidStarted_pathBeginsWithStart_shouldBeTrue"  isValidStarted_pathBeginsWithStart_shouldBeTrue
     ,TestLabel "isValidStarted_pathHasStartingNode_butStartingNodeIsNotStart_shouldBeFalse" isValidStarted_pathHasStartingNode_butStartingNodeIsNotStart_shouldBeFalse
@@ -286,3 +284,6 @@ secondNextPath_ofTwoDiscjunctSentences_shouldBeTwo2 =
             testGraph = toGraphMany ["I like dogs", "You hate rabbits"]
             testPaths = Tests.TestSuite.validStarts testGraph
             firstPaths = nextPaths testPaths testGraph
+
+
+--}
