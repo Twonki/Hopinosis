@@ -23,7 +23,6 @@ common deps
                   split                 >= 0.2.3 && < 0.3
   ghc-options:
     -O2
-    -rtsopts
   default-language:    Haskell2010
 
 
@@ -45,17 +44,18 @@ library
                       Core.Selection
   other-modules:      Core.Path.Internals
                       Core.Selection.Internals
-  hs-source-dirs:      Lib
+  hs-source-dirs:     Lib
 
 
 executable Hopinosis
   import: deps
   main-is:            Program.hs
   ghc-options:
-    -O2    
+    -rtsopts  
     -threaded
   build-depends:       Hopinosis
-  hs-source-dirs:      Applis
+  hs-source-dirs:      App
+  build-depends:       time
 
 Test-Suite HUnitTestSuite
   import: deps, test-deps

@@ -9,10 +9,7 @@ import GHC.Conc(numCapabilities)
 import qualified Data.Text.IO as TxtIO
 import qualified Data.Text as Txt
 import Control.DeepSeq
-
-
 import Data.Time 
-
 
 main :: IO ()
 main = do 
@@ -23,7 +20,7 @@ main = do
 
     putStrLn $ "number of cores: " ++ show numCapabilities
     putStrLn $ "looking for a summary of " ++ show n' ++ " sentences"
-    putStrLn $ "using jaccard-sim and averadged edge-strength (hardcoded)"
+    putStrLn "using jaccard-sim and averadged edge-strength (hardcoded)"
     putStrLn $ "Delta: "++ show delta' ++ " Theta: " ++ show theta'
     
     putStrLn  "service alive and healthy \n"
@@ -33,7 +30,7 @@ main = do
     putStrLn "file read - starting opinosis" 
 
     inittime <- getCurrentTime
-    putStrLn $ show inittime
+    print inittime
 
     let g = force $ Hopi.toGraphSentences file
     graphtime <- getCurrentTime
@@ -45,7 +42,7 @@ main = do
 
 
     donetime <- getCurrentTime
-    putStrLn $ show donetime
+    print donetime
 
     let difference = diffUTCTime donetime inittime
     putStrLn $ "comparison-time:" ++ show (diffUTCTime donetime graphtime)
