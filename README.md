@@ -81,6 +81,23 @@ Which will create a lot of items for you. `index.html` is the starting point you
 
 **Note:** You may have to run an `build --enable-documentation` beforehand.
 
+### Performance Measurements
+
+In regard of performance measuring, you need two tools:
+
+- [Threadscope](https://github.com/haskell/ThreadScope/releases)
+- [hp2ps](https://downloads.haskell.org/~ghc/7.0.3/docs/html/users_guide/hp2ps.html)
+
+The first must be downloaded, the second was installed with GHC in my case.
+
+`cabal run Hopinosis ./Files/darkwing.txt 2 0.51 0.51 +RTS -hT -s`
+
+To run with multiple cores, specify the number of cores with -Nx such as:
+
+`cabal run Hopinosis ./Files/darkwing.txt 2 0.51 0.51 +RTS -hT -s -N4`
+
+However, honestly multicore is not working (well) at the moment.
+
 ## Contribution
 
 You're contribution is welcome! There are several topics you can help with:

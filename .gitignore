@@ -10,6 +10,9 @@
 
 # Performance
 **.tix
+**.hp
+**.ps
+**.aux
 
 # Cabal and Haskell
 /*.ho
