@@ -36,6 +36,12 @@ jobs:
       run: |
         cabal new-install
 
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+
     - name: Integration-Test
       run: | 
+        python --version
         python ./Test/IntegrationTests.py
