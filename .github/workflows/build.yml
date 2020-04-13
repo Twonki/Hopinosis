@@ -14,15 +14,28 @@ jobs:
       with:
         ghc-version: '8.8.3'
         cabal-version: '3.2'
+
     - name: Configure
       run: |
         cabal update
         cabal new-configure --enable-coverage --enable-tests
+
     - name: Build
       run: |
         cabal new-build
-    - name: Install 
+
+    - name: Install Library
       run: | 
         cabal new-install --lib
+
     - name: Unit-Test
-      run: cabal new-test
+      run: |
+        cabal new-test
+
+    - name: Install Executable
+      run: |
+        cabal new-install
+
+    - name: Integration-Test
+      run: | 
+        python ./Test/IntegrationTests.py
