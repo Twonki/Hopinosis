@@ -11,12 +11,15 @@ import qualified Data.Text as Txt
 import Control.DeepSeq
 import Data.Time 
 
+import Control.Monad(when)
+
 import Options.Applicative
 import Data.Semigroup ((<>))
 
 -- The way to parse arguments is taken from 
 -- https://hackage.haskell.org/package/optparse-applicative
 -- Which is a proper library 
+-- This is just a variation of the example given, so you might be enlightend visiting their documentation
 
 data Arguments = Arguments
   { fpath :: String
@@ -61,52 +64,35 @@ args' = Arguments
 main :: IO ()
 main = summarize =<< execParser opts 
     where 
-        opts = info (args' <**> helper) (fullDesc<> progDesc "Print a greeting for TARGET"<> header "hello - a test for optparse-applicative")
+        opts = info (args' <**> helper) (fullDesc<> progDesc "TODO: add after-usage-description"<> header "TODO: Add Toplevel description")
 
-summarize :: Arguments -> IO () 
-summarize _ = print "Kekw"
+summarize :: Arguments -> IO ()
+summarize args = do
+    when (verbose args) (printArgs args)
 
-
-{-- 
-    [f,n,theta,delta] <- getArgs
-    let n' = read n :: Word
-    let theta' = read theta :: Double
-    let delta' = read delta :: Double
-
-    putStrLn $ "number of cores: " ++ show numCapabilities
-    putStrLn $ "looking for a summary of " ++ show n' ++ " sentences"
-    putStrLn "using jaccard-sim and averadged edge-strength (hardcoded)"
-    putStrLn $ "Delta: "++ show delta' ++ " Theta: " ++ show theta'
-    
-    putStrLn  "service alive and healthy \n"
-
-    !file <- TxtIO.readFile f
-
-    putStrLn "file read - starting opinosis" 
-
-    inittime <- getCurrentTime
-    print inittime
+    !file <- TxtIO.readFile $ fpath args
 
     let g = force $ Hopi.toGraphSentences file
-    graphtime <- getCurrentTime
-    putStrLn $ "Graph read done @" ++ show graphtime
-    putStrLn $ "Time for graph: " ++ show (diffUTCTime graphtime inittime)
 
-    let !results =  useExistingGraph n' theta' delta' g
+    let !results =  useExistingGraph (fromIntegral $ n args) (theta args) (delta args) g
+
     TxtIO.putStrLn $ Txt.unlines results
 
+printArgs :: Arguments -> IO ()
+printArgs args = do 
+    putStrLn "Running Hopinosis App with"
+    putStrLn $ "filepath: " ++ fpath args
+    putStrLn ( "number of cores: " ++ show numCapabilities )
+    putStrLn "using jaccard-sim and averadged edge-strength (hardcoded)"
+    putStrLn $ "Delta: "++ show (delta args) ++ " Theta: " ++ show (theta args)
 
-    donetime <- getCurrentTime
-    print donetime
-
-    let difference = diffUTCTime donetime inittime
-    putStrLn $ "comparison-time:" ++ show (diffUTCTime donetime graphtime)
-    putStrLn $ "time elapsed:"++show difference
---}
 
 --resolveSim :: String -> HopiMetric.Distance 
 resolveSim "jaccard" = HopiMetric.jaccardSim
 resolveSim "cosine" = HopiMetric.cosineSim
 resolveSim _ = \x y->1 -- otherwise const function
+
+
+
 
 useExistingGraph n theta delta g = Hopi.summarizeFrom HopiMetric.averagedEdgeStrengths HopiMetric.jaccardSim n theta delta (\x->x) g
