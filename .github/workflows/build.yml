@@ -44,4 +44,5 @@ jobs:
     - name: Integration-Test
       run: | 
         python --version
+        cabal new-install
         python ./Test/IntegrationTests.py
