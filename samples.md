@@ -7,6 +7,12 @@ Most of these are pure garbage. I'm being honest.
 But I value honesty very much so I maybe as well safe you some time.
 The considerable good ones will be marked with :star: so you can try those parameters first.  
 
+**Note:**
+
+The way these scripts are invoked is deprecated.
+
+The results are still kept as the algorithm is deterministic and if invoked with the same parameters, it will give the same results.
+
 ## Parameters
 
 Because you maybe have not seen the code yet, a short summary:

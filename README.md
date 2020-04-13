@@ -55,7 +55,9 @@ If you're using windows, I highly recommend to change that.
 
 To run after the new-install you can simply go:
 
-`Hopinosis ./Files/darkwing.txt 1 0.51 0.51`
+```shell
+Hopinosis -f ./Files/darkwing.txt -n 2 -d 0.51 -t 0.51 -v --sim jaccard
+```
 
 This will run the application. For an overview of the parameters, the [Program.hs](./App/Program.hs) is considerably well documented.
 
@@ -63,7 +65,7 @@ This will run the application. For an overview of the parameters, the [Program.h
 
 To run without installation, you can do:
 
-`cabal run Hopinosis ./Files/reviews.txt 1 0.51 0.51`
+`cabal run Hopinosis -f ./Files/darkwing.txt -n 2 -d 0.51 -t 0.51 -v --sim jaccard`
 
 This also accepts RTS-Parameters such as *+RTS -N2*
 

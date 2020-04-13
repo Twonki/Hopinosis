@@ -26,15 +26,16 @@ data Arguments = Arguments
   , verbose :: Bool
   , n :: Int 
   , delta :: Double
-  , theta :: Double}
+  , theta :: Double
+  , sim :: String}
 
 args' :: Parser Arguments
 args' = Arguments
       <$> strOption
           ( long "filepath"
          <> short 'f'
-         <> metavar "fpath"
-         <> help "Filepath to the .txt to summarize" )
+         <> metavar "STRING"
+         <> help "Filepath to the .txt to summarize (relative or absolute)" )
       <*> switch
           ( long "verbose"
          <> short 'v'
@@ -60,6 +61,13 @@ args' = Arguments
          <> showDefault
          <> value 0.51
          <> metavar "DOUBLE" )
+    <*> strOption
+          ( long "sim"
+         <> short 's'
+         <> help "similiarity metric for finding distinct summaries- currently either 'jaccard' or 'cosine'"
+         <> showDefault
+         <> value "jaccard"
+         <> metavar "STRING" )
 
 main :: IO ()
 main = summarize =<< execParser opts 
@@ -71,11 +79,9 @@ summarize args = do
     when (verbose args) (printArgs args)
 
     !file <- TxtIO.readFile $ fpath args
-
-    let g = force $ Hopi.toGraphSentences file
-
-    let !results =  useExistingGraph (fromIntegral $ n args) (theta args) (delta args) g
-
+    let g = Hopi.toGraphSentences file
+    let results =  useExistingGraph args g
+    
     TxtIO.putStrLn $ Txt.unlines results
 
 printArgs :: Arguments -> IO ()
@@ -83,8 +89,10 @@ printArgs args = do
     putStrLn "Running Hopinosis App with"
     putStrLn $ "filepath: " ++ fpath args
     putStrLn ( "number of cores: " ++ show numCapabilities )
-    putStrLn "using jaccard-sim and averadged edge-strength (hardcoded)"
+    putStrLn $ "using" ++ show (sim args) ++ "-similiarity"
+    putStrLn "using averaged edge-strength (hardcoded)"
     putStrLn $ "Delta: "++ show (delta args) ++ " Theta: " ++ show (theta args)
+    putStrLn ""
 
 
 --resolveSim :: String -> HopiMetric.Distance 
@@ -92,7 +100,4 @@ resolveSim "jaccard" = HopiMetric.jaccardSim
 resolveSim "cosine" = HopiMetric.cosineSim
 resolveSim _ = \x y->1 -- otherwise const function
 
-
-
-
-useExistingGraph n theta delta g = Hopi.summarizeFrom HopiMetric.averagedEdgeStrengths HopiMetric.jaccardSim n theta delta (\x->x) g
+useExistingGraph args g = Hopi.summarizeFrom HopiMetric.averagedEdgeStrengths (resolveSim $ sim args ) (fromIntegral $ n args) (theta args) (delta args) (\x->x) g
