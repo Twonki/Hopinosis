@@ -59,7 +59,15 @@ args' = Arguments
          <> metavar "DOUBLE" )
 
 main :: IO ()
-main = do 
+main = summarize =<< execParser opts 
+    where 
+        opts = info (args' <**> helper) (fullDesc<> progDesc "Print a greeting for TARGET"<> header "hello - a test for optparse-applicative")
+
+summarize :: Arguments -> IO () 
+summarize _ = print "Kekw"
+
+
+{-- 
     [f,n,theta,delta] <- getArgs
     let n' = read n :: Word
     let theta' = read theta :: Double
@@ -94,6 +102,7 @@ main = do
     let difference = diffUTCTime donetime inittime
     putStrLn $ "comparison-time:" ++ show (diffUTCTime donetime graphtime)
     putStrLn $ "time elapsed:"++show difference
+--}
 
 --resolveSim :: String -> HopiMetric.Distance 
 resolveSim "jaccard" = HopiMetric.jaccardSim
