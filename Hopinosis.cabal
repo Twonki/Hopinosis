@@ -53,7 +53,8 @@ executable Hopinosis
   ghc-options:
     -rtsopts  
     -threaded
-  build-depends:       Hopinosis
+  build-depends:       Hopinosis,
+                       optparse-applicative == 0.15.1.0
   hs-source-dirs:      App
   build-depends:       time
 
