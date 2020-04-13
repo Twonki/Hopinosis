@@ -45,4 +45,5 @@ jobs:
       run: | 
         python --version
         cabal new-install
+        Hopinosis ./Files/darkwing.txt 2 0.51 0.51
         python ./Test/IntegrationTests.py
