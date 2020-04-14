@@ -13,6 +13,7 @@
 **.hp
 **.ps
 **.aux
+**.eventlog
 
 # Cabal and Haskell
 /*.ho

@@ -53,6 +53,8 @@ executable Hopinosis
   ghc-options:
     -rtsopts  
     -threaded
+-- remove eventlog from production builds
+    -eventlog
   build-depends:       Hopinosis,
                        optparse-applicative == 0.15.1.0
   hs-source-dirs:      App

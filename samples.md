@@ -34,11 +34,11 @@ The dummy is `0.0`.
 
 ## Text 1
 
-> I like cats. Cats eat a lot of food. 
-> My cat is called Catie. my cats full name is Catharina. 
+> I like cats. Cats eat a lot of food.
+> My cat is called Catie. my cats full name is Catharina.
 > This is not one of my worst jokes. Anyway, Catie likes poultry as her favorite food"
 
-```
+```shell
 /Src> ghci
 :load Hopinosis.hs
 text1 = "I like cats. Cats eat a lot of food. My cat is called Catie. my cats full name is Catharina. This is not one of my worst jokes. Anyway, Catie likes poultry as her favorite food"
@@ -57,14 +57,14 @@ results in
 - "anyway, catie"
 - "my cats"
 
-`summarize Metric.averagedEdgeStrength Metric.jaccardSim 2 0.51 0.51 text1 `
+`summarize Metric.averagedEdgeStrength Metric.jaccardSim 2 0.51 0.51 text1`
 
 results in
 
 - "my cats full name is called catie"
 - "my cats full name is catharina"
 
-:star: `summarize Metric.averagedEdgeStrength Metric.jaccardSim 3 0.51 0.51 text1 `
+:star: `summarize Metric.averagedEdgeStrength Metric.jaccardSim 3 0.51 0.51 text1`
 
 - "this is not one of food"
 - "this is not one of my cats"
@@ -72,7 +72,7 @@ results in
 
 `summarize Metric.averagedEdgeStrengths Metric.jaccardSim 4 0.21 0.21 sample1`
 
-*took over 10 minutes*
+(took over 10 minutes)
 
 - "cats full name is called catie"
 - "cats full name is catharina"
@@ -152,7 +152,7 @@ With:
 :star: `summarize Metric.averagedMagnitudes Metric.jaccardSim 1 0.01 1.2 text2`
 - "apparently, eskimos seem to be fine with being called inuit, as eskimo was the name given by colonists"
 
-`summarize Metric.averagedEdgeStrengths Metric.cosineSim 3 0.51 0.51 text2` -- *Note: takes 3 minutes* 
+`summarize Metric.averagedEdgeStrengths Metric.cosineSim 3 0.51 0.51 text2` -- *Note: takes 3 minutes*
 
 - "apparently, eskimos have 50 words for snow"
 - "until then, i will meet both an inuit also have more than 50 words for some time, eskimos nowadays"
@@ -187,7 +187,7 @@ The following are various [Darkwing Duck](https://www.youtube.com/watch?v=3_ee6a
 
 *Let's get dangerous!*
 
-```
+```shell
 text3 = "I am the terror that flaps in the night, I am the batteries that are not included. I am the terror that flaps in the night, I am the fingernail that scrapes the blackboard of your soul. I am the terror that flaps in the night, I am a special news bulletin that interrupts your favorite show. I am the terror that flaps in the night! I am the wrong number that wakes you at 3am. I am the terror that flaps in the night, I am the onion that stings in your eye. I am the terror that flaps in the night, I am the hairball that clogs your drains. I am the terror that flaps in the night, I am the low ratings that cancel your program. I am the terror that flaps in the night, I am the termite that devours your floorboards. I am the terror that flaps in the night, I am the slug that slimes your begonias. I am the terror that flaps in the night. I am Darkwing Duck."
 ```
 

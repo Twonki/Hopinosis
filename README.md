@@ -85,16 +85,21 @@ Which will create a lot of items for you. `index.html` is the starting point you
 
 In regard of performance measuring, you need two tools:
 
-- [Threadscope](https://github.com/haskell/ThreadScope/releases)
+- [Threadscope](https://github.com/haskell/ThreadScope/releases) + [this fix](https://askubuntu.com/questions/342202/failed-to-load-module-canberra-gtk-module-but-already-installed)
 - [hp2ps](https://downloads.haskell.org/~ghc/7.0.3/docs/html/users_guide/hp2ps.html)
 
 The first must be downloaded, the second was installed with GHC in my case.
 
-`cabal run Hopinosis ./Files/darkwing.txt 2 0.51 0.51 +RTS -hT -s`
+`Hopinosis -f ./Files/darkwing.txt -n 2 -d 0.51 -t 0.51 -v --sim jaccard +RTS -hT -s`
 
 To run with multiple cores, specify the number of cores with -Nx such as:
 
-`cabal run Hopinosis ./Files/darkwing.txt 2 0.51 0.51 +RTS -hT -s -N4`
+`Hopinosis -f ./Files/darkwing.txt -n 2 -d 0.51 -t 0.51 -v --sim jaccard +RTS -hT -s -N4`
+
+To produce an eventlog visible by threadscope, you must run Hopinosis with the RTS Option `-lf`.
+With a working threadscope installation you can then run `threadscope hopinosis.eventlog`
+
+Be careful a bit: I might remove (comment out) the eventlog from cabal to get a faster executable.
 
 However, honestly multicore is not working (well) at the moment.
 
