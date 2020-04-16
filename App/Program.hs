@@ -80,17 +80,19 @@ summarize :: Arguments -> IO ()
 summarize args = do
     when (verbose args) (printArgs args)
 
+    when (verbose args) (printTimestamp "Start")
+
     file <- TxtIO.readFile $ fpath args
-    --evaluate (rnf file)
-    when (verbose args) (printTimestamp "Fileread")
+    evaluate (rnf file)
+    when (verbose args) (printTimestamp "Fileread done")
 
     let g = Hopi.toGraphSentences file
-    --evaluate (rnf g)
-    when (verbose args) (printTimestamp "Graphbuilding")
+    evaluate (rnf g)
+    when (verbose args) (printTimestamp "Graphbuilding done")
     
     let results =  useExistingGraph args g
-    --evaluate (rnf results)
-    when (verbose args) (printTimestamp "Results")
+    evaluate (rnf results)
+    when (verbose args) (printTimestamp "Results done")
 
     TxtIO.putStrLn $ Txt.unlines results
 
@@ -115,6 +117,6 @@ useExistingGraph args g = Hopi.summarizeFrom HopiMetric.averagedEdgeStrengths (r
 printTimestamp :: String -> IO ()
 printTimestamp comment = do 
     t <- getCurrentTime
-    putStrLn $ comment ++ " done at"
+    putStrLn $ comment ++ " at"
     print t
     return ()
