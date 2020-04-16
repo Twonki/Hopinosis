@@ -9,6 +9,8 @@ import GHC.Conc(numCapabilities)
 import qualified Data.Text.IO as TxtIO
 import qualified Data.Text as Txt
 import Control.DeepSeq
+import Control.Exception (evaluate)
+
 import Data.Time 
 
 import Control.Monad(when)
@@ -78,10 +80,18 @@ summarize :: Arguments -> IO ()
 summarize args = do
     when (verbose args) (printArgs args)
 
-    !file <- TxtIO.readFile $ fpath args
+    file <- TxtIO.readFile $ fpath args
+    --evaluate (rnf file)
+    when (verbose args) (printTimestamp "Fileread")
+
     let g = Hopi.toGraphSentences file
-    let results =  useExistingGraph args g
+    --evaluate (rnf g)
+    when (verbose args) (printTimestamp "Graphbuilding")
     
+    let results =  useExistingGraph args g
+    --evaluate (rnf results)
+    when (verbose args) (printTimestamp "Results")
+
     TxtIO.putStrLn $ Txt.unlines results
 
 printArgs :: Arguments -> IO ()
@@ -101,3 +111,10 @@ resolveSim "cosine" = HopiMetric.cosineSim
 resolveSim _ = \x y->1 -- otherwise const function
 
 useExistingGraph args g = Hopi.summarizeFrom HopiMetric.averagedEdgeStrengths (resolveSim $ sim args ) (fromIntegral $ n args) (theta args) (delta args) (\x->x) g
+
+printTimestamp :: String -> IO ()
+printTimestamp comment = do 
+    t <- getCurrentTime
+    putStrLn $ comment ++ " done at"
+    print t
+    return ()
