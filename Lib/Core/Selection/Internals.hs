@@ -78,7 +78,7 @@ validCandidatesWithLength ps n = ntuples ps n
 calculateAllDistances :: DistanceFunction -> [Path] -> [Double]
 calculateAllDistances _ [] = []
 calculateAllDistances _ [_] = [0.0]
-calculateAllDistances dist (x:os) = (parMap rpar (dist x)) os ++ calculateAllDistances dist os
+calculateAllDistances dist (x:os) = map (dist x) os ++ calculateAllDistances dist os
 
 -- | Inverts the distances
 --
@@ -99,7 +99,7 @@ calculateAllMetrics = map
 overAllValue :: Metric -> DistanceFunction -> [Path] -> Double
 overAllValue _ _ [] = 0.0
 overAllValue mFn _ [x] = mFn x
-overAllValue mFn dFn ps = product (parMap rpar mFn ps ++ invertedDistances dFn ps)
+overAllValue mFn dFn ps = product (map mFn ps ++ invertedDistances dFn ps)
 
 -- | Checks a list of candidates whether they are over the sigmaDelta threshold given a metric 
 filterBySigmaTheta :: 
@@ -110,7 +110,7 @@ filterBySigmaTheta ::
 filterBySigmaTheta ps mfn theta = filter (\x -> sigmaThetaQualified x mfn theta) ps
     where 
         sigmaThetaQualified :: [Path] -> Metric -> Double -> Bool
-        sigmaThetaQualified p mfn' sigma= product (parMap rpar mfn' p) > sigma
+        sigmaThetaQualified p mfn' sigma= product (map mfn' p) > sigma
 
 -- | sorts the candidates by their overall Value
 -- 

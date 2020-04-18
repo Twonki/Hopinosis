@@ -20,14 +20,14 @@ import Control.Parallel.Strategies
 -- 
 -- This can be used to build graphs from paths - however the graphs will maybe have dead-end edges. 
 fromNodes :: [Node] -> Graph
-fromNodes nds = mconcat $ (parMap rpar (uncurry Map.singleton) nds)
+fromNodes nds = mconcat $ uncurry Map.singleton <$> nds
 
 
 -- |Takes a list of list of words and produces an graph. 
 -- 
 -- The words have to be in correct order of their occurrence, including duplicates. 
 parseDocument:: [[Text]] -> Graph
-parseDocument = mconcat . (parMap rpar parseSentence)
+parseDocument = mconcat . map parseSentence
 
 -- |Takes a list of words and produces an graph. 
 -- 

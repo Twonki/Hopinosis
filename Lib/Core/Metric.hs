@@ -36,11 +36,11 @@ The following functions are "meta-functions" regarding metrics, such as combinin
 
 -- | Returns a function, which sums the results of two metric functions. 
 metricAdd :: Metric -> Metric -> Metric 
-metricAdd a b = \p -> a p + b p
+metricAdd a b p = a p + b p
 
 -- | Returns a function, which multiplies the results of two metric functions. 
 metricProd :: Metric -> Metric -> Metric 
-metricProd a b = \p -> a p * b p
+metricProd a b p = a p * b p
 
 
 -- | Multiplies the results of two distance function. 
@@ -51,7 +51,7 @@ metricProd a b = \p -> a p * b p
 -- Thats why there is no distance-add, as e.g. the reflexivity would be either violated 
 -- or the inputs where no valid distance functions.
 distanceProd :: DistanceFunction -> DistanceFunction -> DistanceFunction
-distanceProd a b = \p1 p2 -> a p1 p2 * b p1 p2 
+distanceProd a b p1 p2 = a p1 p2 * b p1 p2 
 
 {-
 * Metric Functions
@@ -100,6 +100,8 @@ $DistanceFunctions
 -- | Calculates consine similarity for two paths
 --
 -- Source: https://en.wikipedia.org/wiki/Cosine_similarity
+-- 
+-- This is a candidate to be replaced with a library.
 cosineSim :: Path -> Path -> Double
 cosineSim [] _ = 0.0
 cosineSim _ [] = 0.0

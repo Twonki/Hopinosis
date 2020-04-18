@@ -97,7 +97,7 @@ results in
 
 `summarize Metric.averagedEdgeStrengths Metric.cosineSim 4 0.21 0.21 sample1`
 
-*took over 10 minutes*
+(took over 10 minutes)
 
 - "anyway, catie"
 - "anyway, catie likes poultry as her favorite food"
