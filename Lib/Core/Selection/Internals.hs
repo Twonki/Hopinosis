@@ -11,6 +11,7 @@ The term "candidates" is used for the list of paths which are considered a resul
 If I want an opinosis summary of a huge graph with 3 sentences, the input-paths can be very huge, but each candidate will have a length of 3. 
 
 This module is the computationally most intensive of this library.
+Be careful and aware of performance if you touch these functions. Prepare to measure performance beforehand and after your changes. 
 
 The computation times are still highly dependent on the given metrics and distance functions, see "Core.Metric" for this. 
 -}

@@ -1,6 +1,6 @@
 cabal-version:       3.0
 name:                Hopinosis
-version:             0.1.3.2
+version:             0.1.3.3
 synopsis:            library to supply "Opinosis"-Algorithm APIs
 
 bug-reports:         https://github.com/Twonki/Hopinosis/issues
@@ -44,6 +44,7 @@ library
                       Core.Selection
   other-modules:      Core.Path.Internals
                       Core.Selection.Internals
+                      Core.Metric.Internals
   hs-source-dirs:     Lib
 
 

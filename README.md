@@ -65,7 +65,7 @@ This will run the application. For an overview of the parameters, the [Program.h
 
 To run without installation, you can do:
 
-`cabal run Hopinosis -f ./Files/darkwing.txt -n 2 -d 0.51 -t 0.51 -v --sim jaccard`
+`cabal new-run Hopinosis -- -f ./Files/darkwing.txt -n 2 -d 0.51 -t 0.51 -v --sim jaccard`
 
 This also accepts RTS-Parameters such as *+RTS -N2*
 
