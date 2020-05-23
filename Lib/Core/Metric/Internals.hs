@@ -8,6 +8,9 @@ This module contains example metrics - however they are not required for the ove
 
 It is only here to provide example values and for the "commonBestPaths".
 -}
+{-# LANGUAGE ForeignFunctionInterface #-}
+
+
 module Core.Metric.Internals where 
 
 import Core.Node   
@@ -24,6 +27,9 @@ import qualified Data.List.Ordered as Ordered
 import qualified Data.Set as Set
 
 import Control.Parallel
+
+import Foreign
+import Foreign.C.Types
 
 
 {-
@@ -116,6 +122,10 @@ cosineSim p1 p2 =
                 where 
                     dot a b = sum $ zipWith (*) a b
                     len a = sqrt $ dot a a
+
+foreign import ccall safe "cosine_similarity.h cosine_similarity" 
+    c_cosine_similarity :: Ptr CChar -> Ptr CChar -> Int -> Int -> Double
+
 
 
 -- | Calculates the jaccard similarity of two paths

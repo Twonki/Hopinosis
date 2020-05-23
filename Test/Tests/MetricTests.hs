@@ -20,14 +20,6 @@ allMetricTests = TestList [
     ,TestLabel "averagedMagnitudes_DoubleSentenceGraph_shouldBeTwo" averagedMagnitudes_DoubleSentenceGraph_shouldBeTwo
     ,TestLabel "edgeStrength_DoubleSentenceGraph_shouldBeTwoTimesSentenceLengthMinusTwo" edgeStrength_DoubleSentenceGraph_shouldBeTwoTimesSentenceLengthMinusTwo
     ,TestLabel "averagedEdgeStrength_DoubleSentenceGraph_shouldBeBiggerThanOneAndSmallerThanTwo" averagedEdgeStrength_DoubleSentenceGraph_shouldBeBiggerThanOneAndSmallerThanTwo
-
-    ,TestLabel "toVectors_shouldHaveSameSize" toVectors_shouldHaveSameSize
-    ,TestLabel "toVectors_onePathEmpty_shouldHaveSameSize" toVectors_onePathEmpty_shouldHaveSameSize
-    ,TestLabel "toVectors_secondPathEmpty_shouldHaveSameSize" toVectors_secondPathEmpty_shouldHaveSameSize
-    ,TestLabel "toVectors_6distinctWords_shouldHaveLength6" toVectors_6distinctWords_shouldHaveLength6
-    ,TestLabel "toVectors_6distinctWords_otherVector_shouldHaveLength6Too" toVectors_6distinctWords_otherVector_shouldHaveLength6Too
-    ,TestLabel "toVectors_onePathEmpty_otherHas3Words_shouldHaveLength3" toVectors_onePathEmpty_otherHas3Words_shouldHaveLength3
-    ,TestLabel "toVectors_onePathEmpty_otherVector_otherHas3Words_shouldHaveLength3too" toVectors_onePathEmpty_otherVector_otherHas3Words_shouldHaveLength3too
     ]
 
 allMetricProperties = [
@@ -98,55 +90,6 @@ averagedEdgeStrength_DoubleSentenceGraph_shouldBeBiggerThanOneAndSmallerThanTwo 
             testPaths = allPaths testGraph 
             testPath = head testPaths
 
-
-toVectors_shouldHaveSameSize = 
-    True ~=? length vec1 == length vec2 
-        where 
-            testPath1= packStartNode "Hello" : packEndNode "Leonhard" : []
-            testPath2= packStartNode "Hello"  : []
-            (vec1,vec2) = toVectors (testPath1,testPath2)
-
-toVectors_onePathEmpty_shouldHaveSameSize = 
-    True ~=? length vec1 == length vec2 
-        where 
-            testPath1=  []
-            testPath2=  packStartNode "Hello" : packEndNode "Leonhard" : []
-            (vec1,vec2) = toVectors (testPath1,testPath2)
-
-toVectors_secondPathEmpty_shouldHaveSameSize = 
-    True ~=? length vec1 == length vec2 
-        where 
-            testPath1= packStartNode "Hello" : packEndNode "Leonhard" : []
-            testPath2= []
-            (vec1,vec2) = toVectors (testPath1,testPath2)
-
-toVectors_6distinctWords_shouldHaveLength6 = 
-    6 ~=? length vec1 
-        where 
-            testPath1= packStartNode "Hello" : packNode "I" : packNode "am" : packEndNode "Leonhard" : []
-            testPath2= packStartNode "Bye" : packEndNode "Visitor" : []
-            (vec1,vec2) = toVectors (testPath1,testPath2)
-
-toVectors_6distinctWords_otherVector_shouldHaveLength6Too = 
-    6 ~=? length vec2 
-        where 
-            testPath1= packStartNode "Hello" : packNode "I" : packNode "am" : packEndNode "Leonhard" : []
-            testPath2= packStartNode "Bye" : packEndNode "Visitor" : []
-            (vec1,vec2) = toVectors (testPath1,testPath2)
-
-toVectors_onePathEmpty_otherHas3Words_shouldHaveLength3 = 
-    3 ~=? length vec1 
-        where 
-            testPath1= packStartNode "Hello" : packNode "my" : packEndNode "Opinosis" : []
-            testPath2 = []
-            (vec1,vec2) = toVectors (testPath1,testPath2)
-
-toVectors_onePathEmpty_otherVector_otherHas3Words_shouldHaveLength3too = 
-    3 ~=? length vec2
-        where 
-            testPath1= packStartNode "Hello" : packNode "my" : packEndNode "Opinosis" : []
-            testPath2 = []
-            (vec1,vec2) = toVectors (testPath1,testPath2)
 
 prop_cosineSimReflexivity :: Property
 prop_cosineSimReflexivity = 

@@ -24,7 +24,8 @@ common deps
   ghc-options:
     -O2
   default-language:    Haskell2010
-
+  cxx-sources:        CPP/cosine_similarity.cpp
+  install-includes:   CPP/cosine_similarity.h
 
 common test-deps
   build-depends:       test-framework-quickcheck2,
@@ -46,6 +47,9 @@ library
                       Core.Selection.Internals
                       Core.Metric.Internals
   hs-source-dirs:     Lib
+--  include-dirs:       CPP
+
+--                      cosine_similarity.cpp
 
 
 executable Hopinosis
